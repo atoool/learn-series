@@ -1,0 +1,243 @@
+{
+  "project_info": {
+    "project_number": "936442884198",
+    "firebase_url": "https://fir-d9861.firebaseio.com",
+    "project_id": "fir-d9861",
+    "storage_bucket": "fir-d9861.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936442884198:android:eb4bc92862171a12",
+        "android_client_info": {
+          "package_name": "com.mood.tracker.app.free"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi-uzEpqjgAwAHAf_ZmkwMVafvoqILzLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "936442884198-q80umbghanf1cuekonk05nq7gqrtvbkb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fastapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936442884198:android:20364914c6667794f1bda7",
+        "android_client_info": {
+          "package_name": "com.newapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936442884198-mr216s9npr7himhngo251udm961dpkck.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.newapp",
+            "certificate_hash": "cece01af10f9844185af3f91d576475989450392"
+          }
+        },
+        {
+          "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi-uzEpqjgAwAHAf_ZmkwMVafvoqILzLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "936442884198-q80umbghanf1cuekonk05nq7gqrtvbkb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fastapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936442884198:android:6842f22fd68db6fc",
+        "android_client_info": {
+          "package_name": "com.quit.smoking.app.free"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi-uzEpqjgAwAHAf_ZmkwMVafvoqILzLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "936442884198-q80umbghanf1cuekonk05nq7gqrtvbkb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fastapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936442884198:android:d5f20be7d880e47df1bda7",
+        "android_client_info": {
+          "package_name": "meditation.sleep.anxiety"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936442884198-tnbciaso7n0ao8g4hdoiajq4al7tpbcu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "meditation.sleep.anxiety",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi-uzEpqjgAwAHAf_ZmkwMVafvoqILzLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "936442884198-q80umbghanf1cuekonk05nq7gqrtvbkb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fastapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936442884198:android:c4089a753cea92ddf1bda7",
+        "android_client_info": {
+          "package_name": "walking.workout.weightloss"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi-uzEpqjgAwAHAf_ZmkwMVafvoqILzLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "936442884198-q80umbghanf1cuekonk05nq7gqrtvbkb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fastapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936442884198:android:576ecc5a6b7e2d7cf1bda7",
+        "android_client_info": {
+          "package_name": "weightloss.zero.fastingtracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi-uzEpqjgAwAHAf_ZmkwMVafvoqILzLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "936442884198-q80umbghanf1cuekonk05nq7gqrtvbkb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fastapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

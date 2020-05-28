@@ -1,0 +1,535 @@
+* {
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+-webkit-tap-highlight-color: transparent;
+-moz-user-select: none;
+-ms-user-select: none;
+-khtml-user-select: none;
+-webkit-user-select: none;
+-webkit-touch-callout: none;
+}
+input{
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+-webkit-tap-highlight-color: transparent;
+-moz-user-select: auto;
+-ms-user-select: auto;
+-khtml-user-select: auto;
+-webkit-user-select: auto;
+-webkit-touch-callout: auto;
+}
+@font-face {
+  font-weight: normal;
+  font-style: normal;
+}
+body,html,div{
+  padding: 0;margin: 0;
+}
+
+.hide{
+  visibility: hidden;
+}
+
+html {
+    background: rgb(250, 250, 250);
+}
+
+body{
+    padding-top: env(safe-area-inset-top);
+  font-family: "Roboto",sans-serif;
+}
+body,html{
+  overflow-x: hidden;
+   /* has to be scroll, not auto */
+   /* overflow-y: scroll; */
+  -webkit-overflow-scrolling: touch;
+  height: calc(100% + env(safe-area-inset-bottom))!important;
+}
+
+*::-webkit-scrollbar {
+display: none;
+}
+
+input[type="range"] {
+    margin: auto;
+    -webkit-appearance: none;
+    position: relative;
+    overflow: hidden;
+    height: 100px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 0; /* iOS */
+    outline: none;
+    border: none;
+    background: transparent;
+}
+
+::-webkit-slider-runnable-track {
+  height: 10px;
+  background: rgb(99,104,174);
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+/*
+ * 1. Set to 0 width and remove border for a slider without a thumb
+ */
+::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px; /* 1 */
+    height: 10px;
+    border-radius: 10px;
+    background: #ffc899 ;
+    box-shadow: -101vw 0 0 100vw white;
+}
+
+.swiper-container {
+  width: 100%;
+  height: 100%;
+  max-width: 480px;
+}
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.swiper-container-v{
+  background: rgb(250, 250, 250);
+  /* background: -webkit-linear-gradient(to bottom, #8287e6, #938ae0);  /* Chrome 10-25, Safari 5.1-6
+  background: linear-gradient(to bottom, #8287e6, #938ae0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.swiper-slide{
+  background: none;
+}
+.navigationBtns{
+  position: fixed;
+  top: 0;
+  right: 10px;
+  z-index: 8;
+  height: 100%;
+  align-items: center;justify-content: center;
+  opacity: .7;
+  display: flex;flex-direction: column;
+  pointer-events: none;
+  transition: .3s all ease-in-out;overflow: hidden;
+}
+.noClick{
+  pointer-events: none;
+}
+
+.feelings.rightEnd {
+    justify-content: flex-end;
+    margin-top: 30px;
+    margin-bottom: -30px;
+}
+
+.navigationBtns .topPiece{
+  padding-top: 16px;
+  height: 80%;
+
+}
+.navigationBtns .bottomPiece{
+  height: 20%;
+  align-items: flex-start;justify-content: flex-start;
+  display: flex;flex-direction: column;
+}
+.navigationBtns img{
+  width: 26px;
+  padding: 8px;
+  outline: none;
+  pointer-events: all;
+  cursor: pointer;
+}
+.navigationBtns img.closeBtn{
+  width: 24px;
+}
+.pageContainer{
+  height: 100%; width: 100%;
+}
+
+.dayActionType {
+    text-transform: lowercase;
+}
+
+
+.continueBtn{
+  min-height: 32px;
+  line-height: 1.4;
+  width: 70%;
+  max-width: 320px;
+  margin: 0 auto;
+  font-weight: bold;
+  outline: none;
+  text-transform: uppercase;
+  background: white;
+  color: #8e88db;
+  letter-spacing: .08rem;
+  border-radius: 40px;
+  font-size: 18px;
+  padding: 10px;
+  box-shadow: 0px 15px 15px rgba(0,0,0, 0.24);
+  cursor: pointer;
+  transition: 300ms all ease-in-out;
+  display: flex;align-items: center;justify-content: center;
+}
+
+.greetingsPage{
+  margin: 32px;
+}
+.greetingsPage .topPiece{
+  color: white;
+  font-size: 22px;
+  letter-spacing: .03rem;
+  height: 40%;
+  display: flex;align-items: center;
+  flex-direction: column;
+  padding: 16px;
+  box-sizing: border-box;
+  justify-content: center;
+}
+.greetingsText{
+  opacity: .7;
+}
+
+.prevBtn{
+  opacity: .6;
+}
+
+.greetingsPage .centerPiece{
+  height: 40%;
+  display: flex;align-items: center;
+  justify-content: center;
+}
+.greetingsPage .bottomPiece{
+  height: 20%;
+  display: flex;align-items: center;
+}
+.greetingsPage .dateContainer{
+  color: white; opacity: .7; letter-spacing: .03rem;
+  width: 100%;
+}
+.greetingsPage .todaysDate{
+  font-size: 24px;font-weight: bold;position: relative;
+}
+.greetingsPage .todayText{
+  font-size: 14px; opacity: .8;
+  margin: 8px 0;
+}
+.greetingsPage .fadedText {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    font-size: 48px;
+    font-weight: normal;
+    letter-spacing: .3rem;
+    color: rgba(0, 0, 0, 0.1);
+    top: -40px;
+}
+.iconContainer img {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0px 15px 5px rgba(0,0,0,.2));
+}
+.iconContainer{
+  width: 70px;height: 70px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 16px;
+  box-shadow: 0px 15px 15px rgba(0,0,0, 0.24);
+}
+.howWasTodayPage .topPiece{
+  align-items: flex-start;
+  padding: 32px;
+  box-sizing: border-box;
+  height: 40%;
+  display: flex;align-items: flex-start;flex-direction:column;
+  justify-content: flex-start;
+}
+.howWasTodayPage .iconContainer{
+  width: 50px;height: 50px;
+  margin: 0;
+}
+.headingText{
+  text-align: left;
+  margin-top: 24px;
+  font-size: 24px;
+   opacity: .7;
+   color: white;
+}
+.howWasTodayPage .centerPiece{
+  height: 40%; flex-direction: column;align-items: center;
+  justify-content: flex-start; display: flex;
+}
+.inputRange{width: 80%;}
+.feelings{
+  display: flex;
+  font-size: 16px;
+  justify-content: space-between;
+  color: white;opacity: .7;
+  margin-top: -30px;letter-spacing: .03rem;
+}
+.dayRating{font-weight: bold;  text-align: right; text-transform: uppercase;}
+.rateYourDay{opacity: .8;text-transform: uppercase;text-align: left;max-width: 180px;}
+
+.grid{
+  display: flex;align-items: center;justify-content: center;flex-direction: column;
+}
+.grid-3{
+  width: 33%;
+}
+.grid-3 img{
+  width: 50px;height: 50px; padding: 4px; box-sizing: border-box;
+}
+.dayActions{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-flow: wrap;
+  padding: 16px;
+  box-sizing: border-box;
+}
+.dayActionType{
+  color: white;opacity: .6;
+  letter-spacing: .03rem;
+  font-size: 15px;
+}
+.pageContainer.dayActionsPage .topPiece{
+  height: 25%;
+  padding-bottom: 0;
+}
+.pageContainer.dayActionsPage .centerPiece{
+  height: 55%;
+  /* padding: 16px; */
+  box-sizing: border-box;
+}
+.writeMore,.writeLess{
+  outline: none;
+}
+#dayActionOtherText,#storyTitleText{
+background: none;border:none;
+outline: none;
+font-size: 24px;
+width: 100%;
+color: white;
+}
+.extraTextInfo{
+  color: white;opacity: .4;
+  letter-spacing: .03rem;
+  font-size: 13px;
+  text-transform: uppercase;
+  margin-top: 16px;
+  width: 100%;
+}
+.editMore{
+  padding: 32px;box-sizing: border-box;
+}
+::placeholder {
+  color: white;
+  opacity: .5;
+}
+.writeMoreContainer{
+  height: 100%;
+  width: 100%;
+  padding: 32px;
+}
+.dayActionOther{
+  float: left;
+}
+.textCount{
+  float: right;
+}
+.writeMoreContainer,.textUnit{
+  flex-direction: column;display: flex;align-items: flex-start;justify-content: space-around;
+  width: 100%;
+}
+.writeLess{
+  align-items: center;display: flex;
+  color: white; opacity: .5;
+  font-size: 14px; text-transform: uppercase;
+  padding: 8px 8px 8px 0;
+}
+.writeLess img {
+   width: 26px;
+   padding: 8px;
+   outline: none;
+   padding: 8px 8px 8px 0;
+}
+
+
+.grid{
+  position: relative;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+.actionContent{
+  width: 90%;height: 90%;padding: 8px 0 12px 0;
+  z-index: 2;
+  transition: .2s all ease-in;
+  border-radius: 16px;
+  background: transparent;
+}
+
+.shadowLayer {
+    width: 10%;
+    height: 10px;
+    position: absolute;
+    top: 65px;
+    box-shadow: 0px 4px 20px 15px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    z-index: 1;
+    transition: .4s all linear;
+}
+.grid.active .shadowLayer{
+  opacity: 1;
+}
+
+.active .actionContent{
+  background: white;
+  border-radius: 16px;
+  width: 100%;width: 100%;
+}
+
+.active .dayActionType {
+    color: #8287e5;
+}
+.active img{
+  filter: invert(1);
+}
+
+.swiper-container-feeling .swiper-slide{
+  z-index: 10;;
+}
+
+.writeMore img {
+    opacity: .3;
+}
+
+.feelingContent img{
+  width: 50px;height: 50px;
+  transition: .3s all ease-in-out;
+  opacity: .6;
+}
+.feelingContent .dayActionType{
+  opacity: 0;
+  transition: .3s all ease-in-out;
+}
+
+.dayActionsPage .swiper-slide-active .feelingContent .dayActionType{
+  opacity: 1;
+}
+
+.dayActionsPage .swiper-slide-active .feelingContent img{
+  width: 80px;height: 80px;
+  opacity:1;
+}
+
+.pageContainer.saveStoryPage .bottomPiece{
+  height: 20%;
+}
+.pageContainer.saveStoryPage .centerPiece{
+  height: 45%;
+}
+.pageContainer.saveStoryPage .topPiece{
+  height: 35%;
+}
+
+.navigationBtns.hidden {
+    right: -35px;
+}
+.iconContainer.monster{
+  box-shadow: none;
+  width: 90px;height: 90px;
+  overflow: visible;
+}
+
+
+/* first page format */
+span.name{text-transform: capitalize;}
+.todaysDate .fadedText{text-transform: capitalize;}
+.dateContainer .todayText{text-transform: uppercase;}
+
+
+.howWasTodayPage .iconContainer.monster {
+    height: 75px;
+    width: 75px;
+}
+
+.continueBtn.active {
+    transform: scale(.95);
+    box-shadow: 1px 6px 7px rgba(0,0,0, 0.24);
+}
+
+.fadeOut{
+  opacity: 0;
+  transition: .3s opacity ease-out;
+}
+.fadeIn{
+  opacity: 1;
+}
+.hidden{
+  display: none;
+}
+
+input.error::placeholder {
+    color: red!important;
+    font-size: 14px;
+}
+
+.modal.achievementUnlocked{
+  background-image: radial-gradient(#fdfcfb,#e2d1c3);
+}
+
+.achievementUnlocked img.badge {
+    height: 80%;
+    width: auto;
+    filter: drop-shadow(0px 50px 5px rgba(0,0,0,.1));
+}
+
+@media (max-width:400px) {
+  .pageContainer.dayActionsPage .topPiece{
+    height: 30%;
+    padding-bottom: 0;
+  }
+  .pageContainer.dayActionsPage .centerPiece{
+    height: 60%;
+    box-sizing: border-box;
+  }
+  .pageContainer.saveStoryPage .topPiece{
+    height: 40%;
+    padding-top: 16px;
+  }
+  .pageContainer.saveStoryPage .centerPiece{
+    height: 40%!important;
+  }
+  .greetingsPage .topPiece{
+    padding: 0;
+  }
+}
+
+/* @media (max-height:420px) {
+  body,html{
+    height: 250%!important;
+    max-height: 823px;
+  }
+  .modals{
+    height: 200%!important;
+    max-height: 823px;
+  }
+  .modal {
+    padding-bottom: 200px;
+    margin-bottom: -200px;
+  }
+} */
