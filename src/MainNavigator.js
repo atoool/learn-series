@@ -104,6 +104,7 @@ const SleepStack = () => {
       <Stack.Screen
         name="Plan"
         component={PlanInfo}
+        initialParams={{type: 'sleep'}}
         options={{
           headerShown: false,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -182,7 +183,7 @@ const MainNavigator = () => {
     <Tab.Navigator
       activeColor="orange"
       inactiveColor="darkgrey"
-      barStyle={hideTab ? {opacity: 0, height: 0} : {backgroundColor: '#fff'}}>
+      barStyle={hideTab ? {opacity: 0, height: 0} : {}}>
       <Tab.Screen
         name="Home"
         component={HomeStack}
@@ -195,6 +196,7 @@ const MainNavigator = () => {
           tabBarIcon: ({color}) => (
             <FontAwesome5Icon name="home" color={color} size={20} />
           ),
+          tabBarColor: '#fff',
         }}
       />
       <Tab.Screen
@@ -209,6 +211,7 @@ const MainNavigator = () => {
           tabBarIcon: ({color}) => (
             <FontAwesome5Icon name="search" color={color} size={20} />
           ),
+          tabBarColor: '#fff',
         }}
       />
       <Tab.Screen
@@ -252,6 +255,7 @@ const MainNavigator = () => {
           tabBarIcon: ({color}) => (
             <FontAwesome5Icon name="book" color={color} size={20} />
           ),
+          tabBarColor: '#fff',
         }}
       />
     </Tab.Navigator>

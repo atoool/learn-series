@@ -17,6 +17,7 @@ import Animated, {event, Value} from 'react-native-reanimated';
 import Player from '../comp/Player';
 import Orientation from 'react-native-orientation-locker';
 import {ContextStates} from '../func/ContextStates';
+import R from '../res/R';
 
 const {width, height} = Dimensions.get('window');
 
@@ -49,7 +50,11 @@ export default class PlanInfo extends React.PureComponent {
     //   );
 
     return (
-      <View style={{flex: 1}}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: !this.props.route.params?.type ? '#fff' : '#1e265f',
+        }}>
         <Animated.ScrollView
           style={styles.constainer}
           showsVerticalScrollIndicator={false}
@@ -86,10 +91,26 @@ export default class PlanInfo extends React.PureComponent {
             </Animated.View>
           </Touchable>
           <View style={{paddingHorizontal: 20, marginVertical: 20}}>
-            <Text style={styles.cardTitle}>Basics</Text>
-            <Text style={styles.cardSubTitle}>3-20 MIN MEDITATION</Text>
+            <Text
+              style={[
+                styles.cardTitle,
+                this.props.route.params?.type === 'sleep' && {color: '#a3aeeb'},
+              ]}>
+              Basics
+            </Text>
+            <Text
+              style={[
+                styles.cardSubTitle,
+                this.props.route.params?.type === 'sleep' && {color: '#a3aeeb'},
+              ]}>
+              3-20 MIN MEDITATION
+            </Text>
           </View>
-          <Text style={styles.description}>
+          <Text
+            style={[
+              styles.description,
+              this.props.route.params?.type === 'sleep' && {color: '#6267a8'},
+            ]}>
             Live happier and healthier by learning the fundamentals of
             meditation and mindfulness.
           </Text>
@@ -108,19 +129,40 @@ export default class PlanInfo extends React.PureComponent {
                   marginBottom: 10,
                 }}
                 key={itm}>
-                <Icon name="play-circle-outline" size={40} color="darkgrey" />
-                <Text style={{fontSize: 14, color: 'darkgrey'}}>{itm}</Text>
+                <Icon
+                  name="play-circle-outline"
+                  size={40}
+                  color={
+                    this.props.route.params?.type === 'sleep'
+                      ? '#a3aeeb'
+                      : 'darkgrey'
+                  }
+                />
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color:
+                      this.props.route.params?.type === 'sleep'
+                        ? '#6267a8'
+                        : 'darkgrey',
+                  }}>
+                  {itm}
+                </Text>
               </View>
             ))}
           </View>
           <View style={styles.list}>
-            <HeadText title="Techniques" />
-            <SimpleList />
-            <SimpleList />
+            <HeadText title="Techniques" type={this.props.route.params?.type} />
+            <SimpleList type={this.props.route.params?.type} />
+            <SimpleList type={this.props.route.params?.type} />
           </View>
           <View style={styles.list}>
-            <HeadText title="Related" />
-            <ListData desc={true} data={this.state.data} />
+            <HeadText title="Related" type={this.props.route.params?.type} />
+            <ListData
+              desc={true}
+              data={this.state.data}
+              type={this.props.route.params?.type}
+            />
           </View>
         </Animated.ScrollView>
         <Button

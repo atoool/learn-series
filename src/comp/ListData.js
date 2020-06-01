@@ -4,9 +4,10 @@ import {Icon} from 'react-native-elements';
 import {Image} from 'react-native';
 import {LockedText} from '../comp/LockedText';
 import {TouchableNativeFeedback} from 'react-native-gesture-handler';
-import {CommonActions} from '@react-navigation/native';
+import {CommonActions, useNavigation} from '@react-navigation/native';
 
 export const ListData = props => {
+  const nav = useNavigation();
   return (
     <FlatList
       data={props.data}
@@ -31,7 +32,7 @@ export const ListData = props => {
           key={index}>
           <TouchableNativeFeedback
             onPress={() => {
-              CommonActions.navigate('Plan');
+              nav.navigate('Plan');
             }}
             style={{padding: 5}}>
             <View>

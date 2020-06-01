@@ -1,20 +1,46 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import YouTube from 'react-native-youtube';
-import {Button} from 'react-native-elements';
+import {Button, Icon} from 'react-native-elements';
+import {useIsFocused} from '@react-navigation/native';
+import WebView from 'react-native-webview';
+import YoutubeIframe from 'react-native-youtube-iframe';
+import * as Animatable from 'react-native-animatable';
+
+const {width, height} = Dimensions.get('window');
 
 export const HomePlayer = props => {
-  const [playing, setPlay] = useState(true);
+  const [playing, setPlay] = useState(false);
+
   return (
     <View style={styles.constainer}>
-      <YouTube
-        apiKey="AIzaSyCIsAH7Uc4vyb7Ihmc34XNTRDRAo0j3GhI"
+      <YoutubeIframe
         videoId="7P0o-YhIwJs"
         play={playing}
-        controls={playing ? 2 : 0}
-        style={styles.youtube}
-        onReady={() => setPlay(false)}
-        onChangeState={e => e.state === 'paused' && setPlay(false)}
+        height={'160%'}
+        initialPlayerParams={{
+          controls: false,
+          rel: false,
+          preventFullScreen: true,
+        }}
+        webViewStyle={{
+          marginLeft: '-33%',
+          marginTop: '-10%',
+          backgroundColor: '#000',
+        }}
+        width={'160%'}
+        onChangeState={e => {
+          e === 'paused' && setPlay(false);
+          e === 'stopped' && setPlay(false);
+          e === 'playing' && setPlay(true);
+        }}
       />
       {!playing && (
         <View style={styles.contentContainer}>
@@ -39,7 +65,7 @@ export const HomePlayer = props => {
 
 const styles = StyleSheet.create({
   constainer: {
-    height: 450,
+    height: 370,
     overflow: 'hidden',
     borderBottomEndRadius: 180,
     borderBottomStartRadius: 180,
@@ -49,10 +75,13 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   contentContainer: {
-    alignSelf: 'center',
-    width: '60%',
-    marginTop: -180,
+    height: 370,
+    width: '100%',
     alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 20,
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0)',
   },
   subHead: {
     color: '#fff',

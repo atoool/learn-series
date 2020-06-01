@@ -84,9 +84,8 @@ export default class Sleep extends PureComponent {
                 data={this.state.data}
                 keyExtractor={(itm, indx) => indx.toString()}
                 renderItem={({item, index}) => (
-                  <View style={{padding: 10}}>
+                  <View style={{padding: 10}} key={index}>
                     <TouchableNativeFeedback
-                      key={index}
                       onPress={() => {
                         this.props.navigation.navigate('ExploreFList', {
                           title: 'Sleepcasts',

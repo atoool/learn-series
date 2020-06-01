@@ -4,7 +4,9 @@ import {View, Text, StyleSheet} from 'react-native';
 export const HeadText = props => {
   return (
     <View style={styles.container}>
-      <Text style={styles.head}>{props.title}</Text>
+      <Text style={[styles.head, props.type === 'sleep' && {color: '#a3aeeb'}]}>
+        {props.title}
+      </Text>
       {props.caption && <Text style={styles.subHead}>{props.caption}</Text>}
     </View>
   );

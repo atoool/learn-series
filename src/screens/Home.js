@@ -6,6 +6,7 @@ import {
   ImageBackground,
   Image,
   FlatList,
+  StatusBar,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {HomePlayer} from '../comp/Home/HomePlayer';
@@ -20,59 +21,72 @@ import {SimpleList} from '../comp/SimpleList';
 import {ContextStates} from '../func/ContextStates';
 
 export default class Home extends React.PureComponent {
-  state = {isPlay: false, data: [1, 2, 3, 4, 5, 6]};
-  componentDidMount = () => {};
+  state = {isPlay: false, data: [1, 2, 3, 4, 5, 6], focus: true};
+  componentDidMount = () => {
+    this.focus = this.props.navigation.addListener('focus', () => {
+      this.setState({focus: true});
+    });
+    this.blur = this.props.navigation.addListener('blur', () => {
+      this.setState({focus: false});
+    });
+  };
+
+  componentWillUnmount() {
+    this.focus();
+    this.blur();
+  }
+
   render() {
     const {isPlay} = this.state;
     return (
-      <ContextStates.Consumer>
-        {({loader}) => {
-          if (loader)
-            return <View style={{flex: 1, backgroundColor: '#000'}} />;
-          return (
-            <ScrollView
-              style={styles.constainer}
-              contentContainerStyle={styles.cContainer}>
-              <HomePlayer />
-              <View style={[styles.cardView]}>
-                <HeadText
-                  title="Today's Meditation"
-                  caption="Try 2 sessions for free"
-                />
-                <SmallCard nav={() => this.props.navigation.navigate('Plan')} />
-              </View>
+      // <ContextStates.Consumer>
+      //   {() => {
+      //     return (
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.constainer}
+        contentContainerStyle={styles.cContainer}>
+        <StatusBar hidden translucent />
+        {this.state.focus && <HomePlayer />}
+        <View style={[styles.cardView]}>
+          <HeadText
+            title="Today's Meditation"
+            caption="Try 2 sessions for free"
+          />
+          <SmallCard nav={() => this.props.navigation.navigate('Plan')} />
+        </View>
 
-              <View style={styles.cardView}>
-                <HeadText
-                  title="Ready to begin?"
-                  caption="Start your journey with session 1 of the Basics"
-                />
-                <View style={{paddingHorizontal: 20, width: '100%'}}>
-                  <View style={styles.card}>
-                    <View style={styles.cardTextView}>
-                      <LockedText />
-                    </View>
-                  </View>
-                </View>
+        <View style={styles.cardView}>
+          <HeadText
+            title="Ready to begin?"
+            caption="Start your journey with session 1 of the Basics"
+          />
+          <View style={{paddingHorizontal: 20, width: '100%'}}>
+            <View style={styles.card}>
+              <View style={styles.cardTextView}>
+                <LockedText />
               </View>
-              <View style={styles.cardView}>
-                <HeadText title="My courses" />
-                <SimpleList />
-                <SimpleList />
-              </View>
+            </View>
+          </View>
+        </View>
+        <View style={styles.cardView}>
+          <HeadText title="My courses" />
+          <SimpleList />
+          <SimpleList />
+        </View>
 
-              <View style={styles.cardView}>
-                <HeadText title="Recommended for you" />
-                <ListData data={this.state.data} />
-              </View>
-              <View style={styles.cardView}>
-                <HeadText title="Recent" />
-                <ListData data={this.state.data} />
-              </View>
-            </ScrollView>
-          );
-        }}
-      </ContextStates.Consumer>
+        <View style={styles.cardView}>
+          <HeadText title="Recommended for you" />
+          <ListData data={this.state.data} />
+        </View>
+        <View style={styles.cardView}>
+          <HeadText title="Recent" />
+          <ListData data={this.state.data} />
+        </View>
+      </ScrollView>
+      //     );
+      //   }}
+      // </ContextStates.Consumer>
     );
   }
 }
