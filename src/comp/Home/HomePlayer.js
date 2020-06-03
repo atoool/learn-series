@@ -31,7 +31,7 @@ export const HomePlayer = props => {
           preventFullScreen: true,
         }}
         webViewStyle={{
-          marginLeft: '-33%',
+          marginLeft: '-36%',
           marginTop: '-10%',
           backgroundColor: '#000',
         }}

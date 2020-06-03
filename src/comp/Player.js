@@ -130,13 +130,15 @@ export default class Player extends React.PureComponent {
                         style={{height: '100%', width: '100%'}}
                         videoId={itm}
                         play={i === swipeIndex ? play : false}
-                        onChangeState={e =>
+                        onChangeState={e => {
                           e.state === 'playing'
                             ? this.setState({
                                 play: i === swipeIndex ? true : false,
                               })
-                            : this.setState({play: false})
-                        }
+                            : e.state === 'buffering'
+                            ? this.setState({play: true})
+                            : this.setState({play: false});
+                        }}
                         onReady={async () => {
                           // if (swipeIndex === i) {
                           clearInterval(this.interval);
@@ -216,13 +218,13 @@ export default class Player extends React.PureComponent {
                             justifyContent: 'space-between',
                           }}
                           colors={[
-                            'rgba(0,0,0,1)',
-                            'rgba(0,0,0,0.9)',
+                            'rgba(0,0,0,0.8)',
+                            'rgba(0,0,0,0.6)',
                             'rgba(0,0,0,0)',
                             'rgba(0,0,0,0)',
                             'rgba(0,0,0,0)',
-                            'rgba(0,0,0,0.9)',
-                            'rgba(0,0,0,1)',
+                            'rgba(0,0,0,0.6)',
+                            'rgba(0,0,0,0.8)',
                           ]}
                           useAngle
                           angle={180}>
@@ -273,9 +275,12 @@ export default class Player extends React.PureComponent {
                                 style={{
                                   position: 'absolute',
                                   right: 30,
-                                  top: 30,
+                                  top: 20,
+                                  width: 40,
+                                  height: 40,
+                                  justifyContent: 'center',
                                 }}>
-                                <Icon name="close" color="#fff" size={20} />
+                                <Icon name="close" color="#fff" size={25} />
                               </View>
                             </TouchableNativeFeedback>
                           </View>

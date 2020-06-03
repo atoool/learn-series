@@ -1,1 +1,2 @@
-export const colors = {primary: 'orange'};
+const colors = {primary: 'orange'};
+export default colors;

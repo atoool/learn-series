@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {TimeType} from '../func/TimeFunc';
 import * as Animatable from 'react-native-animatable';
 import {ImageBackground} from 'react-native';
+import R from '../res/R';
 
 export default class Jounal extends React.PureComponent {
   state = {usr: '', pulse: 'pulse'};
@@ -28,9 +29,10 @@ export default class Jounal extends React.PureComponent {
       <View style={{flex: 1, padding: 20, paddingTop: 100}}>
         <Animatable.View
           style={{marginBottom: 30}}
-          animation={this.state.pulse}
-          iterationCount={2}
-          easing="ease-in">
+          // animation={this.state.pulse}
+          // iterationCount={2}
+          // easing="ease-in"
+        >
           <Text style={{fontSize: 22, fontWeight: 'bold', color: '#474a56'}}>
             {TimeType()}
           </Text>
@@ -73,6 +75,7 @@ export default class Jounal extends React.PureComponent {
                 borderRadius: 20,
                 paddingHorizontal: 40,
                 overflow: 'hidden',
+                backgroundColor: R.colors.primary,
               }}
             />
           </ImageBackground>

@@ -137,7 +137,7 @@ export default class ExploreList extends Component {
         <Animated.View
           style={[
             styles.animatedHeaderContainer,
-            {height: headerHeight, backgroundColor: R.colors.primary},
+            {height: headerHeight, backgroundColor: R.color.primary},
           ]}>
           <Animated.Image
             style={{height: '100%', width: '100%', opacity: imageOpacity}}
