@@ -1,23 +1,23 @@
 import React, {useState, useEffect} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import Home from './screens/Home';
-import Journal from './screens/Journal';
-import Sleep from './screens/Sleep';
-import Explore from './screens/Explore';
+import Home from '../screens/Home';
+import Journal from '../screens/Journal';
+import Sleep from '../screens/Sleep';
+import Explore from '../screens/Explore';
 import {Icon} from 'react-native-elements';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import Player from './comp/Player';
-import PlanInfo from './screens/PlanInfo';
+import Player from '../comp/Player';
+import PlanInfo from '../screens/PlanInfo';
 import {set} from 'react-native-reanimated';
-import ExploreList from './screens/ExploreList';
-import ExploreFList from './screens/ExploreFlist';
-import DailyLog from './screens/DailyLog';
-import Analytics from './screens/Analytics';
-import Rewards from './screens/Rewards';
+import ExploreList from '../screens/ExploreList';
+import ExploreFList from '../screens/ExploreFlist';
+import DailyLog from '../screens/DailyLog';
+import Analytics from '../screens/Analytics';
+import Rewards from '../screens/Rewards';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 
 const Stack = createStackNavigator();

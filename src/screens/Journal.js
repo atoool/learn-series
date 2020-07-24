@@ -41,82 +41,100 @@ export default class Jounal extends React.PureComponent {
           </Text>
         </Animatable.View>
         <TouchableNativeFeedback
+          useForeground
           onPress={() => this.props.navigation.navigate('DailyLog')}>
-          <ImageBackground
-            source={{
-              uri: 'https://fstream.in/journal/home/home-create-book.webp',
-            }}
+          <View
             style={{
               marginBottom: 20,
-              padding: 20,
               backgroundColor: 'darkgrey',
               borderRadius: 5,
               overflow: 'hidden',
             }}>
-            <Text style={{fontSize: 16, color: '#fff'}}>Monday</Text>
-            <Text style={{fontSize: 20, color: '#fff', fontWeight: 'bold'}}>
-              May
-            </Text>
-            <Text style={{fontSize: 20, color: '#fff', fontWeight: 'bold'}}>
-              11
-            </Text>
-            <Text style={{fontSize: 16, color: '#fff', marginBottom: 60}}>
-              How do you feel today?
-            </Text>
-            <Button
-              onPress={() => {
-                this.props.navigation.navigate('DailyLog');
+            <ImageBackground
+              source={{
+                uri: 'https://fstream.in/journal/home/home-create-book.webp',
               }}
-              title="Create Story"
-              titleStyle={{fontSize: 14}}
-              containerStyle={{overflow: 'hidden', borderRadius: 20}}
-              buttonStyle={{
-                alignSelf: 'center',
-                borderRadius: 20,
-                paddingHorizontal: 40,
-                overflow: 'hidden',
-                backgroundColor: R.colors.primary,
-              }}
-            />
-          </ImageBackground>
+              style={{
+                padding: 20,
+              }}>
+              <Text style={{fontSize: 16, color: '#fff'}}>Monday</Text>
+              <Text style={{fontSize: 20, color: '#fff', fontWeight: 'bold'}}>
+                May
+              </Text>
+              <Text style={{fontSize: 20, color: '#fff', fontWeight: 'bold'}}>
+                11
+              </Text>
+              <Text style={{fontSize: 16, color: '#fff', marginBottom: 60}}>
+                How do you feel today?
+              </Text>
+              <Button
+                onPress={() => {
+                  this.props.navigation.navigate('DailyLog');
+                }}
+                title="Create Story"
+                useForeground
+                titleStyle={{fontSize: 14}}
+                containerStyle={{overflow: 'hidden', borderRadius: 20}}
+                buttonStyle={{
+                  alignSelf: 'center',
+                  borderRadius: 20,
+                  paddingHorizontal: 40,
+                  overflow: 'hidden',
+                  backgroundColor: R.colors.primary,
+                }}
+              />
+            </ImageBackground>
+          </View>
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
+          useForeground
           onPress={() => this.props.navigation.navigate('Analytics')}>
-          <ImageBackground
-            source={{
-              uri:
-                'https://fstream.in/journal/home/home-analytics-mountain.webp',
-            }}
+          <View
             style={{
-              marginBottom: 20,
-              padding: 20,
               backgroundColor: 'darkgrey',
               borderRadius: 5,
               overflow: 'hidden',
-              paddingVertical: 40,
+              marginBottom: 20,
             }}>
-            <Text style={{fontSize: 16, color: '#fff'}}>
-              Track your progress
-            </Text>
-          </ImageBackground>
+            <ImageBackground
+              source={{
+                uri:
+                  'https://fstream.in/journal/home/home-analytics-mountain.webp',
+              }}
+              style={{
+                padding: 20,
+                paddingVertical: 40,
+              }}>
+              <Text style={{fontSize: 16, color: '#fff'}}>
+                Track your progress
+              </Text>
+            </ImageBackground>
+          </View>
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
+          useForeground
           onPress={() => this.props.navigation.navigate('Rewards')}>
-          <ImageBackground
-            source={{
-              uri:
-                'https://fstream.in/journal/home/home-achievements-trophy.webp',
-            }}
+          <View
             style={{
-              marginBottom: 20,
-              padding: 20,
               backgroundColor: 'darkgrey',
               borderRadius: 5,
-              paddingVertical: 40,
               overflow: 'hidden',
+              marginBottom: 20,
             }}>
-            <Text style={{fontSize: 16, color: '#fff'}}>Your achievements</Text>
-          </ImageBackground>
+            <ImageBackground
+              source={{
+                uri:
+                  'https://fstream.in/journal/home/home-achievements-trophy.webp',
+              }}
+              style={{
+                padding: 20,
+                paddingVertical: 40,
+              }}>
+              <Text style={{fontSize: 16, color: '#fff'}}>
+                Your achievements
+              </Text>
+            </ImageBackground>
+          </View>
         </TouchableNativeFeedback>
       </View>
     );

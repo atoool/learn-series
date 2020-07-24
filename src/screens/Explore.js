@@ -1,23 +1,33 @@
 import React from 'react';
-import {View, Text, FlatList, TouchableNativeFeedback} from 'react-native';
-import {SearchBar, Button} from 'react-native-elements';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableNativeFeedback,
+  ScrollView,
+  ImageBackground,
+} from 'react-native';
+import {SearchBar, Button, Icon} from 'react-native-elements';
 import {SimpleList} from '../comp/SimpleList';
 import {ContextStates} from '../func/ContextStates';
+import R from '../res/R';
 
 export default class Explore extends React.PureComponent {
+  static contextType = ContextStates;
   state = {
     search: '',
     selected: false,
-    data: [
-      'Weathering the storm',
-      'Reframe stress',
-      'Anger, sadness and growth',
-      'begining meditation',
-    ],
+    data: this.context.reduState.explore,
   };
   componentDidMount = () => {};
   updateSearch = search => {
-    this.setState({search});
+    const data =
+      search == ''
+        ? this.context.reduState.explore
+        : this.context.reduState.explore.filter(
+            t => t.name.toLowerCase().search(search.toLowerCase()) > -1,
+          );
+    this.setState({search, data});
   };
   render() {
     const {search, selected} = this.state;
@@ -33,30 +43,34 @@ export default class Explore extends React.PureComponent {
             onFocus={() => this.setState({selected: true})}
             onBlur={() => this.setState({selected: false})}
             searchIcon={() => (
-              <Button
-                activeOpacity={0}
-                onPress={() => this.setState({selected: false})}
-                icon={{
-                  name: selected ? 'keyboard-backspace' : 'search',
-                  color: 'grey',
-                  size: 20,
-                }}
-                containerStyle={{
-                  margin: 0,
-                  padding: 0,
-                  marginLeft: -20,
-                  padding: 0,
-                }}
-                buttonStyle={{
-                  backgroundColor: 'rgba(0,0,0,0)',
-                }}
+              
+              // <Button
+              //   activeOpacity={0}
+              //   onPress={() => this.setState({selected: false})}
+                // disabled
+                <Icon
+                  name=
+                    // selected ? 'keyboard-backspace' :
+                    'search'
+                  color= 'grey'
+                  size={ 20}
+                
+              //   containerStyle={{
+              //     margin: 0,
+              //     padding: 0,
+              //     marginLeft: -20,
+              //     padding: 0,
+              //   }}
+              //   buttonStyle={{
+              //     backgroundColor: 'rgba(0,0,0,0)',
+              //   }}
               />
             )}
             containerStyle={{
               backgroundColor: '#fff',
               paddingTop: 40,
               padding: 20,
-              paddingBottom: !selected ? 60 : 20,
+              // paddingBottom: !selected ? 60 : 20,
             }}
             inputContainerStyle={{
               backgroundColor: '#f0f0f0',
@@ -65,11 +79,22 @@ export default class Explore extends React.PureComponent {
             }}
             placeholder="Search courses"
             onChangeText={this.updateSearch}
+            onClear={this.updateSearch}
             value={search}
           />
-          {!selected && (
-            <FlatList
-              data={[
+          {/* <ScrollView
+            horizontal
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              paddingVertical: 10,
+            }}
+            contentContainerStyle={{paddingHorizontal: 30}}
+            showsHorizontalScrollIndicator={false}>
+            {!selected &&
+              // <FlatList
+              // data={
+              [
                 'focus',
                 'walk',
                 'relax',
@@ -77,18 +102,11 @@ export default class Explore extends React.PureComponent {
                 'morning',
                 'happy',
                 'sleep',
-              ]}
-              style={{position: 'absolute', bottom: 0}}
-              contentContainerStyle={{
-                paddingHorizontal: 20,
-                flexDirection: 'row',
-                paddingVertical: 10,
-              }}
-              keyExtractor={(itm, index) => index.toString()}
-              renderItem={({item, index}) => (
+              ].map((item, index) => (
                 <TouchableNativeFeedback
                   key={index}
-                  onPress={() => this.setState({search: item, selected: true})}>
+                  onPress={() => this.setState({search: item, selected: true})}
+                  useForeground>
                   <View
                     style={{
                       backgroundColor: '#fff',
@@ -98,6 +116,7 @@ export default class Explore extends React.PureComponent {
                       borderWidth: 0.2,
                       borderColor: 'grey',
                       marginRight: 10,
+                      overflow: 'hidden',
                     }}>
                     <Text
                       style={{
@@ -109,50 +128,67 @@ export default class Explore extends React.PureComponent {
                     </Text>
                   </View>
                 </TouchableNativeFeedback>
-              )}
-            />
-          )}
+              ))}
+          </ScrollView>
+        */}
         </View>
         <View style={{height: '100%'}}>
           <FlatList
             data={this.state.data}
             contentContainerStyle={{
-              padding: !selected ? 20 : 0,
+              padding: !selected ? 20 : 20,
             }}
             keyExtractor={(itm, index) => index.toString()}
             renderItem={({item, index}) => (
-              <TouchableNativeFeedback
-                key={index}
-                onPress={() =>
-                  selected
-                    ? this.updateSearch(item)
-                    : this.props.navigation.navigate('ExploreList')
-                }
-                style={{borderRadius: 10}}>
-                {!selected ? (
-                  <View
-                    style={{
-                      backgroundColor: 'grey',
-                      borderRadius: 10,
-                      padding: 30,
-                      width: '100%',
-                      marginBottom: 20,
-                    }}>
-                    <Text
+              <View
+                style={{
+                  backgroundColor: 'grey',
+                  borderRadius: 10,
+                  width: '100%',
+                  marginBottom: 20,
+                  overflow: 'hidden',
+                }}>
+                <TouchableNativeFeedback
+                  onPress={() => {
+                    // if (this.state.selected) this.updateSearch(item);
+                    // else
+                    this.props.navigation.navigate('Plan', {
+                      data: item,
+                      chapter:1,
+                      lesson:1,
+                    });
+                  }}
+                  useForeground={true}>
+                  {/* {!selected ? ( */}
+                  <View style={{}}>
+                    <ImageBackground
+                      source={{uri: isNaN(item.coverImage)?item.coverImage:R.strings.defaultImg}}
                       style={{
-                        fontWeight: 'bold',
-                        fontSize: 16,
-                        color: '#fff',
+                        width: '100%',
                       }}>
-                      {item}
-                    </Text>
+                      <View
+                        style={{
+                          padding: 30,
+                          width: '100%',
+                        }}>
+                        <Text
+                          style={{
+                            fontWeight: 'bold',
+                            fontSize: 16,
+                            color: '#000',
+                          }}>
+                          {item.name}
+                        </Text>
+                      </View>
+                    </ImageBackground>
                   </View>
-                ) : (
-                  <View style={{paddingBottom: 10, width: '100%'}}>
-                    <SimpleList />
-                  </View>
-                )}
-              </TouchableNativeFeedback>
+                  {/* ) : (
+                    <View style={{paddingBottom: 10, width: '100%'}}>
+                      <SimpleList title={'title'} image={''} />
+                    </View>
+                  )} */}
+                </TouchableNativeFeedback>
+              </View>
             )}
           />
         </View>

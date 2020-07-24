@@ -12,7 +12,7 @@ export const LockedText = props => {
             styles.cardTitle,
             props.type === 'sleep' && {color: '#9ea8e7'},
           ]}>
-          Basics
+          {props.title}
         </Text>
       </View>
       <Text
@@ -20,12 +20,12 @@ export const LockedText = props => {
           styles.cardSubTitle,
           props.type === 'sleep' && {color: '#6267a8'},
         ]}>
-        3-20 MIN MEDITATION
+        {props.lessons} LESSONS
       </Text>
-      {props.desc && (
+      {props.desc?.length != 0 && (
         <Text
           style={[styles.desc, props.type === 'sleep' && {color: '#6267a8'}]}>
-          Start to deepen your practice.
+          {props.desc}
         </Text>
       )}
     </View>

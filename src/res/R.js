@@ -1,12 +1,12 @@
-import {strings} from './strings';
+import strings from './strings';
 import colors from './colors';
 import {fonts} from './fonts';
 import {images} from './images';
 import {locale} from './locale';
 
 const R = {
-  strings: strings,
-  colors: colors,
+  strings,
+  colors,
   fonts: fonts,
   images: images,
   locale: locale,

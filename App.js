@@ -1,44 +1,41 @@
 import React from 'react';
 import {StyleSheet, StatusBar, View, ActivityIndicator} from 'react-native';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
-import MainNavigator from './src/MainNavigator';
-import {ContextStates, MyTheme, fetchData} from './src/func/ContextStates';
+import MainNavigator from './src/navigations/MainNavigator';
+import {ContextStates, MyTheme} from './src/func/ContextStates';
 import Player from './src/comp/Player';
+import AppContainer from './src/navigations/AppContainer';
+import AsyncStorage from '@react-native-community/async-storage';
+import {reducer, init} from './src/func/Reducer';
+
+// console.disableYellowBox = true;
 
 class App extends React.PureComponent {
-  state = {loader: false, appData: null, play: false};
+  state = {play: false, onboard: false, type: '', playIndex: 0};
 
   componentDidMount = async () => {
-    await this.getAppData();
+    // await AsyncStorage.clear();
+    const data = await init(this.state);
+    await this.dispatch({type: 'init', payload: data});
   };
 
   componentWillUnmount = () => {};
 
-  getAppData = async () => {
-    let appData = await fetchData();
-    this.setState({appData});
+  playVideo = (type, playIndex) => {
+    this.setState({play: !this.state.play, type, playIndex});
   };
 
-  activateLoader = () => {
-    // this.setState({loader: true});
-    // setTimeout(() => {
-    //   this.setState({loader: false});
-    // }, 1500);
-  };
-
-  playVideo = () => {
-    this.setState({play: !this.state.play});
+  dispatch = async action => {
+    this.setState(await reducer(this.state, action));
   };
 
   render() {
     return (
       <ContextStates.Provider
         value={{
-          loader: this.state.loader,
-          activateLoader: this.activateLoader,
-          appData: this.state.appData,
-          getAppData: async () => await this.getAppData(),
           playVideo: this.playVideo,
+          dispatch: this.dispatch,
+          reduState: this.state,
         }}>
         <View style={{flex: 1}}>
           <StatusBar
@@ -46,7 +43,9 @@ class App extends React.PureComponent {
             backgroundColor="transparent"
             barStyle="dark-content"
           />
-          {this.state.play && <Player />}
+          {this.state.play && (
+            <Player playIndex={this.state.playIndex} type={this.state.type} />
+          )}
           <View
             style={
               !this.state.play
@@ -54,7 +53,7 @@ class App extends React.PureComponent {
                 : {flex: 0, position: 'absolute', zIndex: 0}
             }>
             <NavigationContainer>
-              <MainNavigator />
+              <AppContainer />
             </NavigationContainer>
           </View>
         </View>

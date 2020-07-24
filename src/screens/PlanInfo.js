@@ -15,9 +15,14 @@ import {ListData} from '../comp/ListData';
 import {SimpleList} from '../comp/SimpleList';
 import Animated, {event, Value} from 'react-native-reanimated';
 import Player from '../comp/Player';
-import Orientation from 'react-native-orientation-locker';
+// import Orientation from 'react-native-orientation-locker';
 import {ContextStates} from '../func/ContextStates';
 import R from '../res/R';
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from 'accordion-collapse-react-native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -28,26 +33,68 @@ export default class PlanInfo extends React.PureComponent {
   static contextType = ContextStates;
   state = {
     isPlay: false,
-    data: [1, 2, 3, 4, 5, 6],
+    randomPlans: [],
     scrollY: new Value(0),
     player: false,
+    collapsed: [],
   };
-  componentDidMount = () => {};
+  componentDidMount = () => {
+    this.onMount();
+    this.onFocus = this.props.navigation.addListener('focus', this.onMount);
+  };
+  componentWillUnmount = () => {
+    this.onFocus();
+  };
+  onMount = () => {
+    let {data, type} = this.props.route.params;
+    let lesson;
+    let chapter;
+    if (type == 'sleep') {
+      const {sleepPr} = this.context.reduState;
+      sleepPr.map((itm, i) => {
+        if (data.name == itm.plan) {
+          lesson = sleepPr[i].lesson;
+          chapter = sleepPr[i].chapter;
+        }
+      });
+    } else {
+      const {session} = this.context.reduState;
+      session.map((itm, i) => {
+        if (data.name == itm.plan) {
+          lesson = session[i].lesson;
+          chapter = session[i].chapter;
+        }
+      });
+    }
+    this.setState({lesson, chapter}, () => {
+      const {chapters} = data.lessons[lesson ? lesson - 1 : 0];
+      let videos = [];
+      let randomPlans = [];
+      for (let i = 0; i < chapters.length; i++) {
+        videos.push(chapters[i].video);
+        if (i < 6)
+          randomPlans.push(
+            this.context.reduState.explore[
+              Math.floor(Math.random() * this.context.reduState.explore.length)
+            ],
+          );
+      }
+
+      this.context.dispatch({type: 'videos', payload: videos});
+      this.setState({
+        randomPlans,
+      });
+    });
+  };
   render() {
-    const {isPlay} = this.state;
+    const {collapsed, lesson, chapter} = this.state;
+    const {params} = this.props.route;
+    const {reduState} = this.context;
 
     const backButtX = this.state.scrollY.interpolate({
       inputRange: [0, 50],
       outputRange: [20, -70],
     });
-    // if (this.state.player)
-    //   return (
-    //     <Player
-    //       set={() =>
-    //         this.setState({player: false}, () => Orientation.lockToPortrait())
-    //       }
-    //     />
-    //   );
 
     return (
       <View
@@ -70,24 +117,42 @@ export default class PlanInfo extends React.PureComponent {
             },
           )}
           contentContainerStyle={styles.cContainer}>
-          <Image source={require('../res/imgs/tent.jpg')} style={styles.img} />
+          <Image
+            source={{
+              uri: isNaN(params.data.coverImage)
+                ? params.data.coverImage
+                : R.strings.defaultImg,
+            }}
+            style={styles.img}
+          />
           <Touchable
             onPress={() => {
               this.props.navigation.goBack();
-            }}>
+            }}
+            useForeground>
             <Animated.View
               style={{
-                backgroundColor: '#fff',
+                backgroundColor:
+                  this.props.route.params?.type === 'sleep'
+                    ? '#1e265f'
+                    : '#fff',
                 width: 50,
                 height: 50,
                 borderRadius: 40,
                 justifyContent: 'center',
                 alignItems: 'center',
                 position: 'absolute',
+                elevation: 5,
                 top: 10,
                 left: backButtX,
+                overflow: 'hidden',
               }}>
-              <Icon name="keyboard-arrow-left" color="grey" />
+              <Icon
+                name="keyboard-arrow-left"
+                color={
+                  this.props.route.params?.type === 'sleep' ? '#a3aeeb' : 'grey'
+                }
+              />
             </Animated.View>
           </Touchable>
           <View style={{paddingHorizontal: 20, marginVertical: 20}}>
@@ -96,14 +161,14 @@ export default class PlanInfo extends React.PureComponent {
                 styles.cardTitle,
                 this.props.route.params?.type === 'sleep' && {color: '#a3aeeb'},
               ]}>
-              Basics
+              {params.data.name}
             </Text>
             <Text
               style={[
                 styles.cardSubTitle,
                 this.props.route.params?.type === 'sleep' && {color: '#a3aeeb'},
               ]}>
-              3-20 MIN MEDITATION
+              {params.data.lessons.length} LESSONS
             </Text>
           </View>
           <Text
@@ -111,77 +176,213 @@ export default class PlanInfo extends React.PureComponent {
               styles.description,
               this.props.route.params?.type === 'sleep' && {color: '#6267a8'},
             ]}>
-            Live happier and healthier by learning the fundamentals of
-            meditation and mindfulness.
+            {reduState.desc[0]}
           </Text>
           <View
             style={{
-              flexDirection: 'row',
-              paddingHorizontal: 20,
-              flexWrap: 'wrap',
-              marginTop: 20,
+              width: '100%',
+              padding: 10,
+              backgroundColor:
+                this.props.route.params?.type === 'sleep' ? '#32407b' : '#eee',
             }}>
-            {this.state.data.map(itm => (
-              <View
-                style={{
-                  alignItems: 'center',
-                  marginRight: 22,
-                  marginBottom: 10,
+            {params.data.lessons.map((lessons, key) => (
+              <Collapse
+                isCollapsed={
+                  collapsed[key]
+                    ? collapsed[key]
+                    : key == (lesson ? lesson - 1 : 0)
+                }
+                onToggle={colps => {
+                  collapsed[key] = colps;
+                  this.setState({
+                    collapsed: [...collapsed],
+                  });
                 }}
-                key={itm}>
-                <Icon
-                  name="play-circle-outline"
-                  size={40}
-                  color={
+                key={key}
+                style={{
+                  width: '100%',
+                  backgroundColor:
                     this.props.route.params?.type === 'sleep'
-                      ? '#a3aeeb'
-                      : 'darkgrey'
-                  }
-                />
-                <Text
+                      ? '#1e265f'
+                      : '#fff',
+                  borderRadius: 10,
+                  marginBottom: key === params.data.lessons.length - 1 ? 0 : 10,
+                }}>
+                <CollapseHeader
                   style={{
-                    fontSize: 14,
-                    color:
-                      this.props.route.params?.type === 'sleep'
-                        ? '#6267a8'
-                        : 'darkgrey',
+                    padding: 20,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                   }}>
-                  {itm}
-                </Text>
-              </View>
+                  <Text
+                    style={{
+                      fontFamily: R.fonts.primary,
+                      fontWeight: 'bold',
+                      color:
+                        this.props.route.params?.type === 'sleep'
+                          ? '#a3aeeb'
+                          : '#5e5a61',
+                      fontSize: 16,
+                    }}>
+                    {lessons.title}
+                  </Text>
+                  <Icon
+                    name={
+                      collapsed[key]
+                        ? 'keyboard-arrow-up'
+                        : 'keyboard-arrow-down'
+                    }
+                    color={
+                      this.props.route.params?.type === 'sleep'
+                        ? '#a3aeeb'
+                        : '#5e5a61'
+                    }
+                  />
+                </CollapseHeader>
+                <CollapseBody
+                  style={{
+                    flexDirection: 'row',
+                    paddingHorizontal: 20,
+                    flexWrap: 'wrap',
+                  }}>
+                  <Text
+                    style={{
+                      fontFamily: R.fonts.primary,
+                      color:
+                        this.props.route.params?.type === 'sleep'
+                          ? '#a3aeeb'
+                          : '#5e5a61',
+                      fontSize: 12,
+                    }}>
+                    {lessons.desc}
+                  </Text>
+                  {lessons.chapters.map((chaps, keyc) => (
+                    <View
+                      style={{
+                        alignItems: 'center',
+                        marginRight: 22,
+                        marginBottom: 10,
+                      }}
+                      key={keyc}>
+                      <Icon
+                        name={
+                          key < lesson
+                            ? keyc < chapter
+                              ? 'play-circle-filled'
+                              : 'play-circle-outline'
+                            : 'play-circle-outline'
+                        }
+                        size={40}
+                        color={
+                          this.props.route.params?.type === 'sleep'
+                            ? '#a3aeeb'
+                            : key < lesson
+                            ? keyc < chapter
+                              ? '#5e5a61'
+                              : 'darkgrey'
+                            : 'darkgrey'
+                        }
+                      />
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color:
+                            this.props.route.params?.type === 'sleep'
+                              ? '#6267a8'
+                              : 'darkgrey',
+                        }}>
+                        {keyc + 1}
+                      </Text>
+                    </View>
+                  ))}
+                </CollapseBody>
+              </Collapse>
             ))}
           </View>
-          <View style={styles.list}>
+          {/* <View style={styles.list}>
             <HeadText title="Techniques" type={this.props.route.params?.type} />
-            <SimpleList type={this.props.route.params?.type} />
-            <SimpleList type={this.props.route.params?.type} />
-          </View>
+            <SimpleList
+              type={this.props.route.params?.type}
+              title={'title'}
+              image={''}
+            />
+            <SimpleList
+              type={this.props.route.params?.type}
+              title={'title'}
+              image={''}
+            />
+          </View> */}
           <View style={styles.list}>
             <HeadText title="Related" type={this.props.route.params?.type} />
+
             <ListData
-              desc={true}
-              data={this.state.data}
+              data={this.state.randomPlans}
               type={this.props.route.params?.type}
             />
           </View>
         </Animated.ScrollView>
         <Button
-          title="BEGIN COURSE"
-          titleStyle={{fontSize: 16}}
-          icon={{name: 'play-arrow', color: '#fff'}}
+          title="START"
+          titleStyle={{
+            fontSize: 16,
+            color:
+              this.props.route.params?.type === 'sleep' ? '#a3aeeb' : '#fff',
+          }}
+          icon={{
+            name: 'play-arrow',
+            color:
+              this.props.route.params?.type === 'sleep' ? '#a3aeeb' : '#fff',
+          }}
           containerStyle={{
             position: 'absolute',
             bottom: 20,
             width: '100%',
+            overflow: 'hidden',
           }}
+          useForeground
           buttonStyle={{
-            backgroundColor: 'orange',
+            backgroundColor:
+              this.props.route.params?.type === 'sleep' ? '#6267a8' : 'orange',
             borderRadius: 70,
             marginHorizontal: 20,
             paddingVertical: 18,
             overflow: 'hidden',
           }}
-          onPress={() => this.context.playVideo()}
+          onPressIn={() => {
+            if (params.type == 'sleep') {
+              let sess = this.context.reduState.sleepPr;
+              let session = sess.filter(t => t.plan !== params.data.name);
+              session.push({
+                plan: params.data.name,
+                lesson: lesson,
+                chapter: chapter,
+              });
+              this.context.dispatch({type: 'sleepSess', payload: [...session]});
+            } else {
+              let sess = this.context.reduState.session;
+              let session = sess.filter(t => t.plan !== params.data.name);
+              if (session.length == 3) {
+                session.pop();
+                session.push({
+                  plan: params.data.name,
+                  lesson: lesson,
+                  chapter: chapter,
+                });
+              } else {
+                session.push({
+                  plan: params.data.name,
+                  lesson: lesson,
+                  chapter: chapter,
+                });
+                session.reverse();
+              }
+
+              this.context.dispatch({type: 'session', payload: [...session]});
+            }
+          }}
+          onPressOut={() => {
+            this.context.playVideo(params.type, 1);
+          }}
         />
       </View>
     );
@@ -211,5 +412,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 30,
     marginHorizontal: 20,
+    marginBottom: 30,
   },
 });

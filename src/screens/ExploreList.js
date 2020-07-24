@@ -27,6 +27,7 @@ import {
 } from 'accordion-collapse-react-native';
 import {HeadText} from '../comp/Home/HeadText';
 import {ListData} from '../comp/ListData';
+import {ContextStates} from '../func/ContextStates';
 
 const {height, width} = Dimensions.get('window');
 
@@ -34,6 +35,7 @@ const HEADER_MIN_HEIGHT = height * 0.14;
 const HEADER_MAX_HEIGHT = height * 0.32;
 
 export default class ExploreList extends Component {
+  static contextType = ContextStates;
   constructor(props) {
     super(props);
 
@@ -104,7 +106,7 @@ export default class ExploreList extends Component {
             <View style={styles.cardView} key={i}>
               <HeadText title="Calming meditations" />
               <ListData
-                data={this.state.data.slice(0, 2)}
+                data={this.context.reduState.explore}
                 small
                 desc="Recognize what's occupying your mind and let it go."
               />
@@ -137,7 +139,7 @@ export default class ExploreList extends Component {
         <Animated.View
           style={[
             styles.animatedHeaderContainer,
-            {height: headerHeight, backgroundColor: R.color.primary},
+            {height: headerHeight, backgroundColor: R.colors.primary},
           ]}>
           <Animated.Image
             style={{height: '100%', width: '100%', opacity: imageOpacity}}

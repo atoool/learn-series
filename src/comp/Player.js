@@ -8,16 +8,16 @@ import {
   StatusBar,
   Dimensions,
   BackHandler,
+  Animated,
+  Easing,
 } from 'react-native';
 import {Icon, Button, Slider} from 'react-native-elements';
-import Orientation from 'react-native-orientation-locker';
+import Orientation from 'react-native-orientation';
 import LinearGradient from 'react-native-linear-gradient';
-import YoutubePlayer from 'react-native-youtube-iframe';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import Swiper from 'react-native-swiper';
 import {TouchableWithoutFeedback} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Animated, {Value, event, Easing} from 'react-native-reanimated';
 import {
   heightPercentageToDP,
   widthPercentageToDP,
@@ -25,6 +25,9 @@ import {
 } from 'react-native-responsive-screen';
 import {ContextStates} from '../func/ContextStates';
 import YouTube from 'react-native-youtube';
+import LottieView from 'lottie-react-native';
+import YoutubePlayer from 'react-native-youtube-iframe';
+import WebView from 'react-native-webview';
 
 const {width, height} = Dimensions.get('window');
 
@@ -35,12 +38,15 @@ const videos = [
   'fLLScgWQcHc',
   '4Zne-5V30xg',
 ];
+const LinearGr = Animated.createAnimatedComponent(LinearGradient);
 
+const Swipr = Animated.createAnimatedComponent(Swiper);
 export default class Player extends React.PureComponent {
   static contextType = ContextStates;
   constructor(props) {
     super(props);
-
+    this.animated = new Animated.Value(0);
+    this.animSwipe = new Animated.Value(0);
     this.state = {
       play: false,
       fullScreen: true,
@@ -51,12 +57,21 @@ export default class Player extends React.PureComponent {
       swipeIndex: 0,
       buffering: true,
       loader: true,
+      chapter: 1,
+      lesson: 1,
+      enableSwipe: false,
     };
   }
   componentDidMount() {
+    StatusBar.setHidden(true);
+    StatusBar.setTranslucent(true);
     Orientation.lockToLandscape();
-    let {activateLoader} = this.context;
-    activateLoader();
+    const session = this.context.reduState.session[
+      this.context.reduState.session.length - 1
+    ];
+    const chapter = session.chapter;
+    const lesson = session.lesson;
+    this.setState({chapter, lesson});
     setTimeout(() => {
       this.setState({loader: false});
     }, 1000);
@@ -79,11 +94,79 @@ export default class Player extends React.PureComponent {
     this.back.remove();
   };
 
-  onSwipeLeft = () => {};
-  onSwipeRight = () => {};
+  triggerControls = show => {
+    clearTimeout(this.hideControl);
+    Animated.timing(this.animated, {
+      toValue: !this.state.play ? 0 : 1,
+      duration: 100,
+      useNativeDriver: true,
+      easing: Easing.ease,
+    }).start();
+    this.setState({play: !this.state.play}, () => {
+      this.state.play && this.timeOutFunc();
+    });
+    // this.hideControl = setTimeout(() => {
+    //   Animated.timing(this.animated, {
+    //     toValue: 0,
+    //     duration: 300,
+    //     useNativeDriver: true,
+    //   }).start();
+    // }, 1500);
+  };
+
+  triggerSwipe = show => {
+    clearTimeout(this.hideSwipe);
+    Animated.timing(this.animSwipe, {
+      toValue: show == 'false' ? 0 : 1,
+      duration: 700,
+      useNativeDriver: true,
+      easing: Easing.cubic,
+    }).start();
+    clearInterval(this.interval);
+    show == 'false' &&
+      this.context.reduState.videos.length - 1 !== this.state.swipeIndex &&
+      this.refSwipe.scrollTo(this.state.swipeIndex + 1, true);
+    // this.hideSwipe = setTimeout(() => {
+    //   Animated.timing(this.animSwipe, {
+    //     toValue: 0,
+    //     duration: 500,
+    //     useNativeDriver: true,
+    //     easing: Easing.cubic,
+    //   }).start();
+
+    //   clearInterval(this.interval);
+    // }, 1500);
+  };
+
+  saveIndex = () => {
+    if (
+      this.state.chapter < this.state.swipeIndex + 1 &&
+      this.props.type != 'random'
+    ) {
+      const chapter = this.state.swipeIndex + 1;
+      let lesson = this.state.lesson;
+      this.state.swipeIndex + 1 == this.context.reduState.videos.length &&
+        (lesson = this.state.lesson + 1);
+      this.setState({chapter, lesson});
+      let session =
+        this.props.type === 'sleep'
+          ? this.context.reduState.sleepPr
+          : this.context.reduState.session;
+      session[
+        this.props.type === 'sleep' ? session.length - 1 : 0
+      ].chapter = chapter;
+      session[
+        this.props.type === 'sleep' ? session.length - 1 : 0
+      ].lesson = lesson;
+      this.context.dispatch({
+        type: this.props.type === 'sleep' ? 'sleepSess' : 'session',
+        payload: [...session],
+      });
+    }
+  };
 
   render() {
-    const {play, buffering, swipeIndex} = this.state;
+    const {play, buffering, swipeIndex, enableSwipe} = this.state;
     const {fullScreen, currentTime, totalTime} = this.state;
     const config = {
       velocityThreshold: 0.3,
@@ -91,86 +174,125 @@ export default class Player extends React.PureComponent {
     };
     const rTime = Math.abs(this.state.totalTime - this.state.currentTime) / 60;
 
+    const transY1 = this.animated.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, -60],
+    });
+    const transY2 = this.animated.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 80],
+    });
+
+    const translateX = this.animSwipe.interpolate({
+      inputRange: [0, 1],
+      outputRange: [200, 0],
+    });
+
     return (
       <ContextStates.Consumer>
-        {({loader, playVideo}) => {
-          if (loader || this.state.loader)
+        {({playVideo}) => {
+          if (this.state.loader)
             return <View style={{flex: 1, backgroundColor: '#000'}} />;
 
           return (
             <View style={{height: '100%', width: '100%'}}>
-              <StatusBar hidden translucent />
               <Swiper
+                ref={re => {
+                  this.refSwipe = re;
+                }}
+                // scrollEnabled={enableSwipe}
                 showsButtons={false}
+                index={this.state.swipeIndex}
                 loop={false}
                 onIndexChanged={i => {
                   clearInterval(this.interval);
-                  this.setState({
-                    swipeIndex: i,
-                    play: false,
-                    currentTime: 0,
-                    buffering: true,
-                  });
+                  this.setState(
+                    {
+                      swipeIndex: i,
+                      play: false,
+                      currentTime: 0,
+                      buffering: true,
+                      // enableSwipe: false,
+                    },
+                    this.saveIndex,
+                  );
                 }}
                 showsPagination={false}>
-                {videos.map((itm, i) => (
+                {this.context.reduState.videos.map((itm, i) => (
                   <View
-                    key={itm}
+                    key={i}
                     style={{
                       height: '100%',
                       width: '100%',
                       alignItems: 'stretch',
                       backgroundColor: '#000',
                       justifyContent: 'center',
+                      overflow: 'hidden',
                     }}>
-                    {swipeIndex === i && (
-                      <YouTube
-                        apiKey="AIzaSyCIsAH7Uc4vyb7Ihmc34XNTRDRAo0j3GhI"
+                    {this.state.swipeIndex === i && (
+                      <YoutubePlayer
                         ref={re => (this.playerRef = re)}
-                        style={{height: '100%', width: '100%'}}
+                        apiKey="AIzaSyCIsAH7Uc4vyb7Ihmc34XNTRDRAo0j3GhI"
+                        autoplay={false}
+                        height="100%"
+                        width="100%"
                         videoId={itm}
-                        play={i === swipeIndex ? play : false}
-                        onChangeState={e => {
-                          e.state === 'playing'
-                            ? this.setState({
-                                play: i === swipeIndex ? true : false,
-                              })
-                            : e.state === 'buffering'
-                            ? this.setState({play: true})
-                            : this.setState({play: false});
+                        webViewProps={{
+                          textZoom: 0,
+                          // containerStyle: {left: '-20%'},
+                          javaScriptEnabled: true,
                         }}
-                        onReady={async () => {
-                          // if (swipeIndex === i) {
-                          clearInterval(this.interval);
-                          this.interval = setInterval(async () => {
-                            const totalTim = await this.playerRef.getDuration();
-                            const currentTim = await this.playerRef.getCurrentTime();
+                        play={i === swipeIndex ? this.state.play : false}
+                        onChangeState={e => {
+                          (e.state === 'paused' || e.state === 'stopped') &&
+                            this.setState({play: false});
+                          e.state === 'playing' &&
+                            this.setState({enableSwipe: true});
+                          if (e.state === 'stopped') this.playerRef = null;
+                        }}
+                        loop
+                        onError={e => {
+                          console.warn(e);
+                        }}
+                        onReady={async e => {
+                          if (swipeIndex === i) {
+                            clearInterval(this.interval);
+                            this.interval = setInterval(async () => {
+                              const totalTime = await this.playerRef.getDuration();
+                              const currentTime = await this.playerRef.getCurrentTime();
 
-                            // let c = this.state.currentTime;
-                            // c[swipeIndex] = currentTim;
-                            // let t = this.state.totalTime;
-                            // t[swipeIndex] = totalTim;
-
-                            this.setState({
-                              currentTime: currentTim,
-                              totalTime: totalTim,
+                              if (currentTime >= totalTime - 5)
+                                this.setState({play: false}, () => {
+                                  this.context.reduState.videos.length - 1 ==
+                                  swipeIndex
+                                    ? playVideo('', 1)
+                                    : this.triggerSwipe('true');
+                                });
+                              this.setState({
+                                currentTime,
+                                totalTime: totalTime - 1,
+                              });
+                            }, 1000);
+                            this.setState({buffering: false}, () => {
+                              this.triggerControls(true);
                             });
-                          }, 1000);
-                          this.setState({buffering: false});
-                          // }
+                          }
                         }}
                         // volume={50}
-                        // initialPlayerParams={{
-                        //   controls: false,
-                        //   modestbranding: true,
-                        //   preventFullScreen: false,
-                        //   rel: true,
-                        // }}
+                        initialPlayerParams={{
+                          controls: false,
+                          modestbranding: true,
+                          preventFullScreen: true,
+                          rel: false,
+                          showClosedCaptions: false,
+                          end: 60,
+                        }}
                         controls={this.state.play ? 2 : 0}
                         modestbranding={true}
                         rel={false}
                       />
                     )}
+
                     {buffering && (
                       <View
                         style={{
@@ -178,7 +300,9 @@ export default class Player extends React.PureComponent {
                           height: '100%',
                           position: 'absolute',
                           zIndex: 15,
-                          backgroundColor: 'lightgrey',
+                          backgroundColor: buffering
+                            ? 'lightgrey'
+                            : 'rgba(0,0,0,0)',
                           justifyContent: 'center',
                           alignItems: 'center',
                         }}>
@@ -192,6 +316,7 @@ export default class Player extends React.PureComponent {
                         </Text>
                       </View>
                     )}
+
                     {/* <TouchableWithoutFeedback
                       onPress={() =>
                         this.setState(
@@ -200,7 +325,7 @@ export default class Player extends React.PureComponent {
                         )
                       }> */}
 
-                    {!this.state.play && (
+                    {this.state.play && (
                       <View
                         style={{
                           position: 'absolute',
@@ -209,22 +334,18 @@ export default class Player extends React.PureComponent {
                           zIndex: 20,
                           justifyContent: 'space-between',
                         }}>
-                        <LinearGradient
+                        <LinearGr
                           style={{
                             position: 'absolute',
                             width: '100%',
-                            height: '100%',
-                            zIndex: 20,
-                            justifyContent: 'space-between',
+                            height: '20%',
+                            transform: [{translateY: transY1}],
                           }}
                           colors={[
                             'rgba(0,0,0,0.8)',
                             'rgba(0,0,0,0.6)',
                             'rgba(0,0,0,0)',
                             'rgba(0,0,0,0)',
-                            'rgba(0,0,0,0)',
-                            'rgba(0,0,0,0.6)',
-                            'rgba(0,0,0,0.8)',
                           ]}
                           useAngle
                           angle={180}>
@@ -236,10 +357,10 @@ export default class Player extends React.PureComponent {
                               justifyContent: 'center',
                               alignItems: 'center',
                             }}>
-                            {videos.map((vid, i) =>
+                            {this.context.reduState.videos.map((vid, i) =>
                               swipeIndex === i ? (
                                 <Slider
-                                  key={vid}
+                                  key={i}
                                   style={{width: 200}}
                                   value={this.state.currentTime}
                                   maximumValue={this.state.totalTime}
@@ -248,14 +369,15 @@ export default class Player extends React.PureComponent {
                                     marginLeft: i === 0 ? 0 : 10,
                                     borderRadius: 10,
                                   }}
-                                  thumbStyle={{height: 0, width: 0}}
+                                  thumbTouchSize={{height: 0, width: 0}}
+                                  thumbStyle={{height: 1, width: 1}}
                                   minimumTrackTintColor="#fff"
                                   maximumTrackTintColor="lightgrey"
-                                  thumbTintColor="#fff"
+                                  thumbTintColor="rgba(0,0,0,0)"
                                 />
                               ) : (
                                 <View
-                                  key={vid}
+                                  key={i}
                                   style={{
                                     width: 7,
                                     backgroundColor: 'lightgrey',
@@ -269,7 +391,7 @@ export default class Player extends React.PureComponent {
                             <TouchableNativeFeedback
                               onPress={() => {
                                 // this.props.navigation.goBack();
-                                playVideo();
+                                playVideo('', 1);
                               }}>
                               <View
                                 style={{
@@ -284,7 +406,24 @@ export default class Player extends React.PureComponent {
                               </View>
                             </TouchableNativeFeedback>
                           </View>
-
+                        </LinearGr>
+                        <LinearGr
+                          style={{
+                            position: 'absolute',
+                            width: '100%',
+                            height: '20%',
+                            alignSelf: 'flex-end',
+                            bottom: 0,
+                            transform: [{translateY: transY2}],
+                          }}
+                          colors={[
+                            'rgba(0,0,0,0)',
+                            'rgba(0,0,0,0)',
+                            'rgba(0,0,0,0.6)',
+                            'rgba(0,0,0,0.8)',
+                          ]}
+                          useAngle
+                          angle={180}>
                           <View
                             style={{
                               flexDirection: 'row',
@@ -295,10 +434,10 @@ export default class Player extends React.PureComponent {
                             }}>
                             <TouchableWithoutFeedback
                               onPress={() => {
-                                this.setState(
-                                  {play: !play},
-                                  () => this.state.play && this.timeOutFunc(),
-                                );
+                                // this.setState({play: !this.state.play}, () => {
+                                this.triggerControls(true);
+
+                                // });
                               }}
                               style={{overflow: 'hidden'}}>
                               <View
@@ -335,11 +474,8 @@ export default class Player extends React.PureComponent {
                               minimumTrackTintColor="#fa744f"
                               trackStyle={{height: 2}}
                               thumbStyle={{width: 12, height: 12}}
-                              onValueChange={val => {
-                                this.setState({currentTime: val});
-                              }}
                               onSlidingComplete={val =>
-                                this.playerRef.seekTo(this.state.currentTime)
+                                this.playerRef && this.playerRef.seekTo(val)
                               }
                             />
                             <Text
@@ -372,12 +508,64 @@ export default class Player extends React.PureComponent {
                               }
                             </Text>
                           </View>
-                        </LinearGradient>
+                        </LinearGr>
                       </View>
                     )}
                   </View>
                 ))}
               </Swiper>
+              <Animated.View
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  transform: [{translateX}],
+                  width: '20%',
+                  height: '100%',
+                  alignSelf: 'center',
+                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                  alignItems: 'center',
+                  borderTopLeftRadius: height,
+                  borderBottomLeftRadius: height,
+                  flexDirection: 'row',
+                }}>
+                <LottieView
+                  source={require('../res/imgs/swipe.json')}
+                  autoPlay
+                  loop
+                  colorFilters={[
+                    {
+                      keypath: 'scroll_up',
+                      color: '#FFFFFF',
+                    },
+                  ]}
+                  style={{
+                    height: 100,
+                    width: 100,
+                    margin: 0,
+                    padding: 0,
+                    marginLeft: -20,
+                    position: 'absolute',
+                  }}
+                />
+                <View
+                  style={{
+                    alignSelf: 'center',
+                  }}>
+                  {this.state.currentTime >= this.state.totalTime - 5 && (
+                    <LottieView
+                      source={require('../res/imgs/count.json')}
+                      autoPlay
+                      style={{
+                        width: 40,
+                        height: 40,
+                        marginLeft: 20,
+                      }}
+                      loop={false}
+                      onAnimationFinish={() => this.triggerSwipe('false')}
+                    />
+                  )}
+                </View>
+              </Animated.View>
             </View>
           );
         }}

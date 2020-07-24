@@ -7,6 +7,7 @@ import {
   Image,
   FlatList,
   StatusBar,
+  TouchableNativeFeedback,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {HomePlayer} from '../comp/Home/HomePlayer';
@@ -19,16 +20,15 @@ import {Icon} from 'react-native-elements';
 import {ListData} from '../comp/ListData';
 import {SimpleList} from '../comp/SimpleList';
 import {ContextStates} from '../func/ContextStates';
+import Loading from '../comp/Loading';
+import R from '../res/R';
 
 export default class Home extends React.PureComponent {
-  state = {isPlay: false, data: [1, 2, 3, 4, 5, 6], focus: true};
+  static contextType = ContextStates;
+  state = {isPlay: false, data: [1, 2], focus: true};
   componentDidMount = () => {
-    this.focus = this.props.navigation.addListener('focus', () => {
-      this.setState({focus: true});
-    });
-    this.blur = this.props.navigation.addListener('blur', () => {
-      this.setState({focus: false});
-    });
+    this.focus = this.props.navigation.addListener('focus', async () => {});
+    this.blur = this.props.navigation.addListener('blur', () => {});
   };
 
   componentWillUnmount() {
@@ -37,7 +37,10 @@ export default class Home extends React.PureComponent {
   }
 
   render() {
-    const {isPlay} = this.state;
+    const {reduState} = this.context;
+
+    if (reduState.myCourse == null || reduState.mainVideo == null)
+      return <Loading load={this} />;
     return (
       // <ContextStates.Consumer>
       //   {() => {
@@ -47,42 +50,77 @@ export default class Home extends React.PureComponent {
         style={styles.constainer}
         contentContainerStyle={styles.cContainer}>
         <StatusBar hidden translucent />
-        {this.state.focus && <HomePlayer />}
-        <View style={[styles.cardView]}>
+        <HomePlayer vidData={reduState.mainVideo} that={this} />
+        {/* <View style={[styles.cardView]}>
           <HeadText
             title="Today's Meditation"
             caption="Try 2 sessions for free"
           />
           <SmallCard nav={() => this.props.navigation.navigate('Plan')} />
-        </View>
+        </View> */}
 
         <View style={styles.cardView}>
           <HeadText
             title="Ready to begin?"
-            caption="Start your journey with session 1 of the Basics"
+            caption={`Keep your journey with lesson ${
+              reduState.session[0].lesson
+            }`}
           />
+
           <View style={{paddingHorizontal: 20, width: '100%'}}>
-            <View style={styles.card}>
-              <View style={styles.cardTextView}>
-                <LockedText />
+            <TouchableNativeFeedback
+              onPress={() => {
+                const data = reduState.myCourse[0];
+                this.props.navigation.navigate('Plan', {
+                  data,
+                });
+              }}
+              style={{width: '100%', height: '100%'}}
+              useForeground>
+              <View style={{borderRadius: 10, overflow: 'hidden'}}>
+                <ImageBackground
+                  style={[styles.card]}
+                  source={{
+                    uri: isNaN(reduState.myCourse.reverse()[0].coverImage)
+                      ? reduState.myCourse.reverse()[0].coverImage
+                      : R.strings.defaultImg,
+                  }}>
+                  <View style={styles.cardTextView}>
+                    <LockedText
+                      type={''}
+                      locked={false}
+                      title={reduState.myCourse.reverse()[0].name.toUpperCase()}
+                      desc={''}
+                      lessons={`${
+                        reduState.session.reverse()[0].lesson
+                          ? reduState.session.reverse()[0].lesson
+                          : 1
+                      } OF ${reduState.myCourse.reverse()[0].lessons.length}`}
+                    />
+                  </View>
+                </ImageBackground>
               </View>
-            </View>
+            </TouchableNativeFeedback>
           </View>
         </View>
+
         <View style={styles.cardView}>
           <HeadText title="My courses" />
-          <SimpleList />
-          <SimpleList />
+          {reduState.myCourse.reverse().map((itm, key) => (
+            <View key={key}>
+              <SimpleList data={itm} />
+            </View>
+          ))}
         </View>
 
         <View style={styles.cardView}>
           <HeadText title="Recommended for you" />
-          <ListData data={this.state.data} />
+          <ListData data={reduState.recomPlan} />
         </View>
-        <View style={styles.cardView}>
+        {/* <View style={styles.cardView}>
           <HeadText title="Recent" />
           <ListData data={this.state.data} />
-        </View>
+        </View> */}
       </ScrollView>
       //     );
       //   }}
@@ -104,6 +142,7 @@ const styles = StyleSheet.create({
     padding: 20,
     height: 200,
     backgroundColor: '#fbeee0',
+    overflow: 'hidden',
   },
   cardTextView: {
     position: 'absolute',

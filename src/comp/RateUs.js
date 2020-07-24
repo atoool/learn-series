@@ -1,0 +1,106 @@
+import React, {PureComponent} from 'react';
+import {
+  View,
+  SafeAreaView,
+  Text,
+  StatusBar,
+  Image,
+  Linking,
+  Dimensions,
+  ActivityIndicator,
+  Platform,
+} from 'react-native';
+import {Overlay, Tile, Button} from 'react-native-elements';
+import R from '../res/R';
+import Loading from '../comp/Loading';
+import AsyncStorage from '@react-native-community/async-storage';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
+const {width} = Dimensions.get('screen');
+
+export default class RateUs extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {data: {}, isVisible: false};
+  }
+  componentDidMount = async () => {
+    let lang = await AsyncStorage.getItem('lang').catch(e => {});
+    lang == null && 'en';
+    await fetch(
+      `http://riafy.me/splash.php?appname=${
+        R.strings.bundleId
+      }&country=IN&simcountry=in&version=1.3.2&versioncode=24&lang=${lang}&inputlang=${lang}&network=wifi&loadcount=3&devtype=p&fbclid=IwAR0M6OClxu5DMoJl3efjkEwRSLlJx26JVP9yX8Ywfw70iHDPEWODl1YHUJs`,
+    )
+      .then(res => res.json())
+      .then(respons => {
+        this.setState({data: respons.splash, isVisible: this.props.isVisible});
+      });
+  };
+  onRate = async () => {
+    await AsyncStorage.setItem('rateus', 'rated').catch(e => {});
+    this.setState({isVisible: false}, () => {
+      Linking.openURL(this.state.data.url).catch(e => {});
+    });
+  };
+  render() {
+    return (
+      <Overlay
+        isVisible={
+          Platform.OS === 'ios'
+            ? this.state.data?.url_iOS
+              ? this.state.isVisible
+              : false
+            : this.state.isVisible
+        }
+        overlayStyle={{
+          padding: 0,
+          height: 'auto',
+          width: 'auto',
+          marginHorizontal: hp(1.9),
+          paddingBottom: hp(1.3),
+        }}
+        animationType="fade"
+        onBackdropPress={() => this.setState({isVisible: false})}>
+        <View>
+          <StatusBar backgroundColor="rgba(0,0,0,0.4)" />
+          {this.state.data.image == null ? (
+            <View
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <ActivityIndicator color={R.colors.primary} />
+            </View>
+          ) : (
+            <View>
+              <Image
+                source={{uri: this.state.data.image}}
+                style={{
+                  width: width - wp(8),
+                  height: width - hp(6.4),
+                  backgroundColor: 'lightgrey',
+                }}
+              />
+              <View style={{padding: hp(1.9)}}>
+                <Text style={{fontSize: hp(2.1), color: 'grey'}}>
+                  {this.state.data.message}
+                </Text>
+                <Button
+                  title={this.state.data.button}
+                  buttonStyle={{
+                    marginTop: hp(1.9),
+                    backgroundColor: R.colors.primary,
+                    paddingHorizontal: hp(1.3),
+                    marginHorizontal: wp(19.4),
+                  }}
+                  containerStyle={{width: 'auto'}}
+                  onPress={this.onRate}
+                />
+              </View>
+            </View>
+          )}
+        </View>
+      </Overlay>
+    );
+  }
+}

@@ -1,34 +1,50 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
   Dimensions,
-  TouchableWithoutFeedback,
+  ImageBackground,
 } from 'react-native';
-import YouTube from 'react-native-youtube';
-import {Button, Icon} from 'react-native-elements';
-import {useIsFocused} from '@react-navigation/native';
-import WebView from 'react-native-webview';
-import YoutubeIframe from 'react-native-youtube-iframe';
-import * as Animatable from 'react-native-animatable';
+import {Button} from 'react-native-elements';
+import YoutubeIframe, {getYoutubeMeta} from 'react-native-youtube-iframe';
+import Loading from '../Loading';
+import {useFocusEffect} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
-export const HomePlayer = props => {
+export const HomePlayer = ({that, vidData}) => {
   const [playing, setPlay] = useState(false);
-
+  const [thumb, setThumb] = useState('');
+  useFocusEffect(() => {
+    vidData != null &&
+      getYoutubeMeta(vidData[0]?.video).then(meta => {
+        setThumb(meta.thumbnail_url);
+      });
+  }, []);
+  if (vidData == null) return <Loading load={that} />;
   return (
     <View style={styles.constainer}>
       <YoutubeIframe
-        videoId="7P0o-YhIwJs"
+        videoId={vidData[0].video}
         play={playing}
         height={'160%'}
+        forceAndroidAutoplay={false}
         initialPlayerParams={{
           controls: false,
           rel: false,
           preventFullScreen: true,
+        }}
+        webViewProps={{
+          renderLoading: () => {
+            <ImageBackground
+              style={styles.constainer}
+              defaultSource={{
+                cache: 'force-cache',
+                uri: thumb,
+              }}
+            />;
+          },
         }}
         webViewStyle={{
           marginLeft: '-36%',
@@ -44,11 +60,9 @@ export const HomePlayer = props => {
       />
       {!playing && (
         <View style={styles.contentContainer}>
-          <Text style={styles.subHead}>The Wake Up</Text>
-          <Text style={styles.head}>
-            How can mindfullness help with isolation?
-          </Text>
-          <Text style={styles.caption}>more of your question answered</Text>
+          {/* <Text style={styles.subHead}></Text> */}
+          <Text style={styles.head}>{vidData[0].title}</Text>
+          <Text style={styles.subHead}>{vidData[0].desc.substr(0, 50)}...</Text>
           <Button
             title="WATCH"
             titleStyle={styles.btnText}

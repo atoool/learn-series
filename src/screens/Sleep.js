@@ -31,6 +31,7 @@ export default class Sleep extends PureComponent {
   }
 
   render() {
+    const {reduState} = this.context;
     const headerHeight = this.scrollYAnimatedValue.interpolate({
       inputRange: [0, HEADER_MIN_HEIGHT],
       outputRange: [-40, -HEADER_MIN_HEIGHT - 90],
@@ -59,12 +60,6 @@ export default class Sleep extends PureComponent {
       extrapolate: 'clamp',
     });
     return (
-      // <ContextStates.Consumer>
-      //   {({loader}) => {
-      //     if (loader)
-      //       return <View style={{flex: 1, backgroundColor: '#000'}} />;
-
-      //     return (
       <SafeAreaView style={styles.container}>
         <Animated.FlatList
           style={{flex: 1, backgroundColor: '#1e265f'}}
@@ -82,22 +77,25 @@ export default class Sleep extends PureComponent {
             ],
             {useNativeDriver: true},
           )}
-          data={this.state.data}
+          data={reduState.sleep}
           keyExtractor={(itm, indx) => indx.toString()}
           renderItem={({item, index}) => (
-            <View style={{padding: 10}} key={index}>
+            <View style={{padding: 10}}>
               <TouchableNativeFeedback
                 onPress={() => {
-                  this.props.navigation.navigate('ExploreFList', {
-                    title: 'Sleepcasts',
-                    data: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                  this.props.navigation.navigate('Plan', {
+                    data: item,
+                    chapter: 1,
+                    lesson: 1,
                   });
-                }}>
+                }}
+                useForeground>
                 <View
                   style={{
                     padding: 20,
                     width: '100%',
                     borderRadius: 16,
+                    overflow: 'hidden',
                     backgroundColor: '#3b3282',
                   }}>
                   <Text
@@ -107,7 +105,7 @@ export default class Sleep extends PureComponent {
                       fontWeight: 'bold',
                       marginBottom: 10,
                     }}>
-                    Sleepcasts
+                    {item.name}
                   </Text>
                   <Text
                     style={{
@@ -145,6 +143,7 @@ export default class Sleep extends PureComponent {
                   titleStyle={{fontSize: 14, color: '#8082cf'}}
                   icon={{name: 'play-arrow', color: '#8082cf'}}
                   containerStyle={{width: '50%', alignSelf: 'center'}}
+                  useForeground
                   buttonStyle={{
                     backgroundColor: '#3b3282',
                     borderRadius: 70,
@@ -152,7 +151,7 @@ export default class Sleep extends PureComponent {
                     paddingVertical: 10,
                     overflow: 'hidden',
                   }}
-                  onPress={() => this.context.playVideo()}
+                  onPress={() => this.context.playVideo('random', 1)}
                 />
               </Fireflies>
             </View>
@@ -211,12 +210,8 @@ export default class Sleep extends PureComponent {
               width: '100%',
             }}
           />
-          {/* </SafeAreaView> */}
         </Animated.View>
       </SafeAreaView>
-      //     );
-      //   }}
-      // </ContextStates.Consumer>
     );
   }
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Breathe</title>
+  </head>
+  <body>
+    <div class="breatheContainer">
+      <div class="breatheObject">
+        <img src="breathe/planet-light-blue.png" alt="">
+      </div>
+      <div class="bgContainer">
+        <div class="bgLeft">
+          <img class="spaceMountainFlat" src="breathe/planet-piece-left.png" alt="">
+        </div>
+        <div class="bgRight">
+          <img class="spaceMountainTall" src="breathe/planet-piece-right.png" alt="">
+        </div>
+      </div>
+      <div class="spaceGlow screen"><img src="breathe/screen-space-glow.png" alt=""></div>
+    </div>
+    <link rel="stylesheet" href="css/breathe.css">
+    <script type="text/javascript">
+
+    setTimeout(function() {
+      document.querySelector('.breatheObject').classList.add('circleScaling');
+      document.querySelector('.breatheObject img').classList.add('parallaxScale');
+      document.querySelector('.spaceGlow').classList.add('lightScale');
+      if (window.location.href.indexOf('localhost')==-1 && window.location.href.indexOf('192.168')==-1)
+      window.location.assign('http://riafy.me/vibrate/{0,112,224,136,112,120,96,96,72,80,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,54,52,54,52,60,52,64,52,100,100,112,112,224,112,496,112}');
+      else {
+        console.log('starting..');
+      }
+
+      setInterval(function(){
+          if (window.location.href.indexOf('localhost')==-1 && window.location.href.indexOf('192.168')==-1)
+          window.location.assign('http://riafy.me/vibrate/{0,112,224,136,112,120,96,96,72,80,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,54,52,54,52,60,52,64,52,100,100,112,112,224,112,496,112}');
+          else {
+            console.log('next..');
+          }
+        },8571);
+        
+    },1000);
+
+
+    </script>
+  </body>
+</html>
