@@ -7,30 +7,30 @@ const IAPid =
 const subscriptionsID =
   Platform.OS === 'ios'
     ? [R.strings.subscription]
-    : ['6month_premium', 'monthly_premium'];
+    : ['android.test.purchased', 'monthly_premium'];
 let premiumPurchased;
 let price;
 let microPrice;
 let purchaseErrorSubscription = null;
 let purchaseUpdateSubscription = null;
 checkPurchased = async () => {
-  // await RNIap.getAvailablePurchases()
-  //   .then(purchase => {
-  //     let purchased = purchase != 0 ? purchase[0].productId : null;
-  //     if (
-  //       // purchased === IAPid[0] ||
-  //       purchased === subscriptionsID[0]
-  //       // ||
-  //       // purchased === subscriptionsID[1]
-  //     ) {
-  //       premiumPurchased = true;
-  //     } else {
-  //       premiumPurchased = false;
-  //     }
-  //   })
-  //   .catch(err => {});
+  await RNIap.getAvailablePurchases()
+    .then(purchase => {
+      let purchased = purchase != 0 ? purchase[0].productId : null;
+      if (
+        // purchased === IAPid[0] ||
+        purchased === subscriptionsID[0]
+        // ||
+        // purchased === subscriptionsID[1]
+      ) {
+        premiumPurchased = true;
+      } else {
+        premiumPurchased = false;
+      }
+    })
+    .catch(err => {});
 
-  return true;
+  return premiumPurchased;
 };
 showPrice = async () => {
   let sixMonthPrice;

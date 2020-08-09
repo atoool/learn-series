@@ -11,6 +11,8 @@ import {SearchBar, Button, Icon} from 'react-native-elements';
 import {SimpleList} from '../comp/SimpleList';
 import {ContextStates} from '../func/ContextStates';
 import R from '../res/R';
+import Gradient from 'react-native-linear-gradient';
+import PremiumTag from '../comp/PremiumTag';
 
 export default class Explore extends React.PureComponent {
   static contextType = ContextStates;
@@ -36,7 +38,7 @@ export default class Explore extends React.PureComponent {
       // <ContextStates.Consumer>
       //   {() => {
       //     return (
-      <View style={{flex: 1}}>
+      <View style={{backgroundColor: '#fff', flex: 1}}>
         <View style={{backgroundColor: '#fff', elevation: 10}}>
           <SearchBar
             lightTheme={true}
@@ -79,7 +81,7 @@ export default class Explore extends React.PureComponent {
             }}
             placeholder="Search courses"
             onChangeText={this.updateSearch}
-            onClear={this.updateSearch}
+            // onClear={this.updateSearch}
             value={search}
           />
           {/* <ScrollView
@@ -132,7 +134,6 @@ export default class Explore extends React.PureComponent {
           </ScrollView>
         */}
         </View>
-        <View style={{height: '100%'}}>
           <FlatList
             data={this.state.data}
             contentContainerStyle={{
@@ -153,22 +154,20 @@ export default class Explore extends React.PureComponent {
                     // if (this.state.selected) this.updateSearch(item);
                     // else
                     this.props.navigation.navigate('Plan', {
-                      data: item,
-                      chapter:1,
-                      lesson:1,
+                      data: item,type:'explore'
                     });
                   }}
                   useForeground={true}>
                   {/* {!selected ? ( */}
                   <View style={{}}>
                     <ImageBackground
-                      source={{uri: isNaN(item.coverImage)?item.coverImage:R.strings.defaultImg}}
+                      source={{uri:this.context.reduState.imgExplore[item.coverImage]}}
                       style={{
                         width: '100%',
                       }}>
                       <View
                         style={{
-                          padding: 30,
+                          padding: 30,paddingVertical:40,
                           width: '100%',
                         }}>
                         <Text
@@ -180,6 +179,14 @@ export default class Explore extends React.PureComponent {
                           {item.name}
                         </Text>
                       </View>
+                      
+                      <Gradient
+                  start={{x: 0, y: 1}}
+                  end={{x: 0, y: 0}}
+                  colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.3)']}
+                  style={{width:'100%',height:'100%',position:'absolute'}}
+                />
+                <PremiumTag />
                     </ImageBackground>
                   </View>
                   {/* ) : (
@@ -191,7 +198,7 @@ export default class Explore extends React.PureComponent {
               </View>
             )}
           />
-        </View>
+        
       </View>
       //     );
       //   }}

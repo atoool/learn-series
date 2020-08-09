@@ -1,4 +1,6 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 import com.android.build.OutputFile
 
@@ -129,7 +131,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.newapp"
+        applicationId "academy.learn.piano"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -189,7 +191,8 @@ android {
 }
 
 dependencies {
-  implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.facebook.soloader:soloader:0.9.0+'
+    implementation 'com.android.support:multidex:1.0.3'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
@@ -226,4 +229,3 @@ task copyDownloadableDepsToLibs(type: Copy) {
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-apply plugin: 'com.google.gms.google-services'

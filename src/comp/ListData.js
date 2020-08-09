@@ -1,13 +1,17 @@
-import React from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import React, {useContext} from 'react';
+import {View, Text, StyleSheet, FlatList, ImageBackground} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {Image} from 'react-native';
 import {LockedText} from '../comp/LockedText';
 import {TouchableNativeFeedback} from 'react-native-gesture-handler';
 import {CommonActions, useNavigation} from '@react-navigation/native';
 import R from '../res/R';
+import {ContextStates} from '../func/ContextStates';
+import Gradient from 'react-native-linear-gradient';
+import PremiumTag from './PremiumTag';
 
 export const ListData = props => {
+  const context = useContext(ContextStates);
   const nav = useNavigation();
   return (
     <FlatList
@@ -35,19 +39,25 @@ export const ListData = props => {
           ]}>
           <TouchableNativeFeedback
             onPress={() => {
-              nav.navigate('Plan', {data: item, chapter: 1, lesson: 1});
+              props.scroll && props.scroll();
+              nav.navigate('Plan', {data: item, type: props.type});
             }}
             style={{padding: 5}}
             useForeground>
             <View>
-              <Image
+              <ImageBackground
                 source={{
-                  uri: isNaN(item.coverImage)
-                    ? item.coverImage
-                    : R.strings.defaultImg,
+                  uri: context.reduState.imgHome[item.coverImage],
                 }}
-                style={[styles.img, props.small && {width: 150}]}
-              />
+                style={[styles.img, props.small && {width: 150}]}>
+                <Gradient
+                  start={{x: 0, y: 1}}
+                  end={{x: 0, y: 0}}
+                  colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.3)']}
+                  style={{flex: 1, borderRadius: 5}}
+                />
+                <PremiumTag />
+              </ImageBackground>
               <LockedText
                 title={item.name}
                 lessons={item.lessons.length}
@@ -69,5 +79,6 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 5,
     marginBottom: 5,
+    overflow: 'hidden',
   },
 });

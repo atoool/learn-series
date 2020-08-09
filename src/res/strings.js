@@ -1,7 +1,13 @@
+const bundleId = 'academy.learn.piano';
 export default (strings = {
   primary: '',
-  bundleId: 'keto.weightloss.diet.plan',
+  bundleId,
   defaultImg: 'http://fstream.in/wellness/Packs/abs%20challenge.jpg',
-  api:
-    'https://cookbookapp.in/RIA/learningAPI.php?appname=piano.test.category&shrink&type=',
+  rateURL:
+    Platform.OS === 'ios'
+      ? 'https://apps.apple.com/in/app/fasting-tracker-intermittent/id1514726105'
+      : `https://play.google.com/store/apps/details?id=${bundleId}`,
+  api: `https://cookbookapp.in/RIA/learningAPI.php?appname=${bundleId}&shrink&type=`,
 });
+// jump.rope.workout.counter
+// piano.test.category

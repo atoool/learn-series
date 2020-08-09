@@ -16,7 +16,6 @@ import R from '../res/R';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ContextStates} from '../func/ContextStates';
 import {PremSuccess} from '../comp/PremSuccess';
-import {StackActions} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -55,9 +54,9 @@ export default class Onboarding extends PureComponent {
     } else if (url.indexOf('/skip/') > -1) {
       let u = a.url.substring(a.url.indexOf('%'));
       let dec = decodeURI(u);
+      this.props.navigation.navigate('MainTab');
       await AsyncStorage.setItem('urlVal', dec).catch(e => {});
       await AsyncStorage.setItem('@ONBOARDING', 'HIDE').catch(e => {});
-      this.props.navigation.dispatch(StackActions.replace('MainTab'));
       return false;
     } else if (url.indexOf('/terms') > -1) {
       this.props.navigation.navigate('Terms');
@@ -94,7 +93,7 @@ export default class Onboarding extends PureComponent {
               this.state.htmlUrl === null &&
               this.setState({
                 htmlUrl: e.url.concat(
-                  `?lang=${lang ? lang : 'en'}&simcountry=in&appname=${
+                  `?lang=${lang}&simcountry=in&appname=${
                     R.strings.bundleId
                   }&iOS`,
                 ),
@@ -104,9 +103,9 @@ export default class Onboarding extends PureComponent {
             // alert('Check your network connectivity');
           })
       : this.setState({
-          htmlUrl: `file:///android_asset/onboarding/onboarding.html?lang=${
-            lang ? lang : 'en'
-          }&simcountry=in&appname=${R.strings.bundleId}`,
+          htmlUrl: `file:///android_asset/onboarding/onboarding.html?lang=${lang}&simcountry=in&appname=${
+            R.strings.bundleId
+          }`,
         });
 
     PremiumCheckFun.purchaseListener(this);
@@ -121,15 +120,13 @@ export default class Onboarding extends PureComponent {
         <SafeAreaView
           style={{
             flex: 1,
-            marginTop: Platform.OS === 'ios' ? (height > 750 ? -45 : 0) : 0,
+            marginTop: Platform.OS === 'ios' ? (height > 750 ? -45 : 0) : 2,
             position: 'absolute',
             height: '100%',
             width: '100%',
             backgroundColor: '#fff',
-            justifyContent: 'center',
-            alignItems: 'center',
           }}>
-          <ActivityIndicator size={30} color={R.colors.primary} />
+          <Loading load={this} />
         </SafeAreaView>
       );
     } else if (
@@ -149,7 +146,7 @@ export default class Onboarding extends PureComponent {
           behavior="padding"
           enabled={true}>
           <WebView
-            // key={this.context.connected}
+            key={this.context.connected}
             startInLoadingState
             cacheEnabled
             onError={() => {

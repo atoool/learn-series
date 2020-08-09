@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import {fetchData} from './ApiCalls';
+import Home from '../screens/Home';
 
 export const reduState = {
   mainPlan: null,
@@ -34,7 +35,16 @@ export async function init(state) {
     mainPlan: home.mainPlan,
     recomPlan: home.recommended,
     mainVideo: home.mainVideo,
+    imgHome: home.images,
+    imgSleep: sleep.images,
+    imgExplore: explore.images,
+    titHome: home.titles,
+    titExplore: home.titles,
+    titSleep: sleep.titles,
     desc: home.descriptions,
+    descHome: home.descriptions,
+    descExplore: explore.descriptions,
+    descSleep: sleep.descriptions,
     explore: explore.plans,
     videos: [],
     sleep: sleep.plans,

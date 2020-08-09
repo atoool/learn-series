@@ -15,7 +15,7 @@ export default class Analytics extends React.PureComponent {
       <View style={{backgroundColor: '#dfc4fc', flex: 1}}>
         <WebView
           ref={r => (this.webview = r)}
-          style={{flex: 1, marginTop: 20, backgroundColor: '#dfc4fc'}}
+          style={{flex: 1}}
           source={{
             uri:
               'file:///android_asset/onboarding/analytics.html?lang=en&appname=keto.weightloss.diet.plan&data=1',

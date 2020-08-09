@@ -1,7 +1,10 @@
-package com.newapp;
+package academy.learn.piano;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import com.facebook.react.ReactActivity;
 
 public class MainActivity extends ReactActivity {
@@ -21,4 +24,12 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "newApp";
   }
+  @Override
+protected void onCreate(Bundle state){
+    super.onCreate(state);
+
+    SharedPreferences preferences =
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+preferences.edit().putString("debug_http_host", "192.168.10.7:8081").apply();
+}
 }

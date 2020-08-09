@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, ScrollView} from 'react-native';
 import WebView from 'react-native-webview';
 import {Button} from 'react-native-elements';
 import {TouchableNativeFeedback} from 'react-native';
@@ -26,7 +26,9 @@ export default class Jounal extends React.PureComponent {
   };
   render() {
     return (
-      <View style={{flex: 1, padding: 20, paddingTop: 100}}>
+      <ScrollView
+        style={{flex: 1, padding: 20, paddingTop: 100}}
+        contentContainerStyle={{paddingBottom: 100}}>
         <Animatable.View
           style={{marginBottom: 30}}
           // animation={this.state.pulse}
@@ -136,7 +138,7 @@ export default class Jounal extends React.PureComponent {
             </ImageBackground>
           </View>
         </TouchableNativeFeedback>
-      </View>
+      </ScrollView>
     );
   }
 }

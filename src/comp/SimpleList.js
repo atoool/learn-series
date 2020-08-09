@@ -4,22 +4,28 @@ import {Icon} from 'react-native-elements';
 import {LockedText} from '../comp/LockedText';
 import {useNavigation} from '@react-navigation/native';
 import R from '../res/R';
+import {useContext} from 'react';
+import {ContextStates} from '../func/ContextStates';
 
 export const SimpleList = ({data, type}) => {
+  const context = useContext(ContextStates);
   const nav = useNavigation();
   return (
     <View style={styles.mainContainer}>
       <TouchableNativeFeedback
         onPress={() => {
-          nav.navigate('Plan', {data, chapter: 1, lesson: 1});
+          nav.navigate('Plan', {data, type});
         }}
         useForeground>
         <View style={styles.container}>
           <Image
             source={{
-              uri: isNaN(data?.coverImage)
-                ? data.coverImage
-                : R.strings.defaultImg,
+              uri:
+                type == 'home'
+                  ? context.reduState.imgHome[data.coverImage]
+                  : type == 'explore'
+                  ? context.reduState.imgExplore[data.coverImage]
+                  : context.reduState.imgSleep[data.coverImage],
             }}
             style={styles.img}
           />

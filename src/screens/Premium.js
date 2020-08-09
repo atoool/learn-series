@@ -14,7 +14,7 @@ import Loading from '../comp/Loading';
 import R from '../res/R';
 import AsyncStorage from '@react-native-community/async-storage';
 import {PremSuccess} from '../comp/PremSuccess';
-import ContextStates from '../func/ContextStates';
+import {ContextStates} from '../func/ContextStates';
 
 const {width, height} = Dimensions.get('window');
 
@@ -69,7 +69,6 @@ export default class Premium extends Component {
   };
 
   componentDidMount = async () => {
-    PremiumCheckFun.purchaseListener(this);
     const lang = await AsyncStorage.getItem('lang').catch(e => {});
     let prices = await PremiumCheckFun.showPrice();
 
@@ -80,19 +79,28 @@ export default class Premium extends Component {
       sixMonthPrice: prices[1],
       monthlyPrice: prices[2],
     });
-    await fetch('Web.bundle/onboarding/premium.html')
-      .then(
-        e =>
-          this.state.htmlUrl === null &&
-          this.setState({
-            htmlUrl: e.url.concat(
-              `?lang=${lang}&simcountry=in&appname=${R.strings.bundleId}&iOS`,
-            ),
-          }),
-      )
-      .catch(err => {
-        // alert('Check your network connectivity');
-      });
+    Platform.OS === 'ios'
+      ? await fetch('Web.bundle/onboarding/premium.html')
+          .then(
+            e =>
+              this.state.htmlUrl === null &&
+              this.setState({
+                htmlUrl: e.url.concat(
+                  `?lang=${lang}&simcountry=in&appname=${
+                    R.strings.bundleId
+                  }&iOS`,
+                ),
+              }),
+          )
+          .catch(err => {
+            // alert('Check your network connectivity');
+          })
+      : this.setState({
+          htmlUrl: `file:///android_asset/onboarding/premium.html?lang=${lang}&simcountry=in&appname=${
+            R.strings.bundleId
+          }`,
+        });
+    PremiumCheckFun.purchaseListener(this);
   };
   componentWillUnmount() {
     PremiumCheckFun.purchaseListenerRemove();
@@ -100,7 +108,7 @@ export default class Premium extends Component {
 
   render() {
     if (this.state.htmlUrl == null) {
-      return <View style={{flex: 1}} />;
+      return <Loading load={this} />;
     } else if (
       this.state.purchasedPremium === 'yup' ||
       this.state.purchasedPremium === 'success'

@@ -10,8 +10,6 @@ export default class Rewards extends React.PureComponent {
         <WebView
           containerStyle={{
             flex: 1,
-            marginTop: 20,
-            backgroundColor: '#dfc4fc',
           }}
           source={{
             uri:

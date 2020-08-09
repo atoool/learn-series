@@ -6,10 +6,6 @@ import Sleep from '../screens/Sleep';
 import Explore from '../screens/Explore';
 import {Icon} from 'react-native-elements';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import {
-  createStackNavigator,
-  CardStyleInterpolators,
-} from '@react-navigation/stack';
 import Player from '../comp/Player';
 import PlanInfo from '../screens/PlanInfo';
 import {set} from 'react-native-reanimated';
@@ -19,6 +15,15 @@ import DailyLog from '../screens/DailyLog';
 import Analytics from '../screens/Analytics';
 import Rewards from '../screens/Rewards';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import Premium from '../screens/Premium';
+import Settings from '../screens/Settings';
+import ChangePref from '../screens/ChangePref';
+import Terms from '../screens/Terms';
+import Privacy from '../screens/Privacy';
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
@@ -40,33 +45,33 @@ const HomeStack = () => {
           cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
         }}
       />
+      <Stack.Screen
+        name="Premium"
+        component={Premium}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
     </Stack.Navigator>
   );
 };
 
 const ExploreStack = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Explore"
-        component={Explore}
-        options={{
-          headerShown: false,
-        }}
-      />
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Explore" component={Explore} options={{}} />
       <Stack.Screen
         name="Plan"
         component={PlanInfo}
         options={{
-          headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
         }}
       />
       <Stack.Screen
         name="Player"
         component={Player}
         options={{
-          headerShown: false,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
       />
@@ -74,7 +79,6 @@ const ExploreStack = () => {
         name="ExploreList"
         component={ExploreList}
         options={{
-          headerShown: false,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
       />
@@ -83,7 +87,13 @@ const ExploreStack = () => {
         component={ExploreFList}
         initialParams={{type: 'explore'}}
         options={{
-          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="Premium"
+        component={Premium}
+        options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
       />
@@ -167,6 +177,53 @@ const JournalStack = () => {
     </Stack.Navigator>
   );
 };
+
+const SettingsStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ChangePref"
+        component={ChangePref}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="Terms"
+        component={Terms}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="Privacy"
+        component={Privacy}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="Premium"
+        component={Premium}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const Tab = createMaterialBottomTabNavigator();
 
 const MainNavigator = () => {
@@ -181,9 +238,14 @@ const MainNavigator = () => {
   }, [focused]);
   return (
     <Tab.Navigator
+      sceneAnimationEnabled={false}
       activeColor="orange"
       inactiveColor="darkgrey"
-      barStyle={hideTab ? {opacity: 0, height: 0} : {}}>
+      barStyle={
+        hideTab
+          ? {opacity: 0, height: 0, backgroundColor: '#fff'}
+          : {backgroundColor: '#fff'}
+      }>
       <Tab.Screen
         name="Home"
         component={HomeStack}
@@ -214,7 +276,7 @@ const MainNavigator = () => {
           tabBarColor: '#fff',
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Sleep"
         component={SleepStack}
         listeners={({route}) => {
@@ -242,7 +304,7 @@ const MainNavigator = () => {
           ),
           tabBarColor: '#131953',
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Journal"
         component={JournalStack}
@@ -254,6 +316,21 @@ const MainNavigator = () => {
         options={{
           tabBarIcon: ({color}) => (
             <FontAwesome5Icon name="book" color={color} size={20} />
+          ),
+          tabBarColor: '#fff',
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsStack}
+        listeners={({route}) => {
+          route.state?.index === 0 ? setfocus(true) : setfocus(false);
+
+          route.state?.index === 1 && setHide(true);
+        }}
+        options={{
+          tabBarIcon: ({color}) => (
+            <FontAwesome5Icon name="cog" color={color} size={20} />
           ),
           tabBarColor: '#fff',
         }}

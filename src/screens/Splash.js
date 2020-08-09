@@ -23,7 +23,7 @@ export default class Splash extends React.PureComponent {
           }, 3000);
   };
   redirect = initApp => {
-    if (initApp[0][1] !== 'HIDE') this.props.navigation.replace('MainTab');
+    if (initApp[0][1] == 'HIDE') this.props.navigation.replace('MainTab');
     else this.props.navigation.replace('Onboarding');
     if (initApp[1][1] != null && initApp[1][1] == '2nd')
       this.setState({rateUs: true});
