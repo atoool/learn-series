@@ -53,7 +53,7 @@ export default class Player extends React.PureComponent {
       crntVideo: '',
       swipeIndex: 0,
       buffering: true,
-      loader: true,
+      loader: false,
       chapter: 1,
       lesson: 1,
       enableSwipe: false,
@@ -75,9 +75,9 @@ export default class Player extends React.PureComponent {
       lesson,
       swipeIndex: this.props.route.params.playIndex,
     });
-    setTimeout(() => {
-      this.setState({loader: false});
-    }, 1000);
+    // setTimeout(() => {
+    //   this.setState({loader: false});
+    // }, 1000);
     // this.back = BackHandler.addEventListener('hardwareBackPress', () => {
     //   return true;
     // });
@@ -91,9 +91,9 @@ export default class Player extends React.PureComponent {
   };
 
   componentWillUnmount = () => {
+    Orientation.lockToPortrait();
     clearTimeout(this.timeOut);
     clearInterval(this.interval);
-    Orientation.lockToPortrait();
     // this.back.remove();
   };
 
@@ -194,144 +194,140 @@ export default class Player extends React.PureComponent {
     });
 
     return (
-      <ContextStates.Consumer>
-        {({playVideo}) => {
-          if (this.state.loader)
-            return <View style={{flex: 1, backgroundColor: '#000'}} />;
+      <View style={{height: '100%', width: '100%', backgroundColor: '#000'}}>
+        <Swiper
+          ref={re => {
+            this.refSwipe = re;
+          }}
+          showsButtons={false}
+          index={this.state.swipeIndex}
+          loop={false}
+          onIndexChanged={i => {
+            clearInterval(this.interval);
+            this.setState(
+              {
+                swipeIndex: i,
+                play: true,
+                currentTime: 0,
+                buffering: true,
+              },
+              async () => {
+                await this.saveIndex();
+                this.triggerControls(false);
+                this.triggerSwipe('false', 'ignore');
+              },
+            );
+          }}
+          onTouchEnd={() => {
+            this.triggerControls(false);
+            play &&
+              setTimeout(() => {
+                this.triggerControls(true);
+              }, 3000);
+          }}
+          showsPagination={false}>
+          {videos.map((itm, i) => (
+            <View
+              key={i}
+              style={{
+                height: '100%',
+                width: '100%',
+                backgroundColor: '#000',
+                // justifyContent: 'center',
+                // overflow: 'hidden',
+              }}>
+              {this.state.swipeIndex === i && (
+                <YoutubePlayer
+                  ref={re => (this.playerRef = re)}
+                  height="100%"
+                  width="100%"
+                  videoId={videos[this.state.swipeIndex].video}
+                  play={play}
+                  onChangeState={e => {
+                    e === 'playing' && this.setState({buffering: false});
+                  }}
+                  webViewStyle={{
+                    backgroundColor: '#000',
+                    height: '100%',
+                    width: '100%',
+                  }}
+                  onReady={async e => {
+                    let duration = itm.duration
+                      ? itm.duration.toString()
+                      : null;
+                    let length = duration ? duration.length : 0;
+                    let start =
+                      length == 0 || length == 2
+                        ? 0
+                        : length == 3
+                        ? parseInt(duration.substr(0, 1))
+                        : parseInt(duration.substr(0, 2));
+                    let ends =
+                      length == 4
+                        ? parseInt(duration.substr(2))
+                        : length == 0
+                        ? 0
+                        : length == 3
+                        ? parseInt(duration.substr(1))
+                        : parseInt(duration.substr(0));
+                    this.playerRef.seekTo(start);
+                    let totalTime = await this.playerRef.getDuration();
+                    totalTime = totalTime - ends;
+                    if (swipeIndex === i) {
+                      clearInterval(this.interval);
+                      this.interval = setInterval(async () => {
+                        const currentTime = await this.playerRef.getCurrentTime();
 
-          return (
-            <View style={{height: '100%', width: '100%'}}>
-              <Swiper
-                ref={re => {
-                  this.refSwipe = re;
-                }}
-                showsButtons={false}
-                index={this.state.swipeIndex}
-                loop={false}
-                onIndexChanged={i => {
-                  clearInterval(this.interval);
-                  this.setState(
-                    {
-                      swipeIndex: i,
-                      play: true,
-                      currentTime: 0,
-                      buffering: true,
-                    },
-                    async () => {
-                      await this.saveIndex();
-                      this.triggerControls(false);
-                      this.triggerSwipe('false', 'ignore');
-                    },
-                  );
-                }}
-                onTouchEnd={() => {
-                  this.triggerControls(false);
-                  play &&
-                    setTimeout(() => {
-                      this.triggerControls(true);
-                    }, 3000);
-                }}
-                showsPagination={false}>
-                {videos.map((itm, i) => (
-                  <View
-                    key={i}
-                    style={{
-                      height: '100%',
-                      width: '100%',
-                      alignItems: 'stretch',
-                      backgroundColor: '#000',
-                      justifyContent: 'center',
-                      overflow: 'hidden',
-                    }}>
-                    {this.state.swipeIndex === i && (
-                      <YoutubePlayer
-                        ref={re => (this.playerRef = re)}
-                        height="100%"
-                        width="100%"
-                        videoId={videos[this.state.swipeIndex].video}
-                        play={play}
-                        onChangeState={e => {
-                          e === 'playing' && this.setState({buffering: false});
-                        }}
-                        loop
-                        webViewStyle={{backgroundColor: '#000'}}
-                        onReady={async e => {
-                          let duration = itm.duration
-                            ? itm.duration.toString()
-                            : null;
-                          let length = duration ? duration.length : 0;
-                          let start =
-                            length == 0 || length == 2
-                              ? 0
-                              : length == 3
-                              ? parseInt(duration.substr(0, 1))
-                              : parseInt(duration.substr(0, 2));
-                          let ends =
-                            length == 4
-                              ? parseInt(duration.substr(2))
-                              : length == 0
-                              ? 0
-                              : length == 3
-                              ? parseInt(duration.substr(1))
-                              : parseInt(duration.substr(0));
-                          this.playerRef.seekTo(start);
-                          let totalTime = await this.playerRef.getDuration();
-                          totalTime = totalTime - ends;
-                          if (swipeIndex === i) {
-                            clearInterval(this.interval);
-                            this.interval = setInterval(async () => {
-                              const currentTime = await this.playerRef.getCurrentTime();
+                        if (currentTime >= totalTime)
+                          this.setState(
+                            {
+                              play: false,
+                              completed: videos.length - 1 == swipeIndex,
+                            },
+                            () => {
+                              this.triggerSwipe('true');
+                            },
+                          );
+                        this.setState({
+                          currentTime,
+                        });
+                      }, 1000);
+                      this.setState({totalTime}, () => {
+                        this.triggerControls(true);
+                      });
+                    }
+                  }}
+                  volume={100}
+                  initialPlayerParams={{
+                    controls: false,
+                    modestbranding: true,
+                    preventFullScreen: true,
+                    rel: false,
+                  }}
+                />
+              )}
 
-                              if (currentTime >= totalTime)
-                                this.setState(
-                                  {
-                                    play: false,
-                                    completed: videos.length - 1 == swipeIndex,
-                                  },
-                                  () => {
-                                    this.triggerSwipe('true');
-                                  },
-                                );
-                              this.setState({
-                                currentTime,
-                              });
-                            }, 1000);
-                            this.setState({totalTime}, () => {
-                              this.triggerControls(true);
-                            });
-                          }
-                        }}
-                        volume={100}
-                        initialPlayerParams={{
-                          controls: false,
-                          modestbranding: true,
-                          preventFullScreen: true,
-                          rel: false,
-                        }}
-                      />
-                    )}
+              {buffering && (
+                <View
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                    zIndex: 15,
+                    backgroundColor: '#000',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <LottieView
+                    source={require('../res/imgs/buffer.json')}
+                    loop
+                    autoPlay
+                    style={{width: 150, height: 90}}
+                  />
+                </View>
+              )}
 
-                    {buffering && (
-                      <View
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          position: 'absolute',
-                          zIndex: 15,
-                          backgroundColor: '#000',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        <LottieView
-                          source={require('../res/imgs/buffer.json')}
-                          loop
-                          autoPlay
-                          style={{width: 150, height: 90}}
-                        />
-                      </View>
-                    )}
-
-                    {/* <TouchableWithoutFeedback
+              {/* <TouchableWithoutFeedback
                       onPress={() =>
                         this.setState(
                           {close: !this.state.close},
@@ -339,242 +335,229 @@ export default class Player extends React.PureComponent {
                         )
                       }> */}
 
-                    <View
-                      style={{
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        zIndex: 20,
-                        justifyContent: 'space-between',
-                      }}>
-                      <LinearGr
-                        style={{
-                          position: 'absolute',
-                          width: '100%',
-                          height: '20%',
-                          transform: [{translateY: transY1}],
-                        }}
-                        colors={[
-                          'rgba(0,0,0,0.8)',
-                          'rgba(0,0,0,0.6)',
-                          'rgba(0,0,0,0)',
-                          'rgba(0,0,0,0)',
-                        ]}
-                        useAngle
-                        angle={180}>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            paddingHorizontal: 300,
-                            paddingTop: 20,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          {videos.map((vid, i) =>
-                            swipeIndex === i ? (
-                              <Slider
-                                key={i}
-                                style={{width: 200}}
-                                value={this.state.currentTime}
-                                maximumValue={this.state.totalTime}
-                                trackStyle={{
-                                  height: 7,
-                                  marginLeft: i === 0 ? 0 : 10,
-                                  borderRadius: 10,
-                                }}
-                                thumbTouchSize={{height: 0, width: 0}}
-                                thumbStyle={{height: 7, width: 7}}
-                                minimumTrackTintColor="#fff"
-                                maximumTrackTintColor="lightgrey"
-                                thumbTintColor="rgba(0,0,0,0)"
-                              />
-                            ) : (
-                              <View
-                                key={i}
-                                style={{
-                                  width: 7,
-                                  backgroundColor: 'lightgrey',
-                                  height: 7,
-                                  borderRadius: 10,
-                                  marginLeft: i === 0 ? 0 : 5,
-                                }}
-                              />
-                            ),
-                          )}
-                          <TouchableNativeFeedback
-                            onPress={() => {
-                              this.props.navigation.goBack();
-                            }}>
-                            <View
-                              style={{
-                                position: 'absolute',
-                                right: 30,
-                                top: 20,
-                                width: 40,
-                                height: 40,
-                                justifyContent: 'center',
-                              }}>
-                              <Icon name="close" color="#fff" size={25} />
-                            </View>
-                          </TouchableNativeFeedback>
-                        </View>
-                      </LinearGr>
-                      <LinearGr
-                        style={{
-                          position: 'absolute',
-                          width: '100%',
-                          height: '20%',
-                          alignSelf: 'flex-end',
-                          bottom: 0,
-                          transform: [{translateY: transY2}],
-                        }}
-                        colors={[
-                          'rgba(0,0,0,0)',
-                          'rgba(0,0,0,0)',
-                          'rgba(0,0,0,0.6)',
-                          'rgba(0,0,0,0.8)',
-                        ]}
-                        useAngle
-                        angle={180}>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            paddingBottom: 10,
-                            paddingHorizontal: 15,
-                            justifyContent: 'space-between',
-                          }}>
-                          <TouchableWithoutFeedback
-                            onPress={() => {
-                              this.setState({play: !this.state.play}, () => {
-                                this.triggerControls(true);
-                              });
-                            }}
-                            style={{overflow: 'hidden'}}>
-                            <View
-                              style={{
-                                borderRadius: 30,
-                                borderColor: '#fff',
-                                borderWidth: 1.5,
-                                width: 35,
-                                height: 35,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                overflow: 'hidden',
-                              }}>
-                              {play ? (
-                                <FontAwesome5
-                                  name="pause"
-                                  color="#fff"
-                                  size={16}
-                                />
-                              ) : (
-                                <FontAwesome5
-                                  name="play"
-                                  color="#fff"
-                                  size={16}
-                                />
-                              )}
-                            </View>
-                          </TouchableWithoutFeedback>
-                          <Slider
-                            value={this.state.currentTime}
-                            maximumValue={this.state.totalTime}
-                            style={{width: '85%'}}
-                            thumbTintColor={R.colors.primary}
-                            minimumTrackTintColor={R.colors.primary}
-                            trackStyle={{height: 2}}
-                            thumbStyle={{width: 12, height: 12}}
-                            onSlidingComplete={val =>
-                              this.playerRef && this.playerRef.seekTo(val)
-                            }
-                          />
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              color: '#fff',
-                              textAlignVertical: 'center',
-                              marginBottom: 2,
-                              fontFamily: 'monospace',
-                            }}>
-                            {
-                              fmtMSS(
-                                this.state.totalTime - this.state.currentTime,
-                              ).split('.')[0]
-                            }
-                          </Text>
-                        </View>
-                      </LinearGr>
-                    </View>
-                  </View>
-                ))}
-              </Swiper>
-              <Animated.View
+              <View
                 style={{
                   position: 'absolute',
-                  right: 0,
-                  transform: [{translateX}],
-                  width: '20%',
+                  width: '100%',
                   height: '100%',
-                  alignSelf: 'center',
-                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                  alignItems: 'center',
-                  borderTopLeftRadius: height,
-                  borderBottomLeftRadius: height,
-                  flexDirection: 'row',
+                  zIndex: 20,
+                  justifyContent: 'space-between',
                 }}>
-                {!completed && (
-                  <LottieView
-                    source={require('../res/imgs/swipe.json')}
-                    autoPlay
-                    loop
-                    colorFilters={[
-                      {
-                        keypath: 'scroll_up',
-                        color: '#FFFFFF',
-                      },
-                    ]}
-                    style={{
-                      height: 100,
-                      width: 100,
-                      margin: 0,
-                      padding: 0,
-                      marginLeft: -20,
-                      position: 'absolute',
-                    }}
-                  />
-                )}
-                <View
+                <LinearGr
                   style={{
-                    alignSelf: 'center',
-                  }}>
-                  {this.state.currentTime >= this.state.totalTime && (
-                    <LottieView
-                      source={
-                        completed
-                          ? require('../res/imgs/done.json')
-                          : require('../res/imgs/count.json')
+                    position: 'absolute',
+                    width: '100%',
+                    height: '20%',
+                    transform: [{translateY: transY1}],
+                  }}
+                  colors={[
+                    'rgba(0,0,0,0.8)',
+                    'rgba(0,0,0,0.6)',
+                    'rgba(0,0,0,0)',
+                    'rgba(0,0,0,0)',
+                  ]}
+                  useAngle
+                  angle={180}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      paddingHorizontal: 300,
+                      paddingTop: 20,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    {videos.map((vid, i) =>
+                      swipeIndex === i ? (
+                        <Slider
+                          key={i}
+                          style={{width: 200}}
+                          value={this.state.currentTime}
+                          maximumValue={this.state.totalTime}
+                          trackStyle={{
+                            height: 7,
+                            marginLeft: i === 0 ? 0 : 10,
+                            borderRadius: 10,
+                          }}
+                          thumbTouchSize={{height: 0, width: 0}}
+                          thumbStyle={{height: 7, width: 7}}
+                          minimumTrackTintColor="#fff"
+                          maximumTrackTintColor="lightgrey"
+                          thumbTintColor="rgba(0,0,0,0)"
+                        />
+                      ) : (
+                        <View
+                          key={i}
+                          style={{
+                            width: 7,
+                            backgroundColor: 'lightgrey',
+                            height: 7,
+                            borderRadius: 10,
+                            marginLeft: i === 0 ? 0 : 5,
+                          }}
+                        />
+                      ),
+                    )}
+                    <TouchableNativeFeedback
+                      onPress={() => {
+                        this.props.navigation.goBack();
+                      }}>
+                      <View
+                        style={{
+                          position: 'absolute',
+                          right: 30,
+                          top: 20,
+                          width: 40,
+                          height: 40,
+                          justifyContent: 'center',
+                        }}>
+                        <Icon name="close" color="#fff" size={25} />
+                      </View>
+                    </TouchableNativeFeedback>
+                  </View>
+                </LinearGr>
+                <LinearGr
+                  style={{
+                    position: 'absolute',
+                    width: '100%',
+                    height: '20%',
+                    alignSelf: 'flex-end',
+                    bottom: 0,
+                    transform: [{translateY: transY2}],
+                  }}
+                  colors={[
+                    'rgba(0,0,0,0)',
+                    'rgba(0,0,0,0)',
+                    'rgba(0,0,0,0.6)',
+                    'rgba(0,0,0,0.8)',
+                  ]}
+                  useAngle
+                  angle={180}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      paddingBottom: 10,
+                      paddingHorizontal: 15,
+                      justifyContent: 'space-between',
+                    }}>
+                    <TouchableWithoutFeedback
+                      onPress={() => {
+                        this.setState({play: !this.state.play}, () => {
+                          this.triggerControls(true);
+                        });
+                      }}
+                      style={{overflow: 'hidden'}}>
+                      <View
+                        style={{
+                          borderRadius: 30,
+                          borderColor: '#fff',
+                          borderWidth: 1.5,
+                          width: 35,
+                          height: 35,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          overflow: 'hidden',
+                        }}>
+                        {play ? (
+                          <FontAwesome5 name="pause" color="#fff" size={16} />
+                        ) : (
+                          <FontAwesome5 name="play" color="#fff" size={16} />
+                        )}
+                      </View>
+                    </TouchableWithoutFeedback>
+                    <Slider
+                      value={this.state.currentTime}
+                      maximumValue={this.state.totalTime}
+                      style={{width: '85%'}}
+                      thumbTintColor={R.colors.primary}
+                      minimumTrackTintColor={R.colors.primary}
+                      trackStyle={{height: 2}}
+                      thumbStyle={{width: 12, height: 12}}
+                      onSlidingComplete={val =>
+                        this.playerRef && this.playerRef.seekTo(val)
                       }
-                      autoPlay
-                      style={{
-                        width: completed ? 90 : 40,
-                        height: completed ? 90 : 40,
-                        marginLeft: 20,
-                      }}
-                      loop={false}
-                      onAnimationFinish={async () => {
-                        completed
-                          ? await this.final()
-                          : this.triggerSwipe('false');
-                      }}
                     />
-                  )}
-                </View>
-              </Animated.View>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: '#fff',
+                        textAlignVertical: 'center',
+                        marginBottom: 2,
+                        fontFamily: 'monospace',
+                      }}>
+                      {
+                        fmtMSS(
+                          this.state.totalTime - this.state.currentTime,
+                        ).split('.')[0]
+                      }
+                    </Text>
+                  </View>
+                </LinearGr>
+              </View>
             </View>
-          );
-        }}
-      </ContextStates.Consumer>
+          ))}
+        </Swiper>
+        <Animated.View
+          style={{
+            position: 'absolute',
+            right: 0,
+            transform: [{translateX}],
+            width: '20%',
+            height: '100%',
+            alignSelf: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            alignItems: 'center',
+            borderTopLeftRadius: height,
+            borderBottomLeftRadius: height,
+            flexDirection: 'row',
+          }}>
+          {!completed && (
+            <LottieView
+              source={require('../res/imgs/swipe.json')}
+              autoPlay
+              loop
+              colorFilters={[
+                {
+                  keypath: 'scroll_up',
+                  color: '#FFFFFF',
+                },
+              ]}
+              style={{
+                height: 100,
+                width: 100,
+                margin: 0,
+                padding: 0,
+                marginLeft: -20,
+                position: 'absolute',
+              }}
+            />
+          )}
+          <View
+            style={{
+              alignSelf: 'center',
+            }}>
+            {this.state.currentTime >= this.state.totalTime && (
+              <LottieView
+                source={
+                  completed
+                    ? require('../res/imgs/done.json')
+                    : require('../res/imgs/count.json')
+                }
+                autoPlay
+                style={{
+                  width: completed ? 90 : 40,
+                  height: completed ? 90 : 40,
+                  marginLeft: 20,
+                }}
+                loop={false}
+                onAnimationFinish={async () => {
+                  completed ? await this.final() : this.triggerSwipe('false');
+                }}
+              />
+            )}
+          </View>
+        </Animated.View>
+      </View>
     );
   }
 }

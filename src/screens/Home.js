@@ -41,7 +41,11 @@ export default class Home extends React.PureComponent {
         style={styles.constainer}
         contentContainerStyle={styles.cContainer}>
         <StatusBar hidden translucent />
-        <HomePlayer vidData={reduState.mainVideo} that={this} />
+        <HomePlayer
+          ref={re => (this.player = re)}
+          vidData={reduState.mainVideo}
+          that={this}
+        />
         <View style={styles.cardView}>
           <HeadText
             title="Ready to begin?"
@@ -52,6 +56,7 @@ export default class Home extends React.PureComponent {
           <View style={{paddingHorizontal: 20, width: '100%'}}>
             <TouchableNativeFeedback
               onPress={() => {
+                this.player.playerPause();
                 const data = reduState.myCourse[0];
                 this.props.navigation.navigate('Plan', {
                   data,
@@ -89,14 +94,22 @@ export default class Home extends React.PureComponent {
           <HeadText title="My courses" />
           {reduState.myCourse.map((itm, key) => (
             <View key={key}>
-              <SimpleList data={itm} type="home" />
+              <SimpleList
+                playerPause={this.player?.playerPause}
+                data={itm}
+                type="home"
+              />
             </View>
           ))}
         </View>
 
         <View style={styles.cardView}>
           <HeadText title="Recommended for you" />
-          <ListData data={reduState.recomPlan} type="home" />
+          <ListData
+            playerPause={this.player?.playerPause}
+            data={reduState.recomPlan}
+            type="home"
+          />
         </View>
       </ScrollView>
     );

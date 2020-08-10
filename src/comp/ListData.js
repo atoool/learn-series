@@ -39,6 +39,7 @@ export const ListData = props => {
           ]}>
           <TouchableNativeFeedback
             onPress={() => {
+              props?.playerPause && props.playerPause();
               props.scroll && props.scroll();
               nav.navigate('Plan', {data: item, type: props.type});
             }}

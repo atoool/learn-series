@@ -23,6 +23,7 @@ import Privacy from '../screens/Privacy';
 import {
   createStackNavigator,
   CardStyleInterpolators,
+  TransitionPresets,
 } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
@@ -42,7 +43,16 @@ const HomeStack = () => {
         name="Player"
         component={Player}
         options={{
-          cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {duration: 0},
+            },
+            close: {
+              animation: 'timing',
+              config: {duration: 0},
+            },
+          },
         }}
       />
       <Stack.Screen
@@ -72,7 +82,7 @@ const ExploreStack = () => {
         name="Player"
         component={Player}
         options={{
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
         }}
       />
       <Stack.Screen

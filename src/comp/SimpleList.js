@@ -7,13 +7,14 @@ import R from '../res/R';
 import {useContext} from 'react';
 import {ContextStates} from '../func/ContextStates';
 
-export const SimpleList = ({data, type}) => {
+export const SimpleList = ({data, type, playerPause}) => {
   const context = useContext(ContextStates);
   const nav = useNavigation();
   return (
     <View style={styles.mainContainer}>
       <TouchableNativeFeedback
         onPress={() => {
+          playerPause && playerPause();
           nav.navigate('Plan', {data, type});
         }}
         useForeground>

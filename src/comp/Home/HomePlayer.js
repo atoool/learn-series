@@ -1,4 +1,10 @@
-import React, {useState, useEffect, createRef, useRef, useContext} from 'react';
+import React, {
+  useState,
+  createRef,
+  useContext,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
 import {
   StyleSheet,
   View,
@@ -19,7 +25,7 @@ import {ContextStates} from '../../func/ContextStates';
 
 const {width, height} = Dimensions.get('window');
 // const vids = ['2dc7GuiQP0A', 'nP-i7AlROK4', '8iJ_gxjDuHM', 'JAX1cESZnFA'];
-export const HomePlayer = ({that, vidData}) => {
+export const HomePlayer = forwardRef(({that, vidData}, ref) => {
   const context = useContext(ContextStates);
   const [playing, setPlay] = useState(false);
   const [thumb, setThumb] = useState('');
@@ -36,7 +42,6 @@ export const HomePlayer = ({that, vidData}) => {
   }, []);
 
   let view = createRef(null);
-  let player = useRef();
 
   const onPlay = () => {
     view.current
@@ -47,6 +52,11 @@ export const HomePlayer = ({that, vidData}) => {
     setPlay(false);
     view.current.zoomIn(600);
   };
+  useImperativeHandle(ref, () => ({
+    playerPause() {
+      onPause();
+    },
+  }));
   if (vidData == null) return <Loading load={that} />;
   return (
     <View key={context.connected} style={styles.constainer}>
@@ -54,7 +64,6 @@ export const HomePlayer = ({that, vidData}) => {
       <View style={styles.youtube}>
         <YoutubeIframe
           key={index}
-          ref={player}
           playList={videos}
           play={playing}
           height={'100%'}
@@ -152,7 +161,7 @@ export const HomePlayer = ({that, vidData}) => {
       {/* ))} */}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   constainer: {

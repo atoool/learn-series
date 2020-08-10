@@ -506,6 +506,7 @@ export default class PlanInfo extends React.PureComponent {
                 videos: params.data.lessons[lesson - 1].chapters,
                 type: params.type,
                 playIndex: chapter - 1,
+                lessons: params.data.lessons.length,
               });
           }}
         />
