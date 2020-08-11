@@ -24,6 +24,9 @@ PODS:
   - Firebase/Crashlytics (6.27.1):
     - Firebase/CoreOnly
     - FirebaseCrashlytics (~> 4.2.0)
+  - Firebase/Messaging (6.27.1):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 4.5.0)
   - FirebaseAnalytics (6.6.2):
     - FirebaseCore (~> 6.8)
     - FirebaseInstallations (~> 1.4)
@@ -59,6 +62,19 @@ PODS:
     - GoogleUtilities/Environment (~> 6.7)
     - GoogleUtilities/UserDefaults (~> 6.7)
     - PromisesObjC (~> 1.2)
+  - FirebaseInstanceID (4.5.1):
+    - FirebaseCore (~> 6.8)
+    - FirebaseInstallations (~> 1.0)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/UserDefaults (~> 6.7)
+  - FirebaseMessaging (4.5.0):
+    - FirebaseCore (~> 6.8)
+    - FirebaseInstanceID (~> 4.3)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.5)
+    - GoogleUtilities/Environment (~> 6.5)
+    - GoogleUtilities/Reachability (~> 6.5)
+    - GoogleUtilities/UserDefaults (~> 6.5)
+    - Protobuf (>= 3.9.2, ~> 3.9)
   - Folly (2018.10.22.00):
     - boost-for-react-native
     - DoubleConversion
@@ -109,6 +125,7 @@ PODS:
   - nanopb/decode (1.30905.0)
   - nanopb/encode (1.30905.0)
   - PromisesObjC (1.2.9)
+  - Protobuf (3.12.0)
   - RCTRequired (0.62.2)
   - RCTTypeSafety (0.62.2):
     - FBLazyVector (= 0.62.2)
@@ -346,6 +363,8 @@ PODS:
     - React-cxxreact (= 0.62.2)
     - React-jsi (= 0.62.2)
     - ReactCommon/callinvoker (= 0.62.2)
+  - ReactNativeLocalization (2.1.6):
+    - React
   - RNCAsyncStorage (1.11.0):
     - React
   - RNCMaskedView (0.1.10):
@@ -366,6 +385,11 @@ PODS:
     - Firebase/Crashlytics (~> 6.27.0)
     - React
     - RNFBApp
+  - RNFBMessaging (7.6.1):
+    - Firebase/Analytics (~> 6.27.0)
+    - Firebase/Messaging (~> 6.27.0)
+    - React
+    - RNFBApp
   - RNGestureHandler (1.6.1):
     - React
   - RNIap (4.4.9):
@@ -373,6 +397,10 @@ PODS:
   - RNReanimated (1.9.0):
     - React
   - RNScreens (2.9.0):
+    - React
+  - RNShare (3.7.0):
+    - React
+  - RNSVG (12.1.0):
     - React
   - RNVectorIcons (6.6.0):
     - React
@@ -417,16 +445,20 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/callinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeLocalization (from `../node_modules/react-native-localization`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
+  - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNIap (from `../node_modules/react-native-iap`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNShare (from `../node_modules/react-native-share`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -440,6 +472,8 @@ SPEC REPOS:
     - FirebaseCoreDiagnostics
     - FirebaseCrashlytics
     - FirebaseInstallations
+    - FirebaseInstanceID
+    - FirebaseMessaging
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleDataTransportCCTSupport
@@ -447,6 +481,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - nanopb
     - PromisesObjC
+    - Protobuf
     - YoutubePlayer-in-WKWebView
 
 EXTERNAL SOURCES:
@@ -518,6 +553,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeLocalization:
+    :path: "../node_modules/react-native-localization"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
   RNCMaskedView:
@@ -530,6 +567,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/auth"
   RNFBCrashlytics:
     :path: "../node_modules/@react-native-firebase/crashlytics"
+  RNFBMessaging:
+    :path: "../node_modules/@react-native-firebase/messaging"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNIap:
@@ -538,6 +577,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNShare:
+    :path: "../node_modules/react-native-share"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
@@ -556,6 +599,8 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnostics: 4505e4d4009b1d93f605088ee7d7764d5f0d1c84
   FirebaseCrashlytics: 7d0fa02ea8842cc4b2ab07b0735edafde1ad77d6
   FirebaseInstallations: 3c520c951305cbf9ca54eb891ff9e6d1fd384881
+  FirebaseInstanceID: c4ad474b87787afd27d09541800620993b457d6f
+  FirebaseMessaging: ad9e1a80ea64905e01a0ce1b3eb76a2944544151
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   GoogleAppMeasurement: 8cd1f289d60e629cf16ab03363b9e89c776b9651
@@ -567,6 +612,7 @@ SPEC CHECKSUMS:
   lottie-react-native: a664f59f1f298c2696dd0ae07b15cbdfc433cb02
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
   PromisesObjC: b48e0338dbbac2207e611750777895f7a5811b75
+  Protobuf: 2793fcd0622a00b546c60e7cbbcc493e043e9bb9
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
   RCTTypeSafety: 93006131180074cffa227a1075802c89a49dd4ce
   RCTYouTube: 4509d59a7de050dd0c7c6cb1f427d37678d63b5c
@@ -593,16 +639,20 @@ SPEC CHECKSUMS:
   React-RCTText: fae545b10cfdb3d247c36c56f61a94cfd6dba41d
   React-RCTVibration: 4356114dbcba4ce66991096e51a66e61eda51256
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
+  ReactNativeLocalization: dbb269b27d8a84bb22b9c2cdec38ba780b51dd72
   RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNFBAnalytics: aaddc461e7e6b35c80fd6dc177bf31251a520b08
   RNFBApp: aa6df66d39a8da9f808740a17b282674d0a8dbb9
   RNFBAuth: 0f57e4ba12b055478f18a2e3bb5f4381efe7f3c3
   RNFBCrashlytics: 66dcd39cd17846bc3c59f8e4303c4dcdd8f19d4f
+  RNFBMessaging: 9084f54a03d7bf539640999d48749d0166164a32
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNIap: 4c36518a34ab4cc3f5762037cc510c2e7290485c
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
+  RNShare: a1d5064df7a0ebe778d001869b3f0a124bf0a491
+  RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YoutubePlayer-in-WKWebView: af2f5929fc78882d94bfdfeea999b661b78d9717

@@ -25,13 +25,15 @@ import {
   CardStyleInterpolators,
   TransitionPresets,
 } from '@react-navigation/stack';
+import {useRoute} from '@react-navigation/native';
 
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
+  const route = useRoute();
   return (
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name="Home" component={Home} options={{}} />
+      <Stack.Screen name="Home" component={Home} />
       <Stack.Screen
         name="Plan"
         component={PlanInfo}
@@ -104,7 +106,7 @@ const ExploreStack = () => {
         name="Premium"
         component={Premium}
         options={{
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
         }}
       />
     </Stack.Navigator>
@@ -239,6 +241,7 @@ const Tab = createMaterialBottomTabNavigator();
 const MainNavigator = () => {
   const [hideTab, setHide] = useState(false);
   const [focused, setfocus] = useState(true);
+  const route = useRoute();
 
   useEffect(() => {
     focused &&
@@ -246,6 +249,7 @@ const MainNavigator = () => {
         setHide(false);
       }, 400);
   }, [focused]);
+
   return (
     <Tab.Navigator
       sceneAnimationEnabled={false}

@@ -26,6 +26,7 @@ import {ContextStates} from '../../func/ContextStates';
 const {width, height} = Dimensions.get('window');
 // const vids = ['2dc7GuiQP0A', 'nP-i7AlROK4', '8iJ_gxjDuHM', 'JAX1cESZnFA'];
 export const HomePlayer = forwardRef(({that, vidData}, ref) => {
+  let view = createRef(null);
   const context = useContext(ContextStates);
   const [playing, setPlay] = useState(false);
   const [thumb, setThumb] = useState('');
@@ -40,8 +41,6 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
       });
     }
   }, []);
-
-  let view = createRef(null);
 
   const onPlay = () => {
     view.current

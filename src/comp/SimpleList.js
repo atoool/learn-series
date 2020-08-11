@@ -14,7 +14,6 @@ export const SimpleList = ({data, type, playerPause}) => {
     <View style={styles.mainContainer}>
       <TouchableNativeFeedback
         onPress={() => {
-          playerPause && playerPause();
           nav.navigate('Plan', {data, type});
         }}
         useForeground>

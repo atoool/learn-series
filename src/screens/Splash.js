@@ -35,7 +35,7 @@ export default class Splash extends React.PureComponent {
         {Platform.OS === 'iOS' ? (
           <Loading load={this} />
         ) : (
-          <Image style={styles.img} source={require('../res/imgs/moon.png')} />
+          <Image style={styles.img} source={require('../res/imgs/logo.png')} />
         )}
         {this.state.rateUs && <RateUs isVisible={this.state.rateUs} />}
       </View>
@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   img: {
-    width: 100,
-    height: 90,
+    width: 80,
+    height: 80,
     marginBottom: 20,
   },
 });

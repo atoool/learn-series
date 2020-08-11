@@ -22,21 +22,53 @@ import {SimpleList} from '../comp/SimpleList';
 import {ContextStates} from '../func/ContextStates';
 import Loading from '../comp/Loading';
 import R from '../res/R';
+import Animated from 'react-native-reanimated';
 
 export default class Home extends React.PureComponent {
   static contextType = ContextStates;
   state = {isPlay: false, data: [1, 2], focus: true};
-  componentDidMount = () => {};
+  componentDidMount = () => {
+    this.blur = this.props.navigation.addListener('blur', () => {
+      this.player?.playerPause && this.player?.playerPause();
+    });
+    this.onNotification();
+  };
 
-  componentWillUnmount() {}
+  onNotification = () => {
+    const {notific} = this.context;
+    if (notific)
+      if (notific?.data && notific?.data?.course) {
+        const {explore} = this.context.reduState;
+        let data = null;
+        explore &&
+          (data = explore.filter(f => f.name == notific?.data?.course));
+        data &&
+          data.length != 0 &&
+          this.props.navigation.navigate('Plan', {
+            data: data[0],
+            type: 'explore',
+          });
+      } else
+        setTimeout(() => {
+          notific.message &&
+            notific.message === 'Scheduled' &&
+            this.scrollRef &&
+            this.scrollRef?.getNode()?.scrollTo({x: 0, y: 100, animated: true});
+        }, 2000);
+  };
+
+  componentWillUnmount() {
+    this.blur();
+  }
 
   render() {
     const {reduState} = this.context;
-
+    const {params} = this.props.route;
     if (reduState.myCourse == null || reduState.mainVideo == null)
       return <Loading load={this} />;
     return (
-      <ScrollView
+      <Animated.ScrollView
+        ref={re => (this.scrollRef = re)}
         showsVerticalScrollIndicator={false}
         style={styles.constainer}
         contentContainerStyle={styles.cContainer}>
@@ -56,7 +88,6 @@ export default class Home extends React.PureComponent {
           <View style={{paddingHorizontal: 20, width: '100%'}}>
             <TouchableNativeFeedback
               onPress={() => {
-                this.player.playerPause();
                 const data = reduState.myCourse[0];
                 this.props.navigation.navigate('Plan', {
                   data,
@@ -94,24 +125,16 @@ export default class Home extends React.PureComponent {
           <HeadText title="My courses" />
           {reduState.myCourse.map((itm, key) => (
             <View key={key}>
-              <SimpleList
-                playerPause={this.player?.playerPause}
-                data={itm}
-                type="home"
-              />
+              <SimpleList data={itm} type="home" />
             </View>
           ))}
         </View>
 
         <View style={styles.cardView}>
           <HeadText title="Recommended for you" />
-          <ListData
-            playerPause={this.player?.playerPause}
-            data={reduState.recomPlan}
-            type="home"
-          />
+          <ListData data={reduState.recomPlan} type="home" />
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     );
   }
 }

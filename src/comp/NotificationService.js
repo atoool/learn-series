@@ -1,129 +1,111 @@
-// import firebase from 'react-native-firebase';
-// import {AppState} from 'react-native';
-// import R from '../res/R';
-// // Build a channel
-// const channel1 = new firebase.notifications.Android.Channel(
-//   'test-channel1',
-//   'Test Channel1',
-//   firebase.notifications.Android.Importance.Max,
-// ).setDescription('My apps test channel1');
+import PushNotification from 'react-native-push-notification';
+import NotificationHandler from './NotificationHandler';
+import R from '../res/R';
 
-// const channel2 = new firebase.notifications.Android.Channel(
-//   'test-channel2',
-//   'Test Channel2',
-//   firebase.notifications.Android.Importance.Max,
-// ).setDescription('My apps test channel2');
+export default class NotificationService {
+  constructor(onRegister, onNotification) {
+    this.lastId = 0;
+    this.lastChannelCounter = 0;
 
-// const channel3 = new firebase.notifications.Android.Channel(
-//   'test-channel3',
-//   'Test Channel3',
-//   firebase.notifications.Android.Importance.Max,
-// ).setDescription('My apps test channel3');
+    NotificationHandler.attachRegister(onRegister);
+    NotificationHandler.attachNotification(onNotification);
 
-// // Create the channel
-// async function createChannel() {
-//   await firebase
-//     .notifications()
-//     .android.createChannels([channel1, channel2, channel3])
-//     .then(() => {
-//       // console.warn('channel1');
-//     })
-//     .catch(err => {
-//       // console.warn(err);
-//     });
-// }
+    // Clear badge number at start
+    PushNotification.getApplicationIconBadgeNumber(function(number) {
+      if (number > 0) {
+        PushNotification.setApplicationIconBadgeNumber(0);
+      }
+    });
 
-// const notification1 = new firebase.notifications.Notification()
-//   .setNotificationId('123')
-//   .setTitle(R.locale.appName)
-//   .setBody(R.locale.notifiy)
-//   .setSound('default')
-//   .android.setChannelId('test-channel1')
-//   .android.setSmallIcon('ic_launcher');
+    PushNotification.getChannels(function(channels) {
+      // console.log(channels);
+    });
+  }
 
-// async function notification2PushNow(text) {
-//   const notification2 = new firebase.notifications.Notification()
-//     .setNotificationId('124')
-//     .setTitle(R.locale.appName)
-//     .setBody(text)
-//     .setSound('default')
-//     .android.setChannelId('test-channel2')
-//     .android.setSmallIcon('ic_launcher');
-//   AppState.currentState === 'background' &&
-//     (await firebase.notifications().displayNotification(notification2));
-// }
-// const notification3 = new firebase.notifications.Notification()
-//   .setNotificationId('125')
-//   .setTitle(R.locale.appName)
-//   .setBody(R.locale.notifiy)
-//   .setSound('default')
-//   .android.setChannelId('test-channel1')
-//   .android.setSmallIcon('ic_launcher');
-// const notification4 = new firebase.notifications.Notification()
-//   .setNotificationId('126')
-//   .setTitle(R.locale.appName)
-//   .setBody(R.locale.notifiy)
-//   .setSound('default')
-//   .android.setChannelId('test-channel3')
-//   .android.setSmallIcon('ic_launcher');
+  popInitialNotification = () => {
+    PushNotification.popInitialNotification(notification => {
+      // console.warn('InitialNotication:', notification),
+    });
+  };
 
-// // await firebase.notifications().displayNotification(notification)
+  localNotif = soundName => {
+    this.lastId++;
+    PushNotification.localNotification({
+      /* Android Only Properties */
+      ticker: 'My Notification Ticker', // (optional)
+      autoCancel: true, // (optional) default: true
+      largeIcon: 'ic_launcher', // (optional) default: "ic_launcher"
+      smallIcon: 'ic_notification', // (optional) default: "ic_notification" with fallback for "ic_launcher"
+      bigText: 'My big text that will be shown when notification is expanded', // (optional) default: "message" prop
+      subText: 'This is a subText', // (optional) default: none
+      color: 'red', // (optional) default: system default
+      vibrate: true, // (optional) default: true
+      vibration: 300, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
+      tag: 'some_tag', // (optional) add tag to message
+      group: 'group', // (optional) add group to message
+      ongoing: false, // (optional) set whether this is an "ongoing" notification
+      invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
 
-// checkPermission = async (time1, time2, time3) => {
-//   // const enabled = await firebase.messaging().hasPermission();
-//   // if (enabled) {
-//   // We've the permission
-//   scheduledTime(time1, time2, time3);
-//   //   await firebase.notifications().onNotificationOpened(() => {
-//   //     firebase.notifications().cancelNotification('123');
-//   //     firebase.notifications().cancelNotification('125');
-//   //     firebase.notifications().cancelNotification('126');
-//   //   });
-//   // } else {
-//   // user doesn't have permission
-//   //   try {
-//   //     await firebase.messaging().requestPermission();
-//   //   } catch (error) {
-//   //     Alert.alert(
-//   //       'Unable to access the Notification permission. Please enable the Notification Permission from the settings',
-//   //     );
-//   //   }
-//   // }
-// };
+      /* iOS and Android properties */
+      title: 'Local Notification', // (optional)
+      message: 'My Notification Message', // (required)
+      userInfo: {screen: 'home'}, // (optional) default: {} (using null throws a JSON value '<null>' error)
+    });
+  };
 
-// async function scheduledTime(time1, time2, time3) {
-//   try {
-//     // await firebase.notifications().displayNotification(notification);
-//     await firebase.notifications().scheduleNotification(notification1, {
-//       fireDate: time1,
-//       repeatInterval: 'day',
-//     });
-//     await firebase.notifications().scheduleNotification(notification3, {
-//       fireDate: time2,
-//       repeatInterval: 'day',
-//     });
-//     await firebase.notifications().scheduleNotification(notification4, {
-//       fireDate: time3,
-//       repeatInterval: 'day',
-//     });
-//   } catch {
-//     console.warn('scheduling failed');
-//   }
-// }
+  scheduleNotif = soundName => {
+    this.lastId++;
+    PushNotification.localNotificationSchedule({
+      // new Date().setHours(16, 0, 0)
+      date: new Date(new Date().setHours(16, 0, 0)), // in 30 secs
 
-// async function cancelNotification() {
-//   await firebase.notifications().cancelAllNotifications();
-// }
+      /* Android Only Properties */
+      autoCancel: true, // (optional) default: true
+      largeIcon: 'ic_launcher', // (optional) default: "ic_launcher"
+      smallIcon: 'ic_launcher', // (optional) default: "ic_notification" with fallback for "ic_launcher"
+      bigText: 'Hey! Its time for you to get back on trck', // (optional) default: "message" prop
+      subText: 'This is a subText', // (optional) default: none
+      group: 'local', // (optional) add group to message
+      ongoing: false, // (optional) set whether this is an "ongoing" notification
+      invokeApp: false, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
 
-// export default {
-//   channel1,
-//   channel2,
-//   channel3,
-//   createChannel,
-//   notification1,
-//   notification3,
-//   scheduledTime,
-//   cancelNotification,
-//   checkPermission,
-//   notification2PushNow,
-// };
+      /* iOS only properties */
+      alertAction: 'view', // (optional) default: view
+      category: '', // (optional) default: empty string
+
+      /* iOS and Android properties */
+      id: this.lastId, // (optional) Valid unique 32 bit integer specified as string. default: Autogenerated Unique ID
+      title: R.locale.appName, // (optional)
+      message: 'Scheduled', // (required)
+      userInfo: {}, // (optional) default: {} (using null throws a JSON value '<null>' error)
+    });
+  };
+
+  checkPermission(cbk) {
+    return PushNotification.checkPermissions(cbk);
+  }
+
+  requestPermissions() {
+    return PushNotification.requestPermissions();
+  }
+
+  subscribeTopic = () => {
+    return PushNotification.subscribeToTopic(R.strings.bundleId + '_en');
+  };
+
+  cancelNotif() {
+    PushNotification.cancelLocalNotifications({id: '' + this.lastId});
+  }
+
+  cancelAll() {
+    PushNotification.cancelAllLocalNotifications();
+  }
+
+  abandonPermissions() {
+    PushNotification.abandonPermissions();
+  }
+
+  getScheduledLocalNotifications(callback) {
+    PushNotification.getScheduledLocalNotifications(callback);
+  }
+}

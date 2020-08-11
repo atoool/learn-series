@@ -1001,10 +1001,10 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-5.9.5.tgz#3bad0d855d2e813be085ec305139d4175c512ccc"
   integrity sha512-PbSsRmhRwYIMdeVJTf9gJtvW0TVq/hmgz1xyjsrTIsQ7QS7wbMEiv1Eb/M/y6AEEsdUped5Axm5xykq9TGISHg==
 
-"@react-native-community/push-notification-ios@^1.2.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@react-native-community/push-notification-ios/-/push-notification-ios-1.3.0.tgz#349095f5dda42f59501316c7ef7896adb8c2a1db"
-  integrity sha512-fXLtDYsDv8CZIF/1pnrLyKv68X1VVgsWQTVdxA4UeYPAGP9OU4XdShD1TsPFWIF5VgabNrnmKl1uEDLw3X+6jA==
+"@react-native-community/push-notification-ios@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/push-notification-ios/-/push-notification-ios-1.4.0.tgz#e1781e60fb8a2569547e3f1613c62e1c3b46960c"
+  integrity sha512-YnfxtAuHkiuvprh1d9npGZVwOrso6sys8+w8XY6RQAs8kD2LHZg0C8rA5gfX4jW/GrQV7m14Y6ngciE6Rpd91w==
   dependencies:
     invariant "^2.2.4"
 
@@ -1043,6 +1043,11 @@
   integrity sha512-xRGMeuNmJcaPmgr3PqIXS1r5Wx2x21S9ES007BTBpyCzd92vmlKVawpx5vYjFoVQeKRjEPT37MJ7QTU4x81JoA==
   dependencies:
     stacktrace-js "^2.0.0"
+
+"@react-native-firebase/messaging@^7.6.1":
+  version "7.6.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-7.6.1.tgz#93a6d231b56e5d4420fc242b10aecacade58677f"
+  integrity sha512-43VmHNJCTUC8dj5RS/2PPvY8iWk8qp6VHg1hhmu/oCzcgpeeAdNHPLiQfPxkqiaeHVIr9q8mDKEs+NqSNUD6aw==
 
 "@react-navigation/core@^5.4.0":
   version "5.4.0"
@@ -5471,12 +5476,12 @@ react-native-paper@^3.10.1:
     color "^3.1.2"
     react-native-safe-area-view "^0.14.9"
 
-react-native-push-notification@^3.5.2:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-3.5.2.tgz#5f6226d12a00c25c15279325b57c5fbddd5b1c82"
-  integrity sha512-eh9l7WeL7Lxq17ntsafCrNQF6aW8XS6b7PG/s1Y8amAqpDt8GJ8hz125z566N1jsj3PDh9pfd4SjNS+tLaV47A==
+react-native-push-notification@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-5.0.1.tgz#d7d563c8ed7e56335b311702a93aa6f4a9ced97a"
+  integrity sha512-3xRGLgJfUo8tUPFokA3TVC4jE4uo2uVUnxmtQ1pscNn6BjZnx2+kLdsJK4kDRyjxc/CpTEMfUyZ5pkMsqIgdYw==
   dependencies:
-    "@react-native-community/push-notification-ios" "^1.2.0"
+    "@react-native-community/push-notification-ios" "^1.4.0"
 
 react-native-ratings@^6.3.0:
   version "6.5.0"
@@ -5593,7 +5598,7 @@ react-native-webview@^10.3.2:
 
 "react-native-youtube-iframe@https://github.com/atoool/react-native-youtube-iframe":
   version "1.2.4"
-  resolved "https://github.com/atoool/react-native-youtube-iframe#47fa68753443b224049798ec121edb8cc638ec35"
+  resolved "https://github.com/atoool/react-native-youtube-iframe#1a1553c49121ee7c1169a5555ecd81c679f210ea"
   dependencies:
     events "^3.0.0"
 

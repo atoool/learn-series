@@ -6,8 +6,9 @@ import {
   ActivityIndicator,
   AppState,
   BackHandler,
+  Alert,
 } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, CommonActions} from '@react-navigation/native';
 import MainNavigator from './src/navigations/MainNavigator';
 import {ContextStates, MyTheme} from './src/func/ContextStates';
 import Player from './src/comp/Player';
@@ -20,19 +21,40 @@ import SnackBar from 'react-native-snackbar-component';
 import R from './src/res/R';
 import analytics from '@react-native-firebase/analytics';
 import * as RNIap from 'react-native-iap';
+import NotificationService from './src/comp/NotificationService';
 
 // console.disableYellowBox = true;
 
 class App extends React.PureComponent {
-  state = {
-    play: false,
-    onboard: false,
-    type: '',
-    playIndex: 0,
-    connected: true,
+  constructor(props) {
+    super(props);
+    this.state = {
+      play: false,
+      onboard: false,
+      type: '',
+      playIndex: 0,
+      connected: true,
+      notific: null,
+    };
+
+    this.notif = new NotificationService(this.onRegister, this.onNotif);
+  }
+  onRegister = token => {
+    this.setState({registerToken: token.token, fcmRegistered: true});
+    this.notif.subscribeTopic();
+  };
+
+  onNotif = notific => {
+    this.notific = notific;
+  };
+
+  handlePerm = perms => {
+    !perms.alert && this.notif.requestPermissions();
   };
 
   componentDidMount = async () => {
+    this.notif.checkPermission(this.handlePerm);
+    this.notif.scheduleNotif();
     this.unsubscribe == null &&
       (this.unsubscribe = NetInfo.addEventListener(state => {
         this.setState({connected: state.isConnected});
@@ -96,6 +118,7 @@ class App extends React.PureComponent {
           playVideo: this.playVideo,
           dispatch: this.dispatch,
           reduState: this.state,
+          notific: this.notific,
         }}>
         <View style={{flex: 1}}>
           <StatusBar hidden />
@@ -118,7 +141,9 @@ class App extends React.PureComponent {
                   this.routeName = currentRouteName;
                 }
               }}>
-              <AppContainer />
+              <AppContainer
+                onNotif={this.messageNotif ? this.messageNotif : ''}
+              />
               <SnackBar
                 visible={!this.state.connected}
                 textMessage={'Network error' + '!'}
