@@ -10,11 +10,12 @@ import {
   BackHandler,
   Animated,
   Easing,
+  AppState,
+  ToastAndroid,
 } from 'react-native';
 import {Icon, Button, Slider} from 'react-native-elements';
-import Orientation from 'react-native-orientation';
+import Orientation from 'react-native-orientation-locker';
 import LinearGradient from 'react-native-linear-gradient';
-import GestureRecognizer from 'react-native-swipe-gestures';
 import Swiper from 'react-native-swiper';
 import {TouchableWithoutFeedback} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -24,10 +25,8 @@ import {
   listenOrientationChange,
 } from 'react-native-responsive-screen';
 import {ContextStates} from '../func/ContextStates';
-import YouTube from 'react-native-youtube';
 import LottieView from 'lottie-react-native';
 import YoutubePlayer, {getYoutubeMeta} from 'react-native-youtube-iframe';
-import WebView from 'react-native-webview';
 import R from '../res/R';
 
 const {width, height} = Dimensions.get('window');
@@ -73,28 +72,26 @@ export default class Player extends React.PureComponent {
     this.setState({
       chapter,
       lesson,
-      swipeIndex: this.props.route.params.playIndex,
     });
-    // setTimeout(() => {
-    //   this.setState({loader: false});
-    // }, 1000);
-    // this.back = BackHandler.addEventListener('hardwareBackPress', () => {
-    //   return true;
-    // });
+    setTimeout(() => {
+      this.props.route.params.lesson != lesson &&
+        this.refs.refSwipe.scrollTo(this.props.route.params.chapter, true);
+    }, 1000);
+    AppState.addEventListener('change', state => {
+      state === 'background' && this.setState({play: false});
+    });
+    this.blur = this.props.navigation.addListener('blur', () => {
+      clearInterval(this.interval);
+      Orientation.lockToPortrait();
+      AppState.removeEventListener('change', state => {
+        state === 'background' && this.setState({play: false});
+      });
+    });
   }
 
-  timeOutFunc = () => {
-    clearTimeout(this.timeOut);
-    this.timeOut = setTimeout(() => {
-      this.setState({close: true});
-    }, 4000);
-  };
-
   componentWillUnmount = () => {
-    Orientation.lockToPortrait();
-    clearTimeout(this.timeOut);
     clearInterval(this.interval);
-    // this.back.remove();
+    this.blur();
   };
 
   triggerControls = hide => {
@@ -116,7 +113,7 @@ export default class Player extends React.PureComponent {
       }, 1500));
   };
 
-  triggerSwipe = (show, ignore) => {
+  triggerSwipe = async (show, ignore) => {
     clearTimeout(this.hideSwipe);
     Animated.timing(this.animSwipe, {
       toValue: show == 'false' ? 0 : 1,
@@ -124,60 +121,42 @@ export default class Player extends React.PureComponent {
       useNativeDriver: true,
       easing: Easing.cubic,
     }).start();
-    clearInterval(this.interval);
     !ignore &&
       show == 'false' &&
       this.props.route.params.videos.length - 1 !== this.state.swipeIndex &&
-      this.refSwipe.scrollTo(this.state.swipeIndex + 1, true);
-    // this.hideSwipe = setTimeout(() => {
-    //   Animated.timing(this.animSwipe, {
-    //     toValue: 0,
-    //     duration: 500,
-    //     useNativeDriver: true,
-    //     easing: Easing.cubic,
-    //   }).start();
-
-    //   clearInterval(this.interval);
-    // }, 1500);
+      this.refs.refSwipe.scrollTo(this.state.swipeIndex + 1, true);
+    show == 'true' && (await this.saveIndex());
   };
 
   saveIndex = async () => {
     let {swipeIndex, chapter, lesson} = this.state;
     const {type, videos, lessons} = this.props.route.params;
-    if (chapter - 1 <= swipeIndex && type != 'random' && lessons != lesson) {
-      chapter = swipeIndex + 1;
-      lesson = this.state.lesson;
-      if (swipeIndex == videos.length - 1 && lessons != lesson) {
-        lesson = this.state.lesson + 1;
-        chapter = 1;
+    const playLesson = this.props.route.params.lesson;
+    if (lesson <= playLesson)
+      if (chapter - 1 <= swipeIndex && type != 'random' && lessons != lesson) {
+        chapter = swipeIndex + 1;
+        lesson = this.state.lesson;
+        if (swipeIndex == videos.length - 1 && lessons != lesson) {
+          lesson = this.state.lesson + 1;
+          chapter = 1;
+        }
+        this.setState({chapter, lesson});
+        let session =
+          type === 'sleep'
+            ? this.context.reduState.sleepPr
+            : this.context.reduState.session;
+        session[type === 'sleep' ? session.length - 1 : 0].chapter = chapter;
+        session[type === 'sleep' ? session.length - 1 : 0].lesson = lesson;
+        await this.context.dispatch({
+          type: type === 'sleep' ? 'sleepSess' : 'session',
+          payload: [...session],
+        });
       }
-      this.setState({chapter, lesson});
-      let session =
-        type === 'sleep'
-          ? this.context.reduState.sleepPr
-          : this.context.reduState.session;
-      session[type === 'sleep' ? session.length - 1 : 0].chapter = chapter;
-      session[type === 'sleep' ? session.length - 1 : 0].lesson = lesson;
-      await this.context.dispatch({
-        type: type === 'sleep' ? 'sleepSess' : 'session',
-        payload: [...session],
-      });
-    }
   };
-
-  async final() {
-    await this.saveIndex();
-    this.props.navigation.goBack();
-  }
 
   render() {
     const {play, buffering, swipeIndex, completed} = this.state;
     const {videos, type} = this.props.route.params;
-    const config = {
-      velocityThreshold: 0.3,
-      directionalOffsetThreshold: 80,
-    };
-    const rTime = Math.abs(this.state.totalTime - this.state.currentTime) / 60;
 
     const transY1 = this.animated.interpolate({
       inputRange: [0, 1],
@@ -196,14 +175,10 @@ export default class Player extends React.PureComponent {
     return (
       <View style={{height: '100%', width: '100%', backgroundColor: '#000'}}>
         <Swiper
-          ref={re => {
-            this.refSwipe = re;
-          }}
+          ref="refSwipe"
           showsButtons={false}
-          index={this.state.swipeIndex}
           loop={false}
           onIndexChanged={i => {
-            clearInterval(this.interval);
             this.setState(
               {
                 swipeIndex: i,
@@ -211,8 +186,7 @@ export default class Player extends React.PureComponent {
                 currentTime: 0,
                 buffering: true,
               },
-              async () => {
-                await this.saveIndex();
+              () => {
                 this.triggerControls(false);
                 this.triggerSwipe('false', 'ignore');
               },
@@ -232,51 +206,46 @@ export default class Player extends React.PureComponent {
               style={{
                 height: '100%',
                 width: '100%',
-                backgroundColor: '#000',
-                // justifyContent: 'center',
-                // overflow: 'hidden',
               }}>
               {this.state.swipeIndex === i && (
                 <YoutubePlayer
-                  ref={re => (this.playerRef = re)}
+                  key={this.state.swipeIndex}
+                  ref="playerRef"
                   height="100%"
                   width="100%"
-                  videoId={videos[this.state.swipeIndex].video}
-                  play={play}
+                  videoId={itm.video}
+                  play={this.state.play}
                   onChangeState={e => {
                     e === 'playing' && this.setState({buffering: false});
                   }}
-                  webViewStyle={{
-                    backgroundColor: '#000',
-                    height: '100%',
-                    width: '100%',
-                  }}
                   onReady={async e => {
-                    let duration = itm.duration
-                      ? itm.duration.toString()
-                      : null;
-                    let length = duration ? duration.length : 0;
-                    let start =
-                      length == 0 || length == 2
-                        ? 0
-                        : length == 3
-                        ? parseInt(duration.substr(0, 1))
-                        : parseInt(duration.substr(0, 2));
-                    let ends =
-                      length == 4
-                        ? parseInt(duration.substr(2))
-                        : length == 0
-                        ? 0
-                        : length == 3
-                        ? parseInt(duration.substr(1))
-                        : parseInt(duration.substr(0));
-                    this.playerRef.seekTo(start);
-                    let totalTime = await this.playerRef.getDuration();
-                    totalTime = totalTime - ends;
-                    if (swipeIndex === i) {
+                    if (this.state.swipeIndex === i) {
                       clearInterval(this.interval);
+                      let duration = itm.duration
+                        ? itm.duration.toString()
+                        : null;
+
+                      let length = duration ? duration.length : 0;
+                      let start =
+                        length == 0 || length == 2
+                          ? 0
+                          : length == 3
+                          ? parseInt(duration.substr(0, 1))
+                          : parseInt(duration.substr(0, 2));
+                      let ends =
+                        length == 4
+                          ? parseInt(duration.substr(2))
+                          : length == 0
+                          ? 0
+                          : length == 3
+                          ? parseInt(duration.substr(1))
+                          : parseInt(duration.substr(0));
+                      this.refs.playerRef.seekTo(start);
+                      let totalTim = await this.refs.playerRef.getDuration();
+
+                      let totalTime = totalTim - ends;
                       this.interval = setInterval(async () => {
-                        const currentTime = await this.playerRef.getCurrentTime();
+                        const currentTime = await this.refs.playerRef.getCurrentTime();
 
                         if (currentTime >= totalTime)
                           this.setState(
@@ -284,7 +253,7 @@ export default class Player extends React.PureComponent {
                               play: false,
                               completed: videos.length - 1 == swipeIndex,
                             },
-                            () => {
+                            async () => {
                               this.triggerSwipe('true');
                             },
                           );
@@ -307,7 +276,7 @@ export default class Player extends React.PureComponent {
                 />
               )}
 
-              {buffering && (
+              {this.state.buffering && (
                 <View
                   style={{
                     width: '100%',
@@ -327,14 +296,6 @@ export default class Player extends React.PureComponent {
                 </View>
               )}
 
-              {/* <TouchableWithoutFeedback
-                      onPress={() =>
-                        this.setState(
-                          {close: !this.state.close},
-                          () => this.state.play && this.timeOutFunc(),
-                        )
-                      }> */}
-
               <View
                 style={{
                   position: 'absolute',
@@ -351,8 +312,11 @@ export default class Player extends React.PureComponent {
                     transform: [{translateY: transY1}],
                   }}
                   colors={[
-                    'rgba(0,0,0,0.8)',
-                    'rgba(0,0,0,0.6)',
+                    'rgba(0,0,0,0.9)',
+                    'rgba(0,0,0,0.7)',
+                    'rgba(0,0,0,0.5)',
+                    'rgba(0,0,0,0.3)',
+                    'rgba(0,0,0,0.1)',
                     'rgba(0,0,0,0)',
                     'rgba(0,0,0,0)',
                   ]}
@@ -410,7 +374,7 @@ export default class Player extends React.PureComponent {
                           height: 40,
                           justifyContent: 'center',
                         }}>
-                        <Icon name="close" color="#fff" size={25} />
+                        <Icon name="close" color="#ffffff" size={25} />
                       </View>
                     </TouchableNativeFeedback>
                   </View>
@@ -427,7 +391,7 @@ export default class Player extends React.PureComponent {
                   colors={[
                     'rgba(0,0,0,0)',
                     'rgba(0,0,0,0)',
-                    'rgba(0,0,0,0.6)',
+                    'rgba(0,0,0,0.7)',
                     'rgba(0,0,0,0.8)',
                   ]}
                   useAngle
@@ -471,15 +435,18 @@ export default class Player extends React.PureComponent {
                       style={{width: '85%'}}
                       thumbTintColor={R.colors.primary}
                       minimumTrackTintColor={R.colors.primary}
-                      trackStyle={{height: 2}}
-                      thumbStyle={{width: 12, height: 12}}
-                      onSlidingComplete={val =>
-                        this.playerRef && this.playerRef.seekTo(val)
-                      }
+                      trackStyle={{height: 4}}
+                      maximumTrackTintColor={'#fff'}
+                      thumbStyle={{width: 14, height: 14}}
+                      onValueChange={() => this.triggerControls(true)}
+                      onSlidingComplete={val => {
+                        this.refs.playerRef && this.refs.playerRef.seekTo(val);
+                      }}
                     />
                     <Text
                       style={{
-                        fontSize: 12,
+                        fontSize: 11,
+                        fontWeight: 'bold',
                         color: '#fff',
                         textAlignVertical: 'center',
                         marginBottom: 2,
@@ -511,7 +478,7 @@ export default class Player extends React.PureComponent {
             borderBottomLeftRadius: height,
             flexDirection: 'row',
           }}>
-          {!completed && (
+          {!this.state.completed && (
             <LottieView
               source={require('../res/imgs/swipe.json')}
               autoPlay
@@ -539,19 +506,21 @@ export default class Player extends React.PureComponent {
             {this.state.currentTime >= this.state.totalTime && (
               <LottieView
                 source={
-                  completed
+                  this.state.completed
                     ? require('../res/imgs/done.json')
                     : require('../res/imgs/count.json')
                 }
                 autoPlay
                 style={{
-                  width: completed ? 90 : 40,
-                  height: completed ? 90 : 40,
+                  width: this.state.completed ? 90 : 40,
+                  height: this.state.completed ? 90 : 40,
                   marginLeft: 20,
                 }}
                 loop={false}
-                onAnimationFinish={async () => {
-                  completed ? await this.final() : this.triggerSwipe('false');
+                onAnimationFinish={() => {
+                  this.state.completed
+                    ? this.props.navigation.goBack()
+                    : this.triggerSwipe('false');
                 }}
               />
             )}

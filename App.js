@@ -7,6 +7,7 @@ import {
   AppState,
   BackHandler,
   Alert,
+  SafeAreaView,
 } from 'react-native';
 import {NavigationContainer, CommonActions} from '@react-navigation/native';
 import MainNavigator from './src/navigations/MainNavigator';
@@ -25,40 +26,24 @@ import NotificationService from './src/comp/NotificationService';
 
 // console.disableYellowBox = true;
 
-class App extends React.PureComponent {
+class App extends React.Component {
   constructor(props) {
     super(props);
+
+    this.notif = new NotificationService(this.onRegister, this.onNotif);
     this.state = {
       play: false,
       onboard: false,
       type: '',
       playIndex: 0,
-      connected: true,
       notific: null,
     };
-
-    this.notif = new NotificationService(this.onRegister, this.onNotif);
   }
-  onRegister = token => {
-    this.setState({registerToken: token.token, fcmRegistered: true});
-    this.notif.subscribeTopic();
-  };
-
-  onNotif = notific => {
-    this.notific = notific;
-  };
-
-  handlePerm = perms => {
-    !perms.alert && this.notif.requestPermissions();
-  };
 
   componentDidMount = async () => {
     this.notif.checkPermission(this.handlePerm);
     this.notif.scheduleNotif();
-    this.unsubscribe == null &&
-      (this.unsubscribe = NetInfo.addEventListener(state => {
-        this.setState({connected: state.isConnected});
-      }));
+
     this.appstate == null &&
       (this.appstate = AppState.addEventListener('change', nex => {
         if (nex == 'active')
@@ -85,6 +70,10 @@ class App extends React.PureComponent {
 
     const result = await RNIap.initConnection();
     result == null && (await RNIap.initConnection());
+    this.unsubscribe == null &&
+      (this.unsubscribe = NetInfo.addEventListener(state => {
+        this.setState({connected: state.isConnected});
+      }));
   };
 
   componentWillUnmount = () => {};
@@ -120,43 +109,46 @@ class App extends React.PureComponent {
           reduState: this.state,
           notific: this.notific,
         }}>
-        <View style={{flex: 1}}>
-          <StatusBar hidden />
-          {/* {this.state.play && (
-            <Player playIndex={this.state.playIndex} type={this.state.type} />
-          )} */}
-          <View
-            style={
-              !this.state.play
-                ? {flex: 1}
-                : {flex: 0, position: 'absolute', zIndex: 0}
-            }>
-            <NavigationContainer
-              ref={re => (this.navig = re)}
-              onStateChange={state => {
-                const previousRouteName = this.routeName ? this.routeName : '';
-                const currentRouteName = this.getActiveRouteName(state);
-                if (previousRouteName !== currentRouteName) {
-                  analytics().setCurrentScreen(currentRouteName);
-                  this.routeName = currentRouteName;
-                }
-              }}>
-              <AppContainer
-                onNotif={this.messageNotif ? this.messageNotif : ''}
-              />
+        <SafeAreaView style={{flex: 1}}>
+          <StatusBar backgroundColor={R.colors.statusBar} />
+          <NavigationContainer
+            ref={re => (this.navig = re)}
+            onStateChange={state => {
+              const previousRouteName = this.routeName ? this.routeName : '';
+              const currentRouteName = this.getActiveRouteName(state);
+              if (previousRouteName !== currentRouteName) {
+                analytics().setCurrentScreen(currentRouteName);
+                this.routeName = currentRouteName;
+              }
+            }}>
+            <AppContainer
+              onNotif={this.messageNotif ? this.messageNotif : ''}
+            />
+            {this.state.connected != null && (
               <SnackBar
                 visible={!this.state.connected}
                 textMessage={'Network error' + '!'}
                 backgroundColor="#e84a5f"
               />
-
-              <ExitAlert ref={exitalert => (this.exit = exitalert)} />
-            </NavigationContainer>
-          </View>
-        </View>
+            )}
+            <ExitAlert ref={exitalert => (this.exit = exitalert)} />
+          </NavigationContainer>
+        </SafeAreaView>
       </ContextStates.Provider>
     );
   }
+  onRegister = token => {
+    this.setState({registerToken: token.token, fcmRegistered: true});
+    this.notif.subscribeTopic();
+  };
+
+  onNotif = notific => {
+    this.notific = notific;
+  };
+
+  handlePerm = perms => {
+    !perms.alert && this.notif.requestPermissions();
+  };
 }
 export default App;
 

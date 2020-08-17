@@ -9,7 +9,6 @@ export default class Splash extends React.PureComponent {
     rateUs: false,
   };
   componentDidMount = async () => {
-    StatusBar.setHidden(true);
     const initApp = await AsyncStorage.multiGet([
       '@ONBOARDING',
       'rateus',

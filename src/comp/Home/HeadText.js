@@ -1,5 +1,9 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 export const HeadText = props => {
   return (
@@ -14,18 +18,18 @@ export const HeadText = props => {
 
 const styles = StyleSheet.create({
   container: {
-    marginLeft: 20,
+    marginLeft: wp(5.6),
   },
   head: {
     color: '#5e5a61',
-    fontSize: 16,
+    fontSize: wp(4.44),
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: hp(0.6),
   },
   subHead: {
     color: 'darkgrey',
-    fontSize: 12,
+    fontSize: wp(3.33),
     fontWeight: 'bold',
-    marginBottom: 15,
+    marginBottom: hp(1.9),
   },
 });

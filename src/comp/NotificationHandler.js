@@ -63,7 +63,7 @@ PushNotification.configure({
 
   // Should the initial notification be popped automatically
   // default: true
-  popInitialNotification: true,
+  popInitialNotification: false,
 
   /**
    * (optional) default: true

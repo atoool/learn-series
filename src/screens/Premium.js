@@ -9,7 +9,15 @@ import {
   Platform,
 } from 'react-native';
 import WebView from 'react-native-webview';
-import PremiumCheckFun from '../comp/PremiumCheckFun';
+import {
+  checkPurchased,
+  purchaseSixMonthSubs,
+  purchaseMonthlySubs,
+  purchasePremium,
+  showPrice,
+  purchaseListener,
+  purchaseListenerRemove,
+} from '../comp/PremiumCheckFun';
 import Loading from '../comp/Loading';
 import R from '../res/R';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -35,9 +43,16 @@ export default class Premium extends Component {
 
     if (url.indexOf('/refresh') > -1) {
       this.webview.injectJavaScript(
+        `javascript:setIAPValues('monthly',"${this.state.monthlyPrice}")`,
+      );
+      this.webview.injectJavaScript(
         `javascript:setIAPValues('6month',"${this.state.sixMonthPrice}")`,
       );
-
+      this.webview.injectJavaScript(
+        `javascript:setIAPValues('lifetime',"${this.state.price}"||"${
+          this.state.price
+        }000000")`,
+      );
       return false;
     } else if (url.indexOf('/terms') > -1) {
       this.props.navigation.navigate('Terms');
@@ -46,7 +61,7 @@ export default class Premium extends Component {
       this.props.navigation.navigate('Privacy');
       return false;
     } else if (url.indexOf('/restore') > -1) {
-      let restore = await PremiumCheckFun.checkPurchased();
+      let restore = await checkPurchased();
       restore === true
         ? Alert.alert('Your purchase has been successfully restored')
         : Alert.alert(
@@ -58,11 +73,11 @@ export default class Premium extends Component {
         decodeURI(url.split('http://riafy.me/premium/')[1]),
       );
       if (jsonURL.iap === '6month') {
-        PremiumCheckFun.purchaseSixMonthSubs();
+        purchaseSixMonthSubs();
       } else if (jsonURL.iap === 'monthly') {
-        PremiumCheckFun.purchaseMonthlySubs();
+        purchaseMonthlySubs();
       } else if (jsonURL.iap === 'lifetime') {
-        PremiumCheckFun.purchasePremium();
+        purchasePremium();
       }
       return false;
     }
@@ -70,10 +85,10 @@ export default class Premium extends Component {
 
   componentDidMount = async () => {
     const lang = await AsyncStorage.getItem('lang').catch(e => {});
-    let prices = await PremiumCheckFun.showPrice();
+    let prices = await showPrice();
 
     if (prices[0] == null || prices[1] == null || prices[2] == null)
-      prices = await PremiumCheckFun.showPrice();
+      prices = await showPrice();
     this.setState({
       price: prices[0],
       sixMonthPrice: prices[1],
@@ -100,10 +115,10 @@ export default class Premium extends Component {
             R.strings.bundleId
           }`,
         });
-    PremiumCheckFun.purchaseListener(this);
+    purchaseListener(this);
   };
   componentWillUnmount() {
-    PremiumCheckFun.purchaseListenerRemove();
+    purchaseListenerRemove();
   }
 
   render() {
@@ -119,10 +134,9 @@ export default class Premium extends Component {
       <SafeAreaView
         style={{
           flex: 1,
-          marginTop: height > 736 ? -45 : 0,
+          marginTop: Platform.OS === 'ios' ? (height > 736 ? -45 : 0) : 0,
           backgroundColor: '#fff',
         }}>
-        <StatusBar hidden={true} />
         <WebView
           key={this.context.connected}
           style={{flex: 1}}

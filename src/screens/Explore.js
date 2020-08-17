@@ -13,6 +13,8 @@ import {ContextStates} from '../func/ContextStates';
 import R from '../res/R';
 import Gradient from 'react-native-linear-gradient';
 import PremiumTag from '../comp/PremiumTag';
+import { checkPurchased } from '../comp/PremiumCheckFun';
+import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 export default class Explore extends React.PureComponent {
   static contextType = ContextStates;
@@ -20,8 +22,12 @@ export default class Explore extends React.PureComponent {
     search: '',
     selected: false,
     data: this.context.reduState.explore,
+    purchasedPremium:false
   };
-  componentDidMount = () => {};
+  componentDidMount = async() => {
+const purchasedPremium=await checkPurchased()
+this.setState({purchasedPremium})
+  };
   updateSearch = search => {
     const data =
       search == ''
@@ -55,7 +61,7 @@ export default class Explore extends React.PureComponent {
                     // selected ? 'keyboard-backspace' :
                     'search'
                   color= 'grey'
-                  size={ 20}
+                  size={hp(2.6)}
                 
               //   containerStyle={{
               //     margin: 0,
@@ -70,14 +76,14 @@ export default class Explore extends React.PureComponent {
             )}
             containerStyle={{
               backgroundColor: '#fff',
-              paddingTop: 40,
-              padding: 20,
+              paddingTop: hp(5.1),
+              padding: hp(2.6),
               // paddingBottom: !selected ? 60 : 20,
             }}
             inputContainerStyle={{
               backgroundColor: '#f0f0f0',
-              borderRadius: 40,
-              paddingHorizontal: 20,
+              borderRadius: hp(5.1),
+              paddingHorizontal: wp(5.6),
             }}
             placeholder="Search courses"
             onChangeText={this.updateSearch}
@@ -137,16 +143,16 @@ export default class Explore extends React.PureComponent {
           <FlatList
             data={this.state.data}
             contentContainerStyle={{
-              padding: !selected ? 20 : 20,
+              padding: !selected ? hp(2.6) : hp(2.6),
             }}
             keyExtractor={(itm, index) => index.toString()}
             renderItem={({item, index}) => (
               <View
                 style={{
                   backgroundColor: 'grey',
-                  borderRadius: 10,
+                  borderRadius: hp(1.3),
                   width: '100%',
-                  marginBottom: 20,
+                  marginBottom: hp(2.6),
                   overflow: 'hidden',
                 }}>
                 <TouchableNativeFeedback
@@ -167,26 +173,28 @@ export default class Explore extends React.PureComponent {
                       }}>
                       <View
                         style={{
-                          padding: 30,paddingVertical:40,
+                          padding: hp(3.9),paddingVertical:hp(5.1),
                           width: '100%',
                         }}>
                         <Text
                           style={{
                             fontWeight: 'bold',
-                            fontSize: 16,
+                            fontSize: hp(2.1),
                             color: '#000',
                           }}>
                           {item.name}
                         </Text>
                       </View>
                       
-                      <Gradient
+                 {!this.state.purchasedPremium&&item.premium&& 
+                  <>
+                  <Gradient
                   start={{x: 0, y: 1}}
                   end={{x: 0, y: 0}}
                   colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.3)']}
                   style={{width:'100%',height:'100%',position:'absolute'}}
                 />
-                <PremiumTag />
+                <PremiumTag /></>}
                     </ImageBackground>
                   </View>
                   {/* ) : (

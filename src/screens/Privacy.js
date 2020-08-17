@@ -33,7 +33,6 @@ export default class Privacy extends Component {
     // }
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-        {/* <StatusBar barStyle="dark-content" /> */}
         <WebView
           renderError={() => {
             return <Loading load={this} />;

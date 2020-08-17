@@ -8,6 +8,10 @@ import {TimeType} from '../func/TimeFunc';
 import * as Animatable from 'react-native-animatable';
 import {ImageBackground} from 'react-native';
 import R from '../res/R';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 export default class Jounal extends React.PureComponent {
   state = {usr: '', pulse: 'pulse'};
@@ -27,18 +31,20 @@ export default class Jounal extends React.PureComponent {
   render() {
     return (
       <ScrollView
-        style={{flex: 1, padding: 20, paddingTop: 100}}
-        contentContainerStyle={{paddingBottom: 100}}>
+        style={{flex: 1, padding: hp(2.6), paddingTop: hp(12.8)}}
+        contentContainerStyle={{paddingBottom: hp(12.8)}}>
         <Animatable.View
-          style={{marginBottom: 30}}
+          style={{marginBottom: hp(3.9)}}
           // animation={this.state.pulse}
           // iterationCount={2}
           // easing="ease-in"
         >
-          <Text style={{fontSize: 22, fontWeight: 'bold', color: '#474a56'}}>
+          <Text
+            style={{fontSize: hp(2.8), fontWeight: 'bold', color: '#474a56'}}>
             {TimeType()}
           </Text>
-          <Text style={{fontSize: 22, fontWeight: 'bold', color: '#474a56'}}>
+          <Text
+            style={{fontSize: hp(2.8), fontWeight: 'bold', color: '#474a56'}}>
             {this.state.usr}
           </Text>
         </Animatable.View>
@@ -47,9 +53,9 @@ export default class Jounal extends React.PureComponent {
           onPress={() => this.props.navigation.navigate('DailyLog')}>
           <View
             style={{
-              marginBottom: 20,
+              marginBottom: hp(2.6),
               backgroundColor: 'darkgrey',
-              borderRadius: 5,
+              borderRadius: hp(0.6),
               overflow: 'hidden',
             }}>
             <ImageBackground
@@ -57,16 +63,23 @@ export default class Jounal extends React.PureComponent {
                 uri: 'https://fstream.in/journal/home/home-create-book.webp',
               }}
               style={{
-                padding: 20,
+                padding: hp(2.6),
               }}>
-              <Text style={{fontSize: 16, color: '#fff'}}>Monday</Text>
-              <Text style={{fontSize: 20, color: '#fff', fontWeight: 'bold'}}>
+              <Text style={{fontSize: hp(2.1), color: '#fff'}}>Monday</Text>
+              <Text
+                style={{fontSize: hp(2.6), color: '#fff', fontWeight: 'bold'}}>
                 May
               </Text>
-              <Text style={{fontSize: 20, color: '#fff', fontWeight: 'bold'}}>
+              <Text
+                style={{fontSize: hp(2.6), color: '#fff', fontWeight: 'bold'}}>
                 11
               </Text>
-              <Text style={{fontSize: 16, color: '#fff', marginBottom: 60}}>
+              <Text
+                style={{
+                  fontSize: hp(2.1),
+                  color: '#fff',
+                  marginBottom: hp(7.7),
+                }}>
                 How do you feel today?
               </Text>
               <Button
@@ -75,12 +88,12 @@ export default class Jounal extends React.PureComponent {
                 }}
                 title="Create Story"
                 useForeground
-                titleStyle={{fontSize: 14}}
-                containerStyle={{overflow: 'hidden', borderRadius: 20}}
+                titleStyle={{fontSize: hp(1.7)}}
+                containerStyle={{overflow: 'hidden', borderRadius: hp(2.6)}}
                 buttonStyle={{
                   alignSelf: 'center',
-                  borderRadius: 20,
-                  paddingHorizontal: 40,
+                  borderRadius: hp(2.6),
+                  paddingHorizontal: wp(11.11),
                   overflow: 'hidden',
                   backgroundColor: R.colors.primary,
                 }}
@@ -94,9 +107,9 @@ export default class Jounal extends React.PureComponent {
           <View
             style={{
               backgroundColor: 'darkgrey',
-              borderRadius: 5,
+              borderRadius: hp(0.6),
               overflow: 'hidden',
-              marginBottom: 20,
+              marginBottom: hp(2.6),
             }}>
             <ImageBackground
               source={{
@@ -104,10 +117,10 @@ export default class Jounal extends React.PureComponent {
                   'https://fstream.in/journal/home/home-analytics-mountain.webp',
               }}
               style={{
-                padding: 20,
-                paddingVertical: 40,
+                padding: hp(2.6),
+                paddingVertical: hp(5.1),
               }}>
-              <Text style={{fontSize: 16, color: '#fff'}}>
+              <Text style={{fontSize: hp(2.1), color: '#fff'}}>
                 Track your progress
               </Text>
             </ImageBackground>
@@ -119,9 +132,9 @@ export default class Jounal extends React.PureComponent {
           <View
             style={{
               backgroundColor: 'darkgrey',
-              borderRadius: 5,
+              borderRadius: hp(0.6),
               overflow: 'hidden',
-              marginBottom: 20,
+              marginBottom: hp(2.6),
             }}>
             <ImageBackground
               source={{
@@ -129,10 +142,10 @@ export default class Jounal extends React.PureComponent {
                   'https://fstream.in/journal/home/home-achievements-trophy.webp',
               }}
               style={{
-                padding: 20,
-                paddingVertical: 40,
+                padding: hp(2.6),
+                paddingVertical: hp(5.1),
               }}>
-              <Text style={{fontSize: 16, color: '#fff'}}>
+              <Text style={{fontSize: hp(2.1), color: '#fff'}}>
                 Your achievements
               </Text>
             </ImageBackground>

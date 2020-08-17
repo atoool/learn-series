@@ -8,6 +8,7 @@ import {
   FlatList,
   StatusBar,
   TouchableNativeFeedback,
+  AppState,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {HomePlayer} from '../comp/Home/HomePlayer';
@@ -23,13 +24,18 @@ import {ContextStates} from '../func/ContextStates';
 import Loading from '../comp/Loading';
 import R from '../res/R';
 import Animated from 'react-native-reanimated';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 export default class Home extends React.PureComponent {
   static contextType = ContextStates;
   state = {isPlay: false, data: [1, 2], focus: true};
   componentDidMount = () => {
     this.blur = this.props.navigation.addListener('blur', () => {
-      this.player?.playerPause && this.player?.playerPause();
+      StatusBar.setHidden(false);
+      StatusBar.setBackgroundColor(R.colors.statusBar);
     });
     this.onNotification();
   };
@@ -72,20 +78,14 @@ export default class Home extends React.PureComponent {
         showsVerticalScrollIndicator={false}
         style={styles.constainer}
         contentContainerStyle={styles.cContainer}>
-        <StatusBar hidden translucent />
         <HomePlayer
           ref={re => (this.player = re)}
           vidData={reduState.mainVideo}
           that={this}
         />
         <View style={styles.cardView}>
-          <HeadText
-            title="Ready to begin?"
-            caption={`Keep your journey with lesson ${
-              reduState.session[0].lesson
-            }`}
-          />
-          <View style={{paddingHorizontal: 20, width: '100%'}}>
+          <HeadText title="Ready?" caption={`Keep learning piano lessons`} />
+          <View style={{paddingHorizontal: wp(5.6), width: '100%'}}>
             <TouchableNativeFeedback
               onPress={() => {
                 const data = reduState.myCourse[0];
@@ -96,7 +96,7 @@ export default class Home extends React.PureComponent {
               }}
               style={{width: '100%', height: '100%'}}
               useForeground>
-              <View style={{borderRadius: 10, overflow: 'hidden'}}>
+              <View style={{borderRadius: hp(1.3), overflow: 'hidden'}}>
                 <ImageBackground
                   style={[styles.card]}
                   source={{
@@ -141,37 +141,37 @@ export default class Home extends React.PureComponent {
 
 const styles = StyleSheet.create({
   constainer: {backgroundColor: '#fff', flex: 1},
-  cContainer: {paddingBottom: 20},
+  cContainer: {paddingBottom: hp(2.6)},
   cardView: {
     width: '100%',
-    paddingTop: 30,
+    paddingTop: hp(3.9),
   },
   card: {
-    borderRadius: 10,
+    borderRadius: hp(1.3),
     width: '100%',
-    padding: 20,
-    height: 200,
+    padding: hp(2.6),
+    height: hp(25.6),
     backgroundColor: '#fbeee0',
     overflow: 'hidden',
   },
   cardTextView: {
     position: 'absolute',
-    bottom: 10,
-    left: 10,
+    bottom: hp(1.3),
+    left: wp(2.8),
     backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 10,
+    borderRadius: hp(0.6),
+    padding: hp(1.3),
   },
   cardText: {
     color: '#5e5a61',
-    fontSize: 14,
+    fontSize: hp(1.8),
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: hp(0.6),
   },
   cardSubText: {
     color: 'darkgrey',
-    fontSize: 10,
+    fontSize: hp(1.3),
     fontWeight: 'bold',
-    marginBottom: 2,
+    marginBottom: hp(0.2),
   },
 });

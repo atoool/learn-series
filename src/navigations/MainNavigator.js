@@ -26,6 +26,11 @@ import {
   TransitionPresets,
 } from '@react-navigation/stack';
 import {useRoute} from '@react-navigation/native';
+import R from '../res/R';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const Stack = createStackNavigator();
 
@@ -48,11 +53,11 @@ const HomeStack = () => {
           transitionSpec: {
             open: {
               animation: 'timing',
-              config: {duration: 0},
+              config: {duration: 3},
             },
             close: {
               animation: 'timing',
-              config: {duration: 0},
+              config: {duration: 3},
             },
           },
         }}
@@ -253,13 +258,14 @@ const MainNavigator = () => {
   return (
     <Tab.Navigator
       sceneAnimationEnabled={false}
-      activeColor="orange"
+      activeColor={R.colors.primary}
       inactiveColor="darkgrey"
       barStyle={
         hideTab
           ? {opacity: 0, height: 0, backgroundColor: '#fff'}
-          : {backgroundColor: '#fff'}
-      }>
+          : {backgroundColor: '#fff', elevation: 10}
+      }
+      backBehavior="initialRoute">
       <Tab.Screen
         name="Home"
         component={HomeStack}
@@ -270,7 +276,7 @@ const MainNavigator = () => {
         }}
         options={{
           tabBarIcon: ({color}) => (
-            <FontAwesome5Icon name="home" color={color} size={20} />
+            <FontAwesome5Icon name="home" color={color} size={hp(3)} />
           ),
           tabBarColor: '#fff',
         }}
@@ -285,7 +291,7 @@ const MainNavigator = () => {
         }}
         options={{
           tabBarIcon: ({color}) => (
-            <FontAwesome5Icon name="search" color={color} size={20} />
+            <FontAwesome5Icon name="search" color={color} size={hp(2.6)} />
           ),
           tabBarColor: '#fff',
         }}
@@ -329,7 +335,7 @@ const MainNavigator = () => {
         }}
         options={{
           tabBarIcon: ({color}) => (
-            <FontAwesome5Icon name="book" color={color} size={20} />
+            <FontAwesome5Icon name="book" color={color} size={hp(2.6)} />
           ),
           tabBarColor: '#fff',
         }}
@@ -344,7 +350,7 @@ const MainNavigator = () => {
         }}
         options={{
           tabBarIcon: ({color}) => (
-            <FontAwesome5Icon name="cog" color={color} size={20} />
+            <FontAwesome5Icon name="cog" color={color} size={hp(2.6)} />
           ),
           tabBarColor: '#fff',
         }}

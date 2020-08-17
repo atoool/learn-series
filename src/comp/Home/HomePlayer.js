@@ -4,6 +4,7 @@ import React, {
   useContext,
   forwardRef,
   useImperativeHandle,
+  useRef,
 } from 'react';
 import {
   StyleSheet,
@@ -12,6 +13,7 @@ import {
   Dimensions,
   ImageBackground,
   TouchableWithoutFeedback,
+  AppState,
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import YoutubeIframe, {getYoutubeMeta} from 'react-native-youtube-iframe';
@@ -22,24 +24,35 @@ import Gradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {ContextStates} from '../../func/ContextStates';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const {width, height} = Dimensions.get('window');
 // const vids = ['2dc7GuiQP0A', 'nP-i7AlROK4', '8iJ_gxjDuHM', 'JAX1cESZnFA'];
 export const HomePlayer = forwardRef(({that, vidData}, ref) => {
   let view = createRef(null);
+  let timeout = createRef(null);
   const context = useContext(ContextStates);
   const [playing, setPlay] = useState(false);
   const [thumb, setThumb] = useState('');
   const [buff, setBuff] = useState(true);
   const [index, setIndex] = useState(0);
   const videos = [];
+  let appState = useRef(AppState.currentState);
   vidData.map(v => videos.push(v.video));
   useFocusEffect(() => {
+    AppState.addEventListener('change', c => (appState.current = c));
     if (vidData != null) {
       getYoutubeMeta(vidData[0]?.video).then(meta => {
         setThumb(meta.thumbnail_url);
       });
     }
+    return () => {
+      view.current && onPause();
+      AppState.removeEventListener('change', c => (appState.current = c));
+    };
   }, []);
 
   const onPlay = () => {
@@ -51,12 +64,13 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
     setPlay(false);
     view.current.zoomIn(600);
   };
+  appState.current == 'background' && view.current && onPause();
   useImperativeHandle(ref, () => ({
     playerPause() {
       onPause();
     },
   }));
-  if (vidData == null) return <Loading load={that} />;
+  if (vidData == null) return <View />;
   return (
     <View key={context.connected} style={styles.constainer}>
       {/* {vids.map((vid, i) => ( */}
@@ -72,13 +86,14 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
             rel: false,
             preventFullScreen: true,
             showClosedCaptions: false,
+            loop: true,
           }}
           webViewProps={{
             containerStyle: {backgroundColor: '#000'},
           }}
-          width={'100%'}
+          width={'auto'}
           onReady={() => {
-            view.current && playing == false ? onPlay() : setPlay(true);
+            // view.current && playing == false ? onPlay() : onPause();
           }}
           onChangeState={e => {
             if (e === 'ended') {
@@ -89,6 +104,14 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
 
               setBuff(true);
             }
+            // else if (e === 'buffering') {
+            //   clearTimeout(timeout);
+            //   timeout.current = setTimeout(() => {
+            //     if (buff) {
+            //       onPause();
+            //     }
+            //   }, 5000);
+            // }
             e === 'playing' && setBuff(false);
           }}
         />
@@ -97,7 +120,7 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
             style={{
               position: 'absolute',
               width,
-              height: 250,
+              height: hp(26.9),
               backgroundColor: '#fff',
             }}
             source={{
@@ -110,7 +133,7 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
           <View
             style={{
               backgroundColor: '#000',
-              height: 220,
+              height: hp(28.2),
               width,
               justifyContent: 'center',
               alignItems: 'center',
@@ -121,13 +144,14 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
               loop
               autoPlay
               style={{
-                width: 150,
-                height: 60,
+                width: wp(41.7),
+                height: hp(7.7),
               }}
             />
           </View>
         )}
-        <TouchableWithoutFeedback onPress={() => onPause()}>
+        <TouchableWithoutFeedback
+          onPress={() => (playing ? onPause() : onPlay())}>
           <View style={styles.contentContainer}>
             <Gradient
               colors={[
@@ -147,7 +171,7 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
                 <Button
                   title="WATCH"
                   titleStyle={styles.btnText}
-                  icon={{name: 'play-arrow', color: '#fff', size: 20}}
+                  icon={{name: 'play-arrow', color: '#fff', size: hp(2.6)}}
                   containerStyle={styles.btnContainer}
                   buttonStyle={styles.btn}
                   onPress={onPlay}
@@ -164,56 +188,55 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
 
 const styles = StyleSheet.create({
   constainer: {
-    height: 220,
-    width,
+    height: hp(28.2),
+    width: '100%',
     overflow: 'hidden',
-    borderBottomEndRadius: 180,
-    borderBottomStartRadius: 180,
-    transform: [{scaleX: 2}],
+    borderBottomStartRadius: height < 600 ? hp(15) : hp(23),
+    borderBottomEndRadius: height < 600 ? hp(15) : hp(23),
+    transform: height < 600 ? [{scaleX: 1}] : [{scaleX: wp(0.556)}],
     justifyContent: 'center',
+    alignSelf: 'center',
   },
   youtube: {
     position: 'absolute',
-    height: 220,
-    width,
-    alignSelf: 'center',
-    transform: [{scaleX: 0.5}],
-    justifyContent: 'center',
+    height: hp(28.2),
+    width: '100%',
+    transform: height < 600 ? [{scaleX: 1}] : [{scaleX: wp(0.1389)}],
   },
   contentContainer: {
-    height: 220,
+    height: hp(28.2),
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingBottom: 20,
+    paddingBottom: hp(2.6),
     position: 'absolute',
     backgroundColor: 'rgba(0,0,0,0)',
   },
   subHead: {
     color: '#fff',
-    fontSize: 12,
+    fontSize: wp(3.33),
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: hp(0.6),
   },
   head: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: hp(2.6),
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 5,
+    marginBottom: hp(0.6),
   },
-  caption: {color: '#fff', fontSize: 12},
+  caption: {color: '#fff', fontSize: hp(1.5)},
   btnContainer: {
     overflow: 'hidden',
-    width: 120,
-    marginTop: 10,
+    width: wp(33.33),
+    marginTop: hp(1.3),
   },
-  btnText: {fontSize: 14},
+  btnText: {fontSize: hp(1.7)},
   btn: {
     backgroundColor: '#ff6701',
-    padding: 6,
-    paddingRight: 20,
-    paddingLeft: 10,
-    borderRadius: 20,
+    padding: hp(0.8),
+    paddingRight: wp(5.6),
+    paddingLeft: wp(2.8),
+    borderRadius: hp(2.6),
   },
 });

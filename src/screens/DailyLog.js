@@ -27,20 +27,22 @@ export default class DailyLog extends React.PureComponent {
   };
   render() {
     return (
-      <WebView
-        ref={r => (this.webview = r)}
-        style={{flex: 1}}
-        source={{
-          uri:
-            'file:///android_asset/onboarding/dailyLog.html?lang=en&appname=keto.weightloss.diet.plan',
-        }}
-        onShouldStartLoadWithRequest={res => {
-          if (res.url === 'https://stories.riafy.me/') return false;
-          this.responses(res.url);
-          console.warn(res.url);
-          return true;
-        }}
-      />
+      <>
+        <WebView
+          ref={r => (this.webview = r)}
+          style={{flex: 1}}
+          source={{
+            uri:
+              'file:///android_asset/onboarding/dailyLog.html?lang=en&appname=keto.weightloss.diet.plan',
+          }}
+          onShouldStartLoadWithRequest={res => {
+            if (res.url === 'https://stories.riafy.me/') return false;
+            this.responses(res.url);
+            console.warn(res.url);
+            return true;
+          }}
+        />
+      </>
     );
   }
 }

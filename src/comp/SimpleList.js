@@ -6,6 +6,10 @@ import {useNavigation} from '@react-navigation/native';
 import R from '../res/R';
 import {useContext} from 'react';
 import {ContextStates} from '../func/ContextStates';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 export const SimpleList = ({data, type, playerPause}) => {
   const context = useContext(ContextStates);
@@ -39,7 +43,7 @@ export const SimpleList = ({data, type, playerPause}) => {
           <Icon
             name="keyboard-arrow-right"
             color={type === 'sleep' ? '#a3aeeb' : 'grey'}
-            size={30}
+            size={hp(3.9)}
             containerStyle={styles.icon}
           />
         </View>
@@ -49,16 +53,21 @@ export const SimpleList = ({data, type, playerPause}) => {
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {width: '100%', paddingHorizontal: 15},
+  mainContainer: {width: '100%', paddingHorizontal: wp(4.2)},
   container: {
     flexDirection: 'row',
-    marginTop: 10,
+    marginTop: hp(1.3),
     alignItems: 'center',
     width: '100%',
-    padding: 5,
+    padding: hp(0.6),
     overflow: 'hidden',
-    borderRadius: 5,
+    borderRadius: hp(0.6),
   },
-  img: {width: 80, height: 80, borderRadius: 5, marginRight: 10},
+  img: {
+    width: hp(10.3),
+    height: hp(10.3),
+    borderRadius: hp(0.6),
+    marginRight: wp(2.8),
+  },
   icon: {right: 0, position: 'absolute'},
 });

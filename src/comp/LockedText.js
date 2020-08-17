@@ -1,6 +1,10 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Icon} from 'react-native-elements';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 export const LockedText = props => {
   return (
@@ -35,15 +39,15 @@ export const LockedText = props => {
 const styles = StyleSheet.create({
   cardTitle: {
     color: '#5e5a61',
-    fontSize: 14,
+    fontSize: hp(1.7),
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: hp(0.6),
   },
   cardSubTitle: {
     color: 'darkgrey',
-    fontSize: 10,
+    fontSize: hp(1.3),
     fontWeight: 'bold',
-    marginBottom: 2,
+    marginBottom: hp(0.2),
   },
-  desc: {color: 'grey', fontSize: 12},
+  desc: {color: 'grey', fontSize: hp(1.5)},
 });

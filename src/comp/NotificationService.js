@@ -1,6 +1,7 @@
 import PushNotification from 'react-native-push-notification';
 import NotificationHandler from './NotificationHandler';
 import R from '../res/R';
+import moment from 'moment';
 
 export default class NotificationService {
   constructor(onRegister, onNotification) {
@@ -23,55 +24,60 @@ export default class NotificationService {
   }
 
   popInitialNotification = () => {
-    PushNotification.popInitialNotification(notification => {
-      // console.warn('InitialNotication:', notification),
-    });
+    // PushNotification.popInitialNotification(notification => {
+    //   // console.warn('InitialNotication:', notification),
+    // });
   };
 
   localNotif = soundName => {
-    this.lastId++;
-    PushNotification.localNotification({
-      /* Android Only Properties */
-      ticker: 'My Notification Ticker', // (optional)
-      autoCancel: true, // (optional) default: true
-      largeIcon: 'ic_launcher', // (optional) default: "ic_launcher"
-      smallIcon: 'ic_notification', // (optional) default: "ic_notification" with fallback for "ic_launcher"
-      bigText: 'My big text that will be shown when notification is expanded', // (optional) default: "message" prop
-      subText: 'This is a subText', // (optional) default: none
-      color: 'red', // (optional) default: system default
-      vibrate: true, // (optional) default: true
-      vibration: 300, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
-      tag: 'some_tag', // (optional) add tag to message
-      group: 'group', // (optional) add group to message
-      ongoing: false, // (optional) set whether this is an "ongoing" notification
-      invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
-
-      /* iOS and Android properties */
-      title: 'Local Notification', // (optional)
-      message: 'My Notification Message', // (required)
-      userInfo: {screen: 'home'}, // (optional) default: {} (using null throws a JSON value '<null>' error)
-    });
+    // this.lastId++;
+    // PushNotification.localNotification({
+    //   /* Android Only Properties */
+    //   ticker: 'My Notification Ticker', // (optional)
+    //   autoCancel: true, // (optional) default: true
+    //   largeIcon: 'ic_launcher', // (optional) default: "ic_launcher"
+    //   smallIcon: 'ic_notification', // (optional) default: "ic_notification" with fallback for "ic_launcher"
+    //   bigText: 'My big text that will be shown when notification is expanded', // (optional) default: "message" prop
+    //   subText: 'This is a subText', // (optional) default: none
+    //   color: 'red', // (optional) default: system default
+    //   vibrate: true, // (optional) default: true
+    //   vibration: 300, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
+    //   tag: 'some_tag', // (optional) add tag to message
+    //   group: 'group', // (optional) add group to message
+    //   ongoing: false, // (optional) set whether this is an "ongoing" notification
+    //   invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
+    //   /* iOS and Android properties */
+    //   title: 'Local Notification', // (optional)
+    //   message: 'My Notification Message', // (required)
+    //   userInfo: {screen: 'home'}, // (optional) default: {} (using null throws a JSON value '<null>' error)
+    // });
   };
 
-  scheduleNotif = soundName => {
+  scheduleNotif = () => {
     this.lastId++;
+    const time = moment().set('h', 16);
+    if (time.isBefore(moment())) {
+      time.add(1, 'days');
+    }
+    const fire = new Date(time);
     PushNotification.localNotificationSchedule({
       // new Date().setHours(16, 0, 0)
-      date: new Date(new Date().setHours(16, 0, 0)), // in 30 secs
-
+      date: fire, // in 30 secs
+      repeatType: 'day',
+      importance: 'high',
       /* Android Only Properties */
       autoCancel: true, // (optional) default: true
       largeIcon: 'ic_launcher', // (optional) default: "ic_launcher"
       smallIcon: 'ic_launcher', // (optional) default: "ic_notification" with fallback for "ic_launcher"
-      bigText: 'Hey! Its time for you to get back on trck', // (optional) default: "message" prop
-      subText: 'This is a subText', // (optional) default: none
+      bigText: 'Hey! Its time for you to continue your lessons', // (optional) default: "message" prop
+      // subText: 'This is a subText', // (optional) default: none
       group: 'local', // (optional) add group to message
       ongoing: false, // (optional) set whether this is an "ongoing" notification
       invokeApp: false, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
 
       /* iOS only properties */
-      alertAction: 'view', // (optional) default: view
-      category: '', // (optional) default: empty string
+      // alertAction: 'view', // (optional) default: view
+      // category: '', // (optional) default: empty string
 
       /* iOS and Android properties */
       id: this.lastId, // (optional) Valid unique 32 bit integer specified as string. default: Autogenerated Unique ID

@@ -13,15 +13,14 @@ let price;
 let microPrice;
 let purchaseErrorSubscription = null;
 let purchaseUpdateSubscription = null;
-checkPurchased = async () => {
+export const checkPurchased = async () => {
   await RNIap.getAvailablePurchases()
     .then(purchase => {
       let purchased = purchase != 0 ? purchase[0].productId : null;
       if (
-        // purchased === IAPid[0] ||
-        purchased === subscriptionsID[0]
-        // ||
-        // purchased === subscriptionsID[1]
+        purchased === IAPid[0] ||
+        purchased === subscriptionsID[0] ||
+        purchased === subscriptionsID[1]
       ) {
         premiumPurchased = true;
       } else {
@@ -32,56 +31,58 @@ checkPurchased = async () => {
 
   return premiumPurchased;
 };
-showPrice = async () => {
+
+export const showPrice = async () => {
   let sixMonthPrice;
   let monthlyPremium;
-  // await RNIap.getProducts(IAPid)
-  //   .then(products => {
-  //     if (products.length > 0) {
-  //       price = products[products.length - 1].localizedPrice;
-  //     }
-  //   })
-  //   .catch(err => {});
+  await RNIap.getProducts(IAPid)
+    .then(products => {
+      if (products.length > 0) {
+        price = products[products.length - 1].localizedPrice;
+      }
+    })
+    .catch(err => {});
   await RNIap.getSubscriptions(subscriptionsID)
     .then(prices => {
-      // monthlyPremium = prices[1].localizedPrice;
+      monthlyPremium = prices[1].localizedPrice;
       sixMonthPrice = prices[0].localizedPrice;
     })
     .catch(err => {});
-  // return [price, sixMonthPrice, monthlyPremium];
-  return [0, sixMonthPrice, 0];
+
+  return [price, sixMonthPrice, monthlyPremium];
+  // return [0, sixMonthPrice, 0];
 };
 
-purchasePremium = async () => {
+export const purchasePremium = async () => {
   await RNIap.requestPurchase(IAPid[0], false).catch(err => {});
 };
-purchaseListener = that => {
+export const purchaseListener = that => {
   try {
     if (purchaseErrorSubscription == null) {
       try {
         purchaseErrorSubscription = RNIap.purchaseErrorListener(error => {
-          Alert.alert(error.message);
+          // Alert.alert(error.message);
         });
       } catch (e) {}
     }
     if (purchaseUpdateSubscription == null) {
       purchaseUpdateSubscription = RNIap.purchaseUpdatedListener(
         async purchase => {
-          console.warn('purchase');
+          // console.warn('purchase');
 
           const receipt = purchase.transactionReceipt;
           if (receipt) {
-            console.warn('recep');
+            // console.warn('recep');
 
             that.setState({purchasedPremium: 'yup'}, () => {
-              console.warn('yup');
+              // console.warn('yup');
             });
             try {
-              console.warn('onsuc');
+              // console.warn('onsuc');
 
               await RNIap.finishTransaction(purchase, false).then(async () => {
                 that.setState({purchasedPremium: 'success'}, () => {
-                  console.warn('suc');
+                  // console.warn('suc');
                 });
               });
             } catch (ackErr) {
@@ -98,7 +99,7 @@ purchaseListener = that => {
   }
 };
 
-purchaseListenerRemove = () => {
+export const purchaseListenerRemove = () => {
   if (purchaseUpdateSubscription != null) {
     purchaseUpdateSubscription.remove();
     purchaseUpdateSubscription = null;
@@ -109,20 +110,10 @@ purchaseListenerRemove = () => {
   }
 };
 
-purchaseSixMonthSubs = async () => {
+export const purchaseSixMonthSubs = async () => {
   await RNIap.requestSubscription(subscriptionsID[0], false).catch(err => {});
 };
 
-purchaseMonthlySubs = async () => {
+export const purchaseMonthlySubs = async () => {
   await RNIap.requestSubscription(subscriptionsID[1], false).catch(err => {});
-};
-
-export default {
-  checkPurchased,
-  showPrice,
-  purchasePremium,
-  purchaseMonthlySubs,
-  purchaseSixMonthSubs,
-  purchaseListener,
-  purchaseListenerRemove,
 };

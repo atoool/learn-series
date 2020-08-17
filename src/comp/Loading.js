@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import R from '../res/R';
+import {heightPercentageToDP} from 'react-native-responsive-screen';
 
 export default class Loading extends PureComponent {
   constructor(props) {
@@ -46,7 +47,10 @@ export default class Loading extends PureComponent {
               }
             />
           }>
-          <ActivityIndicator size={30} color={R.colors.primary} />
+          <ActivityIndicator
+            size={heightPercentageToDP(4)}
+            color={R.colors.primary}
+          />
         </ScrollView>
       </View>
     );

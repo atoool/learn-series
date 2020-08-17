@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {Button, Icon} from 'react-native-elements';
 import Share from 'react-native-share';
-import PremiumCheckFun from '../comp/PremiumCheckFun';
+import {checkPurchased} from '../comp/PremiumCheckFun';
 import R from '../res/R';
 import {
   widthPercentageToDP as wp,
@@ -46,7 +46,7 @@ class Settings extends Component {
         title: R.locale.getPremium1,
       },
       {image: require(`../res/imgs/pencil.png`), title: R.locale.scp},
-      {image: require('../res/imgs/bell.png'), title: R.locale.Notification},
+      // {image: require('../res/imgs/bell.png'), title: R.locale.Notification},
       // {image: require(`../res/imgs/lang.png`), title: R.locale.lang},
       {image: require(`../res/imgs/privacy.png`), title: R.locale.spp},
       {image: require(`../res/imgs/terms.png`), title: R.locale.stu},
@@ -55,17 +55,16 @@ class Settings extends Component {
     ],
   };
   componentDidMount = async () => {
-    let premiumPurchased = await PremiumCheckFun.checkPurchased();
+    let premiumPurchased = await checkPurchased();
 
     this.setState({premiumPurchased});
     this.getNotific();
 
     this.props.navigation.addListener('focus', async () => {
-      let premiumPurchased = await PremiumCheckFun.checkPurchased(
-        this.context.iapData,
-      );
+      let premiumPurchased = await checkPurchased();
+      // this.context.iapData,
       this.setState({premiumPurchased});
-      this.getNotific();
+      // this.getNotific();
     });
   };
 
@@ -119,16 +118,16 @@ class Settings extends Component {
                         ? this.props.navigation.navigate('Privacy', {
                             type: 'settings',
                           })
-                        : item.title === R.locale.stu
-                        ? this.props.navigation.navigate('Terms', {
+                        : item.title === R.locale.stu &&
+                          this.props.navigation.navigate('Terms', {
                             type: 'settings',
-                          })
-                        : // : item.title === R.locale.lang
-                        // ? this.props.navigation.navigate('Language')
-                        item.title === R.locale.Notification &&
-                          this.state.notific === R.locale.on
-                        ? this.offNotific()
-                        : this.onNotific();
+                          });
+                      // : item.title === R.locale.lang
+                      // ? this.props.navigation.navigate('Language')
+                      // item.title === R.locale.Notification &&
+                      //   this.state.notific === R.locale.on
+                      // ? this.offNotific()
+                      // : this.onNotific();
                     }}>
                     <View style={Style.buttonView}>
                       <View style={Style.buttonImageView}>

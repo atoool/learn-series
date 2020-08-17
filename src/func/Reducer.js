@@ -63,7 +63,6 @@ async function session(val, state) {
       (myCourse = [
         ...myCourse,
         ...state.explore.filter(t => t.name === m.plan),
-        ...state.mainPlan.filter(t => t.name === m.plan),
       ]),
   );
 

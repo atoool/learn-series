@@ -10,12 +10,20 @@ import {
   Alert,
 } from 'react-native';
 import WebView from 'react-native-webview';
-import PremiumCheckFun from '../comp/PremiumCheckFun';
 import Loading from '../comp/Loading';
 import R from '../res/R';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ContextStates} from '../func/ContextStates';
 import {PremSuccess} from '../comp/PremSuccess';
+import {
+  purchaseSixMonthSubs,
+  checkPurchased,
+  showPrice,
+  purchaseListener,
+  purchaseListenerRemove,
+  purchasePremium,
+  purchaseMonthlySubs,
+} from '../comp/PremiumCheckFun';
 
 const {width, height} = Dimensions.get('window');
 
@@ -30,12 +38,26 @@ export default class Onboarding extends PureComponent {
     premiumCalled: false,
     htmlUrl: null,
     load: true,
+    purchased: false,
   };
 
   _onNavigationStateChange = async a => {
     let url = a.url;
     // if (url.indexOf('stories.riafy.me') > -1) return false;
     if (url.indexOf('#slide6') > -1) {
+      // console.warn('inside refresh');
+      // this.webview.stopLoading();
+      this.webview.injectJavaScript(
+        `javascript:setIAPValues('monthly',"${this.state.monthlyPrice}")`,
+      );
+      this.webview.injectJavaScript(
+        `javascript:setIAPValues('6month',"${this.state.sixMonthPrice}")`,
+      );
+      this.webview.injectJavaScript(
+        `javascript:setIAPValues('lifetime',"${this.state.price}"||"${
+          this.state.price
+        }000000")`,
+      );
       return false;
     } else if (url.indexOf('http://riafy.me/onboarding/') > -1) {
       let jsonURL = JSON.parse(
@@ -47,14 +69,32 @@ export default class Onboarding extends PureComponent {
         let u = a.url.substring(a.url.indexOf('%'));
         let dec = decodeURI(u);
         await AsyncStorage.setItem('urlVal', dec).catch(e => {});
-        PremiumCheckFun.purchaseSixMonthSubs();
+        this.state.purchased
+          ? this.props.navigation.replace('MainTab')
+          : purchaseSixMonthSubs();
+        return false;
+      } else if (jsonURL.iap === 'monthly') {
+        let u = a.url.substring(a.url.indexOf('%'));
+        let dec = decodeURI(u);
+        await AsyncStorage.setItem('urlVal', dec).catch(e => {});
+        this.state.purchased
+          ? this.props.navigation.replace('MainTab')
+          : purchaseMonthlySubs();
+        return false;
+      } else if (jsonURL.iap === 'lifetime') {
+        let u = a.url.substring(a.url.indexOf('%'));
+        let dec = decodeURI(u);
+        await AsyncStorage.setItem('urlVal', dec).catch(e => {});
+        this.state.purchased
+          ? this.props.navigation.replace('MainTab')
+          : purchasePremium();
         return false;
       }
       return false;
     } else if (url.indexOf('/skip/') > -1) {
       let u = a.url.substring(a.url.indexOf('%'));
       let dec = decodeURI(u);
-      this.props.navigation.navigate('MainTab');
+      this.props.navigation.replace('MainTab');
       await AsyncStorage.setItem('urlVal', dec).catch(e => {});
       await AsyncStorage.setItem('@ONBOARDING', 'HIDE').catch(e => {});
       return false;
@@ -65,7 +105,7 @@ export default class Onboarding extends PureComponent {
       this.props.navigation.navigate('Privacy');
       return false;
     } else if (url.indexOf('/restore') > -1) {
-      let restore = await PremiumCheckFun.checkPurchased();
+      let restore = await checkPurchased();
       restore === true
         ? Alert.alert('Your purchase has been successfully restored')
         : Alert.alert(
@@ -77,13 +117,15 @@ export default class Onboarding extends PureComponent {
 
   componentDidMount = async () => {
     const lang = await AsyncStorage.getItem('lang').catch(e => {});
-    let prices = await PremiumCheckFun.showPrice();
+    let purchased = await checkPurchased();
+    let prices = await showPrice();
     if (prices[0] == null || prices[1] == null || prices[2] == null)
-      prices = await PremiumCheckFun.showPrice();
+      prices = await showPrice();
     this.setState({
       price: prices[0],
       sixMonthPrice: prices[1],
       monthlyPrice: prices[2],
+      purchased,
     });
 
     Platform.OS === 'ios'
@@ -108,10 +150,10 @@ export default class Onboarding extends PureComponent {
           }`,
         });
 
-    PremiumCheckFun.purchaseListener(this);
+    purchaseListener(this);
   };
   componentWillUnmount = async () => {
-    PremiumCheckFun.purchaseListenerRemove();
+    purchaseListenerRemove();
   };
 
   render() {
@@ -140,7 +182,6 @@ export default class Onboarding extends PureComponent {
           flex: 1,
           marginTop: Platform.OS === 'ios' ? (height > 750 ? -45 : 0) : 2,
         }}>
-        <StatusBar hidden />
         <KeyboardAvoidingView
           style={{flex: 1}}
           behavior="padding"
@@ -165,9 +206,6 @@ export default class Onboarding extends PureComponent {
             originWhitelist={['*']}
             javaScriptEnabled
             domStorageEnabled
-            injectedJavaScript={`javascript:setIAPValues('6month',"${
-              this.state.sixMonthPrice
-            }")`}
             onShouldStartLoadWithRequest={a => {
               if (a.url.indexOf('stories.riafy.me') > -1) return false;
               this._onNavigationStateChange(a);

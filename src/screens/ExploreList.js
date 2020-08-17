@@ -87,7 +87,6 @@ export default class ExploreList extends Component {
 
     return (
       <SafeAreaView style={styles.container}>
-        <StatusBar translucent={true} />
         {/* <ImageBackground
           style={{flex: 1}}
           source={require('../res/images/background.jpg')}> */}
