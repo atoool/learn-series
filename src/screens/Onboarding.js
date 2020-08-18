@@ -68,7 +68,11 @@ export default class Onboarding extends PureComponent {
       if (jsonURL.iap === '6month') {
         let u = a.url.substring(a.url.indexOf('%'));
         let dec = decodeURI(u);
-        await AsyncStorage.setItem('urlVal', dec).catch(e => {});
+        await AsyncStorage.multiSet([
+          ['urlVal', dec],
+          ['@ONBOARDING', 'HIDE'],
+          ['rateus', '2nd'],
+        ]).catch(e => {});
         this.state.purchased
           ? this.props.navigation.replace('MainTab')
           : purchaseSixMonthSubs();
@@ -76,7 +80,11 @@ export default class Onboarding extends PureComponent {
       } else if (jsonURL.iap === 'monthly') {
         let u = a.url.substring(a.url.indexOf('%'));
         let dec = decodeURI(u);
-        await AsyncStorage.setItem('urlVal', dec).catch(e => {});
+        await AsyncStorage.multiSet([
+          ['urlVal', dec],
+          ['@ONBOARDING', 'HIDE'],
+          ['rateus', '2nd'],
+        ]).catch(e => {});
         this.state.purchased
           ? this.props.navigation.replace('MainTab')
           : purchaseMonthlySubs();
@@ -84,7 +92,11 @@ export default class Onboarding extends PureComponent {
       } else if (jsonURL.iap === 'lifetime') {
         let u = a.url.substring(a.url.indexOf('%'));
         let dec = decodeURI(u);
-        await AsyncStorage.setItem('urlVal', dec).catch(e => {});
+        await AsyncStorage.multiSet([
+          ['urlVal', dec],
+          ['@ONBOARDING', 'HIDE'],
+          ['rateus', '2nd'],
+        ]).catch(e => {});
         this.state.purchased
           ? this.props.navigation.replace('MainTab')
           : purchasePremium();
@@ -95,8 +107,11 @@ export default class Onboarding extends PureComponent {
       let u = a.url.substring(a.url.indexOf('%'));
       let dec = decodeURI(u);
       this.props.navigation.replace('MainTab');
-      await AsyncStorage.setItem('urlVal', dec).catch(e => {});
-      await AsyncStorage.setItem('@ONBOARDING', 'HIDE').catch(e => {});
+      await AsyncStorage.multiSet([
+        ['urlVal', dec],
+        ['@ONBOARDING', 'HIDE'],
+        ['rateus', '2nd'],
+      ]).catch(e => {});
       return false;
     } else if (url.indexOf('/terms') > -1) {
       this.props.navigation.navigate('Terms');

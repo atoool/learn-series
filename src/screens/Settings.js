@@ -93,7 +93,7 @@ class Settings extends Component {
           ref={this.props.scrollRef}>
           <Image
             style={{height: hp(31.3), width: '100%', marginBottom: hp(3.2)}}
-            source={require('../res/imgs/keto_onboard.png')}
+            source={require('../res/imgs/settings.png')}
           />
           <View style={{flex: 1, justifyContent: 'space-around'}}>
             {this.state.array.map((item, index) => {

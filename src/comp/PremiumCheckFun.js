@@ -7,7 +7,7 @@ const IAPid =
 const subscriptionsID =
   Platform.OS === 'ios'
     ? [R.strings.subscription]
-    : ['android.test.purchased', 'monthly_premium'];
+    : ['6month_premium', 'monthly_premium'];
 let premiumPurchased;
 let price;
 let microPrice;

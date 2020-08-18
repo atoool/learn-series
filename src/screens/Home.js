@@ -28,6 +28,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import RateUs from '../comp/RateUs';
 
 export default class Home extends React.PureComponent {
   static contextType = ContextStates;
@@ -134,6 +135,8 @@ export default class Home extends React.PureComponent {
           <HeadText title="Recommended for you" />
           <ListData data={reduState.recomPlan} type="home" />
         </View>
+
+        <RateUs isVisible={reduState.rateUs} />
       </Animated.ScrollView>
     );
   }

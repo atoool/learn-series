@@ -12,6 +12,7 @@ export const reduState = {
   desc: [],
   sleep: null,
   myCourse: [],
+  rateUs: false,
 };
 
 export async function init(state) {
@@ -52,6 +53,7 @@ export async function init(state) {
     sleepPr: sleepPr
       ? sleepPr
       : [{plan: sleep.plans[0].name, lesson: 1, chapter: 1}],
+    rateUs: false,
   };
 }
 
@@ -82,6 +84,8 @@ export async function reducer(state, action) {
       return await sleepSess(action.payload, state);
     case 'videos':
       return {...state, videos: action.payload};
+    case 'rateus':
+      return {...state, rateUs: action.payload};
     case 'init':
       return action.payload;
     default:

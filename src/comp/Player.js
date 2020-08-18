@@ -12,6 +12,7 @@ import {
   Easing,
   AppState,
   ToastAndroid,
+  SafeAreaView,
 } from 'react-native';
 import {Icon, Button, Slider} from 'react-native-elements';
 import Orientation from 'react-native-orientation-locker';
@@ -173,7 +174,8 @@ export default class Player extends React.PureComponent {
     });
 
     return (
-      <View style={{height: '100%', width: '100%', backgroundColor: '#000'}}>
+      <SafeAreaView
+        style={{height: '100%', width: '100%', backgroundColor: '#000'}}>
         <Swiper
           ref="refSwipe"
           showsButtons={false}
@@ -526,7 +528,7 @@ export default class Player extends React.PureComponent {
             )}
           </View>
         </Animated.View>
-      </View>
+      </SafeAreaView>
     );
   }
 }

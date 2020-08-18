@@ -2,13 +2,14 @@ import React from 'react';
 import {StyleSheet, Image, View, StatusBar, Platform} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Loading from '../comp/Loading';
-import RateUs from '../comp/RateUs';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {ContextStates} from '../func/ContextStates';
 
 export default class Splash extends React.PureComponent {
+  static contextType = ContextStates;
   state = {
     rateUs: false,
   };
@@ -27,21 +28,27 @@ export default class Splash extends React.PureComponent {
   };
   redirect = initApp => {
     if (initApp[0][1] == 'HIDE') this.props.navigation.replace('MainTab');
-    else this.props.navigation.replace('MainTab');
-    if (initApp[1][1] != null && initApp[1][1] == '2nd')
-      this.setState({rateUs: true});
+    else this.props.navigation.replace('Onboarding');
+
+    initApp[1][1] != null &&
+      initApp[1][1] == '2nd' &&
+      this.context.dispatch({type: 'rateus', payload: true});
   };
 
   render() {
     return (
-      <View style={styles.container}>
-        {Platform.OS === 'iOS' ? (
-          <Loading load={this} />
-        ) : (
-          <Image style={styles.img} source={require('../res/imgs/logo.png')} />
-        )}
-        {this.state.rateUs && <RateUs isVisible={this.state.rateUs} />}
-      </View>
+      <>
+        <View style={styles.container}>
+          {Platform.OS === 'iOS' ? (
+            <Loading load={this} />
+          ) : (
+            <Image
+              style={styles.img}
+              source={require('../res/imgs/logo.png')}
+            />
+          )}
+        </View>
+      </>
     );
   }
 }

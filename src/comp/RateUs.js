@@ -36,7 +36,11 @@ export default class RateUs extends PureComponent {
     )
       .then(res => res.json())
       .then(respons => {
-        this.setState({data: respons.splash, isVisible: this.props.isVisible});
+        this.setState({
+          data: respons.splash,
+          isVisible:
+            this.props.isVisible == true ? this.props.isVisible : false,
+        });
       });
   };
   onRate = async () => {
@@ -65,7 +69,7 @@ export default class RateUs extends PureComponent {
         animationType="fade"
         onBackdropPress={() => this.setState({isVisible: false})}>
         <View>
-          <StatusBar backgroundColor="rgba(0,0,0,0.4)" />
+          <StatusBar backgroundColor="#000" />
           {this.state.data.image == null ? (
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -74,7 +78,7 @@ export default class RateUs extends PureComponent {
           ) : (
             <View>
               <Image
-                source={{uri: this.state.data.image}}
+                source={{uri: this.state.data.image, cache: 'force-cache'}}
                 style={{
                   width: width - wp(8),
                   height: width - hp(6.4),
