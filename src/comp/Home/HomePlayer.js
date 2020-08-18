@@ -193,15 +193,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderBottomStartRadius: height < 600 ? hp(15) : hp(23),
     borderBottomEndRadius: height < 600 ? hp(15) : hp(23),
-    transform: height < 600 ? [{scaleX: 1}] : [{scaleX: wp(0.556)}],
-    justifyContent: 'center',
-    alignSelf: 'center',
+    transform: height < 600 ? [{scaleX: 1}] : [{scaleX: 2}],
   },
   youtube: {
     position: 'absolute',
     height: hp(28.2),
     width: '100%',
-    transform: height < 600 ? [{scaleX: 1}] : [{scaleX: wp(0.1389)}],
+    transform: height < 600 ? [{scaleX: 1}] : [{scaleX: 0.5}],
   },
   contentContainer: {
     height: hp(28.2),

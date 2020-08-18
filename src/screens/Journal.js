@@ -64,6 +64,7 @@ export default class Jounal extends React.PureComponent {
               }}
               style={{
                 padding: hp(2.6),
+                backgroundColor: R.colors.img,
               }}>
               <Text style={{fontSize: hp(2.1), color: '#fff'}}>Monday</Text>
               <Text
@@ -119,6 +120,7 @@ export default class Jounal extends React.PureComponent {
               style={{
                 padding: hp(2.6),
                 paddingVertical: hp(5.1),
+                backgroundColor: R.colors.img,
               }}>
               <Text style={{fontSize: hp(2.1), color: '#fff'}}>
                 Track your progress
@@ -144,6 +146,7 @@ export default class Jounal extends React.PureComponent {
               style={{
                 padding: hp(2.6),
                 paddingVertical: hp(5.1),
+                backgroundColor: R.colors.img,
               }}>
               <Text style={{fontSize: hp(2.1), color: '#fff'}}>
                 Your achievements

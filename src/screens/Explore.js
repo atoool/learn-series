@@ -170,6 +170,7 @@ this.setState({purchasedPremium})
                       source={{uri:this.context.reduState.imgExplore[item.coverImage]}}
                       style={{
                         width: '100%',
+                        backgroundColor: R.colors.img,
                       }}>
                       <View
                         style={{

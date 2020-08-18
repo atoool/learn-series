@@ -102,5 +102,6 @@ const styles = StyleSheet.create({
     borderRadius: hp(0.6),
     marginBottom: hp(0.6),
     overflow: 'hidden',
+    backgroundColor: R.colors.img,
   },
 });

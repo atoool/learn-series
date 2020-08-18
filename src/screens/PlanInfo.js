@@ -520,6 +520,7 @@ const styles = StyleSheet.create({
     height: hp(29.5),
     alignSelf: 'center',
     borderRadius: hp(1.3),
+    backgroundColor: R.colors.img,
   },
   cardTitle: {
     color: '#5e5a61',

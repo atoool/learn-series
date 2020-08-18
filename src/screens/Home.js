@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: hp(2.6),
     height: hp(25.6),
-    backgroundColor: '#fbeee0',
+    backgroundColor: R.colors.img,
     overflow: 'hidden',
   },
   cardTextView: {

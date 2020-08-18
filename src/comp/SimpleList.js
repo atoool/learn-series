@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     height: hp(10.3),
     borderRadius: hp(0.6),
     marginRight: wp(2.8),
+    backgroundColor: R.colors.img,
   },
   icon: {right: 0, position: 'absolute'},
 });
