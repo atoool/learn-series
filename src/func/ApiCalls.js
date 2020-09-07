@@ -23,7 +23,7 @@ export const fetchData = async type => {
           e => {},
         );
       }
-    }, 2000);
+    }, 100);
   }
   return data;
 };
