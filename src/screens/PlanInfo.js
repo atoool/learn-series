@@ -46,7 +46,7 @@ export default class PlanInfo extends React.Component {
     collapsed: [],
     lesson: 1,
     chapter: 1,
-    purchasedPremium: false,
+    premiumPurchased: false,
   };
 
   componentDidMount = () => {
@@ -60,7 +60,7 @@ export default class PlanInfo extends React.Component {
 
   onMount = async () => {
     Orientation.lockToPortrait();
-    const purchasedPremium = await checkPurchased();
+    const {premiumPurchased} = this.context.reduState;
 
     let {data, type} = this.props.route.params;
     let lesson = 1;
@@ -82,7 +82,7 @@ export default class PlanInfo extends React.Component {
         }
       });
     }
-    this.setState({lesson, chapter, purchasedPremium}, () => {
+    this.setState({lesson, chapter, premiumPurchased}, () => {
       const {chapters} = data.lessons[lesson ? lesson - 1 : 0];
       // let videos = [];
       let randomPlans = [];
@@ -151,7 +151,7 @@ export default class PlanInfo extends React.Component {
   };
 
   render() {
-    const {collapsed, lesson, chapter, purchasedPremium} = this.state;
+    const {collapsed, lesson, chapter, premiumPurchased} = this.state;
     const {params} = this.props.route;
     const {type} = params;
     const {reduState, playVideo} = this.context;
@@ -344,7 +344,7 @@ export default class PlanInfo extends React.Component {
                             : true
                         }
                         onPress={() => {
-                          if (!purchasedPremium && params.data.premium)
+                          if (!premiumPurchased && params.data.premium)
                             this.props.navigation.navigate('Premium');
                           else {
                             this.savePlan();
@@ -374,7 +374,7 @@ export default class PlanInfo extends React.Component {
                                 : false
                             }
                             name={
-                              !purchasedPremium
+                              !premiumPurchased
                                 ? params.data.premium
                                   ? 'lock'
                                   : 'play-circle'
@@ -460,7 +460,7 @@ export default class PlanInfo extends React.Component {
           icon={() => (
             <FontAwesome5Icon
               name={
-                !purchasedPremium
+                !premiumPurchased
                   ? params.data.premium
                     ? 'lock'
                     : 'play'
@@ -489,7 +489,7 @@ export default class PlanInfo extends React.Component {
             alignItems: 'center',
           }}
           onPress={() => {
-            if (!purchasedPremium && params.data.premium)
+            if (!premiumPurchased && params.data.premium)
               this.props.navigation.navigate('Premium');
             else {
               this.savePlan();

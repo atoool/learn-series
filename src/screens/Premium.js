@@ -61,8 +61,8 @@ export default class Premium extends Component {
       this.props.navigation.navigate('Privacy');
       return false;
     } else if (url.indexOf('/restore') > -1) {
-      let restore = await checkPurchased();
-      restore === true
+      let {premiumPurchased} = this.context.reduState;
+      premiumPurchased === true
         ? Alert.alert('Your purchase has been successfully restored')
         : Alert.alert(
             'Failed to restore purchase! couldn`t find any previous purchase',
@@ -85,10 +85,7 @@ export default class Premium extends Component {
 
   componentDidMount = async () => {
     const lang = await AsyncStorage.getItem('lang').catch(e => {});
-    let prices = await showPrice();
-
-    if (prices[0] == null || prices[1] == null || prices[2] == null)
-      prices = await showPrice();
+    let {prices} = this.context.reduState;
     this.setState({
       price: prices[0],
       sixMonthPrice: prices[1],

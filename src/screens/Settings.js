@@ -55,13 +55,13 @@ class Settings extends Component {
     ],
   };
   componentDidMount = async () => {
-    let premiumPurchased = await checkPurchased();
+    let {premiumPurchased} = this.context.reduState;
 
     this.setState({premiumPurchased});
     this.getNotific();
 
     this.props.navigation.addListener('focus', async () => {
-      let premiumPurchased = await checkPurchased();
+      let {premiumPurchased} = this.context.reduState;
       // this.context.iapData,
       this.setState({premiumPurchased});
       // this.getNotific();

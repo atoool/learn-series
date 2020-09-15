@@ -18,14 +18,7 @@ import {
 export const ListData = props => {
   const context = useContext(ContextStates);
   const nav = useNavigation();
-  const [premiumPurchased, setPremium] = useState(false);
-  useEffect(() => {
-    async function premiumCheck() {
-      const premium = await checkPurchased();
-      setPremium(premium);
-    }
-    premiumCheck();
-  }, []);
+  const {premiumPurchased} = context.reduState;
   return (
     <FlatList
       data={props.data}

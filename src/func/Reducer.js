@@ -1,6 +1,50 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import {fetchData} from './ApiCalls';
 import Home from '../screens/Home';
+import {Platform} from 'react-native';
+import {checkPurchased, showPrice} from '../comp/PremiumCheckFun';
+// import RNFS from 'react-native-fs';
+
+export async function IAPCall() {
+  let htmlPath = '';
+  let premiumPurchased = false;
+  let prices = [0, 0, 0];
+  await AsyncStorage.multiGet(['isPremium', 'prices', 'htmlPath'])
+    .then(async r => {
+      if (Platform.OS === 'ios') {
+        // const results = await RNFS.readDir(RNFS.MainBundlePath);
+        // const webFolder = results.filter(f => f.name == 'Web.bundle');
+        // htmlPath = 'file://' + webFolder[0].path;
+      } else htmlPath = 'file:///android_asset/html';
+
+      if (r[0][1] == null || r[1][1] == null) {
+        premiumPurchased = await checkPurchased().catch(e => {});
+
+        if (premiumPurchased == false) {
+          prices = await showPrice().catch(e => {});
+        }
+        await AsyncStorage.multiSet([
+          ['isPremium', JSON.stringify(premiumPurchased)],
+          ['prices', JSON.stringify(prices)],
+        ]).catch(e => {});
+      } else {
+        premiumPurchased = JSON.parse(r[0][1]);
+
+        prices = JSON.parse(r[1][1]);
+
+        let isPremium = await checkPurchased().catch(e => {});
+        if (isPremium !== premiumPurchased) premiumPurchased = isPremium;
+        let cPrices = await showPrice().catch(e => {});
+        // console.warn(prices);
+        if (cPrices !== prices) prices = cPrices;
+      }
+    })
+    .catch(e => {
+      console.warn('ss');
+    });
+
+  return [htmlPath, premiumPurchased, prices];
+}
 
 export const reduState = {
   mainPlan: null,
@@ -22,6 +66,7 @@ export async function init(state) {
   const sleep = await fetchData('sleep');
   const mainP = local[0][1] ? JSON.parse(local[0][1]) : null;
   const sleepPr = local[1][1] ? JSON.parse(local[1][1]) : null;
+  const IAP = await IAPCall();
   let myC = [];
   mainP &&
     mainP.map(
@@ -54,6 +99,9 @@ export async function init(state) {
       ? sleepPr
       : [{plan: sleep.plans[0].name, lesson: 1, chapter: 1}],
     rateUs: false,
+    htmlPath: IAP[0],
+    premiumPurchased: IAP[1],
+    prices: IAP[2],
   };
 }
 

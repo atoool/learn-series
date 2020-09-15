@@ -9,8 +9,11 @@ import {
   Alert,
   SafeAreaView,
 } from 'react-native';
-import {NavigationContainer, CommonActions} from '@react-navigation/native';
-import MainNavigator from './src/navigations/MainNavigator';
+import {
+  NavigationContainer,
+  CommonActions,
+  DefaultTheme,
+} from '@react-navigation/native';
 import {ContextStates, MyTheme} from './src/func/ContextStates';
 import Player from './src/comp/Player';
 import AppContainer from './src/navigations/AppContainer';
@@ -43,9 +46,11 @@ class App extends React.Component {
   componentDidMount = async () => {
     this.notif.checkPermission(this.handlePerm);
     this.notif.scheduleNotif();
+    const data = await init(this.state);
+    await this.dispatch({type: 'init', payload: data});
 
     this.appstate == null &&
-      (this.appstate = AppState.addEventListener('change', nex => {
+      (this.appstate = AppState.addEventListener('change', (nex) => {
         if (nex == 'active')
           this.back == null &&
             (this.back = BackHandler.addEventListener(
@@ -65,13 +70,11 @@ class App extends React.Component {
               },
             ));
       }));
-    const data = await init(this.state);
-    await this.dispatch({type: 'init', payload: data});
 
     const result = await RNIap.initConnection();
     result == null && (await RNIap.initConnection());
     this.unsubscribe == null &&
-      (this.unsubscribe = NetInfo.addEventListener(state => {
+      (this.unsubscribe = NetInfo.addEventListener((state) => {
         this.setState({connected: state.isConnected});
       }));
   };
@@ -82,11 +85,11 @@ class App extends React.Component {
     this.setState({play: !this.state.play, type, playIndex});
   };
 
-  dispatch = async action => {
+  dispatch = async (action) => {
     this.setState(await reducer(this.state, action));
   };
 
-  getActiveRouteName = state => {
+  getActiveRouteName = (state) => {
     if (!state || typeof state.index !== 'number') {
       return 'Unknown';
     }
@@ -101,6 +104,13 @@ class App extends React.Component {
   };
 
   render() {
+    const Themes = {
+      ...DefaultTheme,
+      colors: {
+        ...DefaultTheme.colors,
+        background: R.colors.background,
+      },
+    };
     return (
       <ContextStates.Provider
         value={{
@@ -112,8 +122,9 @@ class App extends React.Component {
         <SafeAreaView style={{flex: 1}}>
           <StatusBar backgroundColor={R.colors.statusBar} />
           <NavigationContainer
-            ref={re => (this.navig = re)}
-            onStateChange={state => {
+            ref={(re) => (this.navig = re)}
+            theme={Themes}
+            onStateChange={(state) => {
               const previousRouteName = this.routeName ? this.routeName : '';
               const currentRouteName = this.getActiveRouteName(state);
               if (previousRouteName !== currentRouteName) {
@@ -131,22 +142,22 @@ class App extends React.Component {
                 backgroundColor="#e84a5f"
               />
             )}
-            <ExitAlert ref={exitalert => (this.exit = exitalert)} />
+            <ExitAlert ref={(exitalert) => (this.exit = exitalert)} />
           </NavigationContainer>
         </SafeAreaView>
       </ContextStates.Provider>
     );
   }
-  onRegister = token => {
+  onRegister = (token) => {
     this.setState({registerToken: token.token, fcmRegistered: true});
     this.notif.subscribeTopic();
   };
 
-  onNotif = notific => {
+  onNotif = (notific) => {
     this.notific = notific;
   };
 
-  handlePerm = perms => {
+  handlePerm = (perms) => {
     !perms.alert && this.notif.requestPermissions();
   };
 }

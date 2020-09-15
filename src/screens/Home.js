@@ -71,6 +71,8 @@ export default class Home extends React.PureComponent {
   render() {
     const {reduState} = this.context;
     const {params} = this.props.route;
+    console.warn(reduState.premiumPurchased, reduState.prices);
+
     if (reduState.myCourse == null || reduState.mainVideo == null)
       return <Loading load={this} />;
     return (

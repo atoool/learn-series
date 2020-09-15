@@ -29,7 +29,7 @@ export default class Loading extends PureComponent {
           position: 'absolute',
           height: '100%',
           width: '100%',
-          backgroundColor: '#fff',
+          backgroundColor: R.colors.background,
         }}>
         <ScrollView
           contentContainerStyle={{

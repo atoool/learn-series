@@ -30,7 +30,7 @@ export default class Terms extends Component {
     //   return <Loading load={this} />;
     // }
     return (
-      <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: R.colors.background}}>
         {/* <StatusBar barStyle="dark-content" /> */}
         <WebView
           key={this.context.connected}
@@ -44,7 +44,7 @@ export default class Terms extends Component {
               R.locale.appName
             }&lang=${this.state.lang}`,
           }}
-          style={{flex: 1, marginTop: hp(6.4)}}
+          containerStyle={{flex: 1, paddingTop: hp(6.4)}}
           onHttpError={() => {
             this.setState({load: false});
           }}

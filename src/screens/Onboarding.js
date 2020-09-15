@@ -43,8 +43,10 @@ export default class Onboarding extends PureComponent {
 
   _onNavigationStateChange = async a => {
     let url = a.url;
+    console.warn(url);
+
     // if (url.indexOf('stories.riafy.me') > -1) return false;
-    if (url.indexOf('#slide6') > -1) {
+    if (url.indexOf('/vibrate') > -1) {
       // console.warn('inside refresh');
       // this.webview.stopLoading();
       this.webview.injectJavaScript(
@@ -120,8 +122,8 @@ export default class Onboarding extends PureComponent {
       this.props.navigation.navigate('Privacy');
       return false;
     } else if (url.indexOf('/restore') > -1) {
-      let restore = await checkPurchased();
-      restore === true
+      let {premiumPurchased} = this.context.reduState;
+      premiumPurchased === true
         ? Alert.alert('Your purchase has been successfully restored')
         : Alert.alert(
             'Failed to restore purchase! couldn`t find any previous purchase',
@@ -132,10 +134,9 @@ export default class Onboarding extends PureComponent {
 
   componentDidMount = async () => {
     const lang = await AsyncStorage.getItem('lang').catch(e => {});
-    let purchased = await checkPurchased();
-    let prices = await showPrice();
-    if (prices[0] == null || prices[1] == null || prices[2] == null)
-      prices = await showPrice();
+    let purchased = this.context.reduState.premiumPurchased;
+    let {prices} = this.context.reduState;
+
     this.setState({
       price: prices[0],
       sixMonthPrice: prices[1],
@@ -172,21 +173,7 @@ export default class Onboarding extends PureComponent {
   };
 
   render() {
-    if (this.state.htmlUrl == null) {
-      return (
-        <SafeAreaView
-          style={{
-            flex: 1,
-            marginTop: Platform.OS === 'ios' ? (height > 750 ? -45 : 0) : 2,
-            position: 'absolute',
-            height: '100%',
-            width: '100%',
-            backgroundColor: '#fff',
-          }}>
-          <Loading load={this} />
-        </SafeAreaView>
-      );
-    } else if (
+    if (
       this.state.purchasedPremium === 'yup' ||
       this.state.purchasedPremium === 'success'
     )
@@ -195,39 +182,36 @@ export default class Onboarding extends PureComponent {
       <SafeAreaView
         style={{
           flex: 1,
-          marginTop: Platform.OS === 'ios' ? (height > 750 ? -45 : 0) : 2,
+          backgroundColor: R.colors.background,
         }}>
-        <KeyboardAvoidingView
+        <WebView
+          ref={re => (this.webview = re)}
+          key={this.context.connected}
+          startInLoadingState
+          cacheEnabled
+          cacheMode="LOAD_CACHE_ELSE_NETWORK"
+          onError={() => {
+            this.setState({load: false});
+          }}
+          renderError={() => <Loading load={this} />}
+          renderLoading={() => <Loading load={this} />}
           style={{flex: 1}}
-          behavior="padding"
-          enabled={true}>
-          <WebView
-            key={this.context.connected}
-            startInLoadingState
-            cacheEnabled
-            onError={() => {
-              this.setState({load: false});
-            }}
-            renderError={() => <Loading load={this} />}
-            renderLoading={() => <Loading load={this} />}
-            style={{flex: 1}}
-            source={{
-              uri: this.state.htmlUrl,
-            }}
-            scrollEnabled={false}
-            pagingEnabled={true}
-            allowingReadAccessToURL={'Web.bundle'}
-            allowsBackForwardNavigationGestures={true}
-            originWhitelist={['*']}
-            javaScriptEnabled
-            domStorageEnabled
-            onShouldStartLoadWithRequest={a => {
-              if (a.url.indexOf('stories.riafy.me') > -1) return false;
-              this._onNavigationStateChange(a);
-              return true;
-            }}
-          />
-        </KeyboardAvoidingView>
+          source={{
+            uri: this.state.htmlUrl,
+          }}
+          scrollEnabled={false}
+          pagingEnabled={true}
+          allowingReadAccessToURL={'Web.bundle'}
+          allowsBackForwardNavigationGestures={true}
+          originWhitelist={['*']}
+          javaScriptEnabled
+          domStorageEnabled
+          onShouldStartLoadWithRequest={a => {
+            if (a.url.indexOf('stories.riafy.me') > -1) return false;
+            this._onNavigationStateChange(a);
+            return true;
+          }}
+        />
       </SafeAreaView>
     );
   }

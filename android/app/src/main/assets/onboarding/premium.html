@@ -10,9 +10,18 @@
     <link rel="stylesheet" href="css/swiper.min.css">
     <!-- <link  href="css/picker.min.css" rel="stylesheet"> -->
     <!-- <script src="js/picker.min.js"></script> -->
-    <script src="js/fastclick.js" charset="utf-8"></script>
+    <!--<script src="js/fastclick.js" charset="utf-8"></script>-->
     <!-- <script src="js/data.js" charset="utf-8"></script> -->
     <script type="text/javascript">
+        function nightModeSwitch(){
+       var now = new Date();
+       var hrs = now.getHours();
+       var greet;
+       if (hrs >= 19 || hrs <= 6)
+       {
+         document.querySelector('body').classList.add('night');
+       }
+    }
       var urlParams;
       (window.onpopstate = function () {
         var match,
@@ -294,7 +303,7 @@ input{
       /* background: -webkit-linear-gradient(left, #8CA6DB 0%, #B993D6 90%); */
     }
     .userReview{
-      font-weight: 300;
+      /*font-weight: 300;*/
       font-size: 14px;
       margin: 16px 0px 24px 0;
     }
@@ -497,7 +506,497 @@ body.ja .option {
 }
     </style>
   </head>
-  <body>
+  <body class="noscroll">
+    <script type="text/javascript">nightModeSwitch();</script>
+    <div id="spinner" class="loaded"><div class="processing"><div class="ispinner"><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div></div></div></div>
+    <script type="text/javascript">
+    var retryTimer,spinnerHTML='<div class="ispinner"><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div></div>';
+    function removeSpinner(loadingText){
+      if (loadingText==undefined) {
+        loadingText=spinnerHTML;
+      }
+      document.getElementById('spinner').classList.remove('loaded');
+      document.querySelector('body').classList.remove('noscroll');
+      document.querySelector('#spinner .processing').innerHTML=loadingText;
+    }
+      function smoothscrollToTop(){
+     var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+     if (currentScroll > 0) {
+          window.requestAnimationFrame(smoothscrollToTop);
+          window.scrollTo (0,currentScroll - (currentScroll/10));
+     }
+  }
+    function addSpinner(type="full",text,ctaFunction,ctaText='TAP TO RETRY'){
+      clearTimeout(retryTimer);
+      smoothscrollToTop();
+      if (type=='half') {
+        document.getElementById('spinner').classList.add('frozen');
+      }
+      else
+      {setTimeout(function(){
+        document.querySelector('body').classList.add('noscroll');
+      },400);}
+      if (ctaFunction!=undefined) {
+        console.log(ctaFunction);
+        text=text+'<br><a href="#" onclick="spinnerAction('+ctaFunction+')">'+ctaText+'</a>';
+      }
+      document.querySelector('#spinner .processing').innerHTML=text;
+      document.getElementById('spinner').classList.add('loaded');
+    }
+    function spinnerAction(ctaFunction){
+      retryTimer=setTimeout(function(){
+        document.querySelector('#spinner .processing a').innerHTML=spinnerHTML;
+      },150);
+      eval(ctaFunction);
+    }
+    </script>
+    <style media="screen">
+    .night #spinner{
+        background: #1c1c1f;
+        color: #eee;
+    }
+    .noscroll{overflow: hidden;height: 100%;}
+    #spinner .processing a:active{opacity: .4;}
+    #spinner .processing a{border-bottom: none;transition: 100ms ease opacity;
+    margin-top: 16px;
+    height: 32px;    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #06c;
+    font-size: 14px;}
+    #spinner.frozen .processing a {margin: 0;width: 30%;}
+    #spinner {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    background-color: white;
+    z-index: 10;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-direction: column;
+    }
+    .processing{
+    color: #777;max-width: 70%;text-align: center;
+    }
+    .loaded{display: flex!important;}
+    .ispinner {position: relative;width: 20px;height: 20px; }.ispinner .ispinner-blade {position: absolute;top: 37%;left: 44.5%;width: 10%;height: 25%;background-color: #8e8e93;border-radius: 50%/20%;animation: iSpinnerBlade 1s linear infinite;will-change: opacity; }.ispinner .ispinner-blade:nth-child(1) {transform: rotate(30deg) translate(0, -150%);animation-delay: -1.6666666667s; }.ispinner .ispinner-blade:nth-child(2) {transform: rotate(60deg) translate(0, -150%);animation-delay: -1.5833333333s; }.ispinner .ispinner-blade:nth-child(3) {transform: rotate(90deg) translate(0, -150%);animation-delay: -1.5s; }.ispinner .ispinner-blade:nth-child(4) {transform: rotate(120deg) translate(0, -150%);animation-delay: -1.4166666667s; }.ispinner .ispinner-blade:nth-child(5) {transform: rotate(150deg) translate(0, -150%);animation-delay: -1.3333333333s; }.ispinner .ispinner-blade:nth-child(6) {transform: rotate(180deg) translate(0, -150%);animation-delay: -1.25s; }.ispinner .ispinner-blade:nth-child(7) {transform: rotate(210deg) translate(0, -150%);animation-delay: -1.1666666667s; }.ispinner .ispinner-blade:nth-child(8) {transform: rotate(240deg) translate(0, -150%);animation-delay: -1.0833333333s; }.ispinner .ispinner-blade:nth-child(9) {transform: rotate(270deg) translate(0, -150%);animation-delay: -1s; }.ispinner .ispinner-blade:nth-child(10) {transform: rotate(300deg) translate(0, -150%);animation-delay: -0.9166666667s; }.ispinner .ispinner-blade:nth-child(11) {transform: rotate(330deg) translate(0, -150%);animation-delay: -0.8333333333s; }.ispinner .ispinner-blade:nth-child(12) {transform: rotate(360deg) translate(0, -150%);animation-delay: -0.75s; }.ispinner.ispinner-large {width: 35px;height: 35px; }.ispinner.ispinner-large .ispinner-blade {width: 8.5714285714%;height: 25.7142857143%;border-radius: 50%/16.67%; }@keyframes iSpinnerBlade {0% {opacity: 0.85; }50% {opacity: 0.25; }100% {opacity: 0.25; } }
+    #spinner.spinnerBottom {
+    height: 25%;
+    top: 75%;
+    }
+
+    #spinner.frozen {
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      background-color: rgba(255,255,255,0.7);
+        height: 90px;
+        bottom: 0;
+        position: fixed;
+        top: auto;
+    }
+
+    .frozen .processing {
+        display: flex;color: #1d1d1f;
+        justify-content: space-between;
+        max-width: 80%;
+        align-items: center;    text-align: left;
+    }
+    .night #spinner.frozen {background-color: rgba(29,29,31,0.72);}
+
+    .night .frozen .processing {
+        color: #eee;
+    }
+
+    .night a, .night #spinner.frozen .processing a{
+        color: #2997ff;
+    }
+
+    .heading{
+  color: #565656;font-size: 19px;
+    line-height: 1.26316;
+    font-weight: 600;
+    letter-spacing: .012em;
+}
+
+.night .heading{color: #eee;}
+    </style>
+    <style media="screen">
+    .settingUp{
+    background: #fafafa!important;
+    color: #fafafa!important;
+    pointer-events: none;
+    }
+    .settingUp::before{
+    display: block;
+    content: "Setting up, please wait...";
+    color: gray;
+    font-weight: 100;
+    letter-spacing: normal;
+    text-transform: none;
+    }
+
+    div#iOS-6month .subscTitle, div#iOS-6month .mthval, div#iOS-6month .subscDetails {
+    color: #555;
+    font-size: 14px;
+    display: inline-block;
+    margin-top: 4px;
+}
+.iOS-sub div#reviewText    {
+   font-size: 21px!important;color:#666;font-weight:400;
+}
+
+.iOS-sub #reviewUser {
+font-size: 14px; font-weight:400;color:#666
+}
+
+.iosApp .bottomPiece {
+    display: flex;
+    flex-direction: column;
+    height: 30%;
+}
+
+.iosApp .centerPiece {
+    height: 35%;
+}
+
+.iosTerms.footer {
+    overflow: scroll;
+}
+
+@media(orientation:landscape){
+
+.android .subscription.container .centerPiece {
+    height: 80%;
+    padding-top: 16px;
+}
+
+.android .subscription.container .bottomPiece {
+    height: 20%;
+}
+
+#parametersContent .option {
+    width: 100%;
+    font-size: 17px;
+}
+#parametersContent .optionsBtn{
+    box-shadow:none;
+}
+
+#parametersContent img.iconsSmall {
+    height: 21px;
+}
+/*#parametersContent .centerPiece{
+    height:calc(100% - 50px);
+}*/
+
+.metricContainer {
+    font-size: 12px;
+    height: 24px;
+    margin-bottom: 0;
+}
+
+.sival {
+    height: 24px;
+    line-height: 24px;
+}
+
+#parametersContent .optionsBtn {
+    padding: 8px 32px;
+}
+
+
+.parameters .parent{
+    height:80%;
+    min-height:80%;
+}
+
+  .container {display: flex;}
+
+.container .topPiece,.container .bottomPiece, .container .centerPiece {
+    height: 100%;
+}
+
+.container .centerPiece {
+    padding: 8px;
+    padding-left: 16px;
+    height: 70%;
+}
+#tagsContent .container .centerPiece {
+  padding: 0;
+}
+.container .bottomPiece .continueBtn {
+    width: 75%; 
+    max-width: 240px;
+    max-width: fit-content;
+    padding: 0 32px;
+}
+
+.container .bottomPiece {
+    height: 30%;
+    width: 50%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.container.optionsContainer{
+    flex-direction:column;
+}
+.optionsContainer .headingPiece {
+    width: 100%;
+    height: 50px;align-items:center;
+}
+.optionsContainer .centerPiece {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.optionsContainer .bottomPiece {
+    height: 20%;
+    width: 100%;
+    position: relative;
+    justify-content:center;
+}
+
+.optionsBtnContent {
+    display: flex;align-items:center;
+}
+
+.optionsBtnContent .option {
+    margin-right: 16px; font-size: 21px;
+}
+img.icons{height: 21px;}
+
+.tagsBtn.next.continueBtn {
+    z-index: 10;
+    position: relative;
+}
+
+#tagsContent .bottomPiece::before {
+    /* z-index: 1; */
+}
+
+#personalisationContent .topPiece {
+    display: none;
+}
+
+#personalisationContent .centerPiece {
+    height: 75%;
+}
+
+.selectedOptions {
+    width: 80%;
+}
+
+.subscription.container .centerPiece {
+    padding: 0 16px;
+    height: 50%;
+}
+
+.container.subscription .bottomPiece {
+    height: 50%;
+    justify-content: center;
+    display: flex;
+}
+
+.subscription .optionsBtnContent {
+    justify-content: center;
+}
+
+.subscription.container .bottomPiece .continueBtn {
+    width: 70%;
+}
+.swiper-slide:first-child .topPiece, .subscription .topPiece, .swiper-slide:first-child .centerPiece,.subscription .centerPiece {
+    width: 50%;
+}
+.introTitle{
+  font-size: 24px;
+  padding: 8px;
+}
+.continueBtn{
+  font-size: 16px;height: 36px;line-height: 36px;
+}
+#goalSegment .optionsBtn {
+    width: 45%;
+    height: 45%;
+    padding: 16px;
+}
+
+#goalSegment .centerPiece {
+    width: 100%;
+    margin: 0;
+    padding: 8px;
+    box-sizing: border-box;
+    justify-content: space-evenly;
+}
+
+.subscription .bottomPiece{
+      padding: 0 16px;
+}
+#goalSegment .optionsBtnContent .option {
+    font-size: 18px;
+}
+
+.android .subscTitle {
+    font-size: 15px;
+}
+
+.android .subscription .optionsBtnContent .option {
+    margin-right: 0;
+}
+
+.android .subscription .optionsBtn {
+    padding: 8px;
+    margin:4px 0;
+}
+/*.android .centerPiece{align-items:flex-start;}*/
+.android .stars{
+    margin-top:0;
+}
+.android .userReview{
+    margin:8px;
+}
+
+}
+
+@media (orientation: landscape) and (min-height:500px){
+    #personalisationContent, .optionsContainer{padding:10%;box-sizing:border-box;}
+.android .subscription .centerPiece {height: 70%;padding: 32px;box-sizing: border-box;}
+
+.android .subscription .bottomPiece {
+    height: 30%;
+}
+img.icons {height: 32px!important;}
+
+.optionsBtnContent .option {
+    font-size: 24px!important;
+}
+
+.metricContainer {
+    font-size: 17px;
+    height: 34px;
+    margin-bottom: 0;
+}
+
+.sival {
+    height: 34px;
+    line-height: 34px;
+}
+
+.parameters .parent{
+    height:80%;
+    min-height: 420px!important;
+}
+
+.heading {
+    font-size: 24px;
+}
+.introTitle {
+    font-size: 32px;
+    padding: 24px;
+}
+.continueBtn {
+    font-size: 21px;
+    height: 48px;
+    line-height: 48px;
+}
+#goalSegment .optionsBtn {
+    padding: 16px 32px;
+}
+}
+
+/*night mode*/
+.night .subheading
+{
+  color: #aaa;
+}
+.night {
+    background: #1c1c1f;
+    color: #eee;
+}
+.night #personalisationContent .topPiece{
+  background: #1c1c1f;
+}
+
+.night .introTitle {
+    color: #eee;
+}
+
+.night .continueBtn {
+    box-shadow: 0px 15px 15px -10px #000;
+}
+
+.night .optionsBtn,.night .tagChip {
+    box-shadow: 0px 0px 12px rgb(0 0 0 / 31%);
+    border: 1px solid #26282f;
+}
+.night .checkBox,.night .metricContainer{
+  border: 1px solid #26282f;
+}
+
+.night img.icons,.night img.iconsSmall {filter: invert(.7);}
+
+.night .optionSelected img.icons {
+    filter: invert(1);
+}
+.night .tagPiece {background: linear-gradient(to top, #2f2f35 0%, #1c1c1f 100%);border-bottom: 1px solid #1b1b21;}
+
+.night #tagsContent .bottomPiece::before {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #1c1c1f);
+}
+.night input.unitVal {
+    color: #eee;
+}
+
+.night .become38 {
+    color: #eee;
+}
+
+.night .select3 {
+    color: #1c1c1f!important;
+    background: #2f2f35!important;
+}
+.night .select3::before {
+    color: #ccc;
+}
+.night #tagsContent .bottomPiece {
+    background: transparent;
+}
+.night .tagChip {
+    /* background: #32323a; */
+}
+
+.night .personalising {
+    color: #eee;
+}
+
+.night .selectedOptionText {
+    color: #ccc;
+}
+
+.night #reviewText {
+    color: #ccc!important;
+}
+
+.night #reviewUser {
+    color: #ccc!important;
+}
+
+.night .iosApp .subscTitle,.night .iosApp .mthval, .night .iosApp .subscDetails {
+    color: #aaa;
+}
+
+.night .footer a {
+    color: gray;
+}
+
+
+    </style>
     <!-- Swiper -->
       <div class="swiper-container">
         <div class="swiper-wrapper">
@@ -581,7 +1080,89 @@ body.ja .option {
               </div>
             </div>
           </div>
-          <div class="swiper-slide swiper-no-swiping" data-hash="slide6" id="subContent">
+          <div class="swiper-slide swiper-no-swiping iosApp" data-hash="slide6" id="subContent">
+            <div class="container subscription">
+              <div class="topPiece"><img id="premiumImage" src="" alt="" class="heroShot">
+                <div class="skeleton"></div>
+              </div>
+              <div class="centerPiece">
+
+
+                <div class="iOS-sub">
+                  <div class="stars">⭐️⭐️⭐️⭐️⭐️</div>
+                  <div class="userReview" id="reviewText"></div>
+                </div>
+
+                <div class="subContent" style="display:none;">
+                  <div class="stars">⭐️⭐️⭐️⭐️⭐️</div>
+                  <div class="userReview" id="reviewText"></div>
+                  <div onclick="IAP('6month')" class="optionsBtn wide optionSelected" id="opt-6month">
+                    <div class="optionsBtnContent">
+                      <div class="option">
+                        <div class="subscTitle">3 DAY FREE TRIAL</div>
+                        <div class="subscDetails">Cancel any time. <span class="mthval month6">$49.99</span> / 6 month</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div onclick="IAP('lifetime')" style="display:none" class="optionsBtn wide optionSelected" id="opt-lifetime">
+                    <div class="optionsBtnContent">
+                      <div class="option">
+                        <div class="subscTitle">LIFETIME PREMIUM</div>
+                        <div class="subscDetails"><span class="origvalContainer"><span class="origval lifetimeOrig">$225</span><span class="strike"></span></span> <span class="mthval lifetime">$112.5</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="premPacks" style="display:none">
+                    <div onclick="IAP('monthly')" class="optionsBtn" id="opt-monthly">
+                      <div class="optionsBtnContent">
+                        <div class="option">
+                          <div class="subscTitle">MONTHLY</div>
+                          <div class="subscDetails"><span class="mthval monthly">$9.99</span></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div onclick="IAP('lifetime')" class="optionsBtn" id="opt-lifetime">
+                      <div class="optionsBtnContent">
+                        <div class="option">
+                          <div class="subscTitle">LIFETIME</div>
+                          <div class="subscDetails"><span class="origvalContainer"><span class="origval lifetimeOrig">$225</span><span class="strike"></span></span> <span class="mthval lifetime">$112.5</span></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div onclick="IAP('6month')" style="display:none" class="optionsBtn" id="opt-6month">
+                      <div class="optionsBtnContent">
+                        <div class="option">
+                          <div class="subscTitle">6 MONTH</div>
+                          <div class="subscDetails"><span class="origvalContainer"><span class="mthval month6">$49.99</span> / 6 month</div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                </div>
+                </div>
+              <div class="bottomPiece">
+                <div class="bottomContent">
+                  <div onclick="paramNext()" class="paramNext continueBtn pulse">START</div>
+                  <div onclick="IAP('6month')" class="optionSelected" id="iOS-6month">
+                    <div class="optionsBtnContent">
+                      <div class="option">
+                        <div class="subscDetails"><div class="subscTitle">3 days free</div>, then <span class="mthval month6">$49.99</span> / 6 month</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="iosTerms footer">
+                      <br><br><a id="terms" href="http://riafy.me/terms">Terms of use</a> &amp; <a id="privacy" href="http://riafy.me/privacy">Privacy policy</a><br><br>
+                      <a id="terms" href="http://riafy.me/restore">Restore purchase</a><br><br>
+                      After free trial ends, premium subscription renews automatically, unless it is canceled before 24-hours of the end of the trial period. Payment will be charged to iTunes Account at confirmation of purchase and renews automatically unless auto-renew is turned off. Subscriptions may be managed by the user and auto-renewal may be turned off by going to the users Account Settings after purchase. Your AppleID account will be charged for renewal within 24-hours before the end of the trial period. You can manage and cancel your subscriptions by going to your account settings on the App Store. Any unused portion of a free trial period, if offered, will be forfeited when the user purchases a subscription to that publication, where applicable.
+                    </div>
+
+
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide swiper-no-swiping android" data-hash="slide6" id="subContent">
             <div class="container subscription">
               <div class="topPiece"><img id="premiumImage" src="" alt="" class="heroShot">
                 <div class="skeleton"></div>
@@ -593,7 +1174,7 @@ body.ja .option {
                   <div onclick="IAP('6month')" class="optionsBtn wide optionSelected" id="opt-6month">
                     <div class="optionsBtnContent">
                       <div class="option">
-                        <div class="subscTitle">7 DAY FREE TRIAL</div>
+                        <div class="subscTitle">3 DAY FREE TRIAL</div>
                         <div class="subscDetails">Cancel any time. <span class="mthval month6">$49.99</span> / 6 month</div>
                       </div>
                     </div>
@@ -636,11 +1217,20 @@ body.ja .option {
                 </div>
               <div class="bottomPiece">
                 <div class="bottomContent">
-                  <div onclick="paramNext()" class="paramNext continueBtn">DONE</div>
+                  <div onclick="paramNext()" class="paramNext continueBtn pulse">DONE</div>
                 </div>
               </div>
             </div>
           </div>
+          <script type="text/javascript">
+          if (urlParams.iOS!=undefined) {
+            document.querySelector('.android').remove();
+            // document.querySelector('.skeleton').style.display="none";
+          }
+          else{
+            document.querySelector('.iosApp').remove();
+          }
+          </script>
         </div>
       </div>
 
@@ -735,11 +1325,11 @@ body.ja .option {
       // xhttp.open("GET", "https://cookbookapp.in/RIA/wellnessIAP.php?appname=wellness.walking.workout", true);
       // xhttp.send();
 
-      if ('addEventListener' in document) {
-      	document.addEventListener('DOMContentLoaded', function() {
-      		FastClick.attach(document.body);
-      	}, false);
-      }
+      // if ('addEventListener' in document) {
+      // 	document.addEventListener('DOMContentLoaded', function() {
+      // 		FastClick.attach(document.body);
+      // 	}, false);
+      // }
         var onboardingData={};
         onboardingData['fitness']="beginner";
         onboardingData['goals']="weight";
@@ -931,7 +1521,8 @@ body.ja .option {
 
       .skeleton {
         /* background-image: linear-gradient(90deg, transparent 0px, rgba(185, 224, 207, 0.9) 40px, transparent 80px); */
-        background-image: linear-gradient(90deg, transparent 0px, rgb(252, 246, 254) 40px, transparent 80px);
+        /*background-image: linear-gradient(90deg, transparent 0px, rgb(252, 246, 254) 40px, transparent 80px);*/
+        background-image: linear-gradient(90deg, #ffffff00 0px, rgba(254, 246, 246, 0.63) 40px, #ffffff00 80px);
         height: 100%;
         width: 100%;
         position: absolute;
@@ -1057,12 +1648,38 @@ span.optionText {width: 60%;}
             document.getElementsByTagName("body")[0].appendChild(css);
         }
 
+
+      </script>
+      <style type="text/css">
+      .spinning {
+          display: flex;width: 100%;height: 100%;
+          align-items: center;
+          justify-content: center;
+      }
+
+      .spinning .ispinner .ispinner-blade {
+          background: white;
+      }
+
+      </style>
+      <script type="text/javascript">
+      var selectorG,prevValue;
+      function convertToSpinner(selector){
+        selectorG=selector;
+        prevValue=document.querySelector(selector).innerHTML;
+        document.querySelector(selector).innerHTML="<div class='spinning'>"+spinnerHTML+"</div>";
+        setTimeout(function(){
+            document.querySelector(selectorG).innerHTML=prevValue;
+        },3000);
+      }
+
+
         if (urlParams.lang!=undefined) {
           var data;
           var xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-
+              removeSpinner('Loading...');
               data=JSON.parse(this.response);
 
               var highIAPCountries=data.highIAPCountries;
@@ -1189,13 +1806,16 @@ span.optionText {width: 60%;}
 
 
         var btns=document.querySelectorAll('.continueBtn');
+
         btns[btns.length-1].innerHTML=data.subscriptionBtn;
+
         if (!btns[btns.length-1].classList.contains('targets')) {
           btns[btns.length-1].classList.remove('paramNext');
           btns[btns.length-1].classList.remove('next');
 
           btns[btns.length-1].addEventListener('click',function () {
               // console.log("added event","http://riafy.me/premium/"+JSON.stringify(onboardingData));
+              convertToSpinner(".continueBtn.pulse");
               window.location.assign("http://riafy.me/premium/"+JSON.stringify(onboardingData));
           });
         }

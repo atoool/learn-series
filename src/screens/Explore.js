@@ -22,11 +22,9 @@ export default class Explore extends React.PureComponent {
     search: '',
     selected: false,
     data: this.context.reduState.explore,
-    purchasedPremium:false
   };
   componentDidMount = async() => {
-const purchasedPremium=await checkPurchased()
-this.setState({purchasedPremium})
+
   };
   updateSearch = search => {
     const data =
@@ -39,7 +37,7 @@ this.setState({purchasedPremium})
   };
   render() {
     const {search, selected} = this.state;
-
+const {premiumPurchased}=this.context.reduState
     return (
       // <ContextStates.Consumer>
       //   {() => {
@@ -187,7 +185,7 @@ this.setState({purchasedPremium})
                         </Text>
                       </View>
                       
-                 {!this.state.purchasedPremium&&item.premium&& 
+                 {!premiumPurchased&&item.premium&& 
                   <>
                   <Gradient
                   start={{x: 0, y: 1}}

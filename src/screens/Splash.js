@@ -7,6 +7,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {ContextStates} from '../func/ContextStates';
+import R from '../res/R';
 
 export default class Splash extends React.PureComponent {
   static contextType = ContextStates;
@@ -58,6 +59,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: R.colors.background,
   },
   img: {
     width: hp(10.3),
