@@ -87,28 +87,12 @@ export default class ChangePref extends Component {
 
   render() {
     if (this.state.htmlUrl == null) {
-      return (
-        <View style={{flex: 1}}>
-          {Platform.OS === 'ios' && height > 750 && (
-            <View
-              style={{
-                height: hp(5),
-                backgroundColor: R.colors.primary,
-                width: '100%',
-              }}
-            />
-          )}
-          <View>
-            <Loading load={this} />
-          </View>
-        </View>
-      );
+      return <Loading load={this} />;
     }
     return (
       <SafeAreaView
         style={{
           flex: 1,
-          marginTop: Platform.OS === 'ios' ? (width < 375 ? wp(8.3) : 0) : 0,
           backgroundColor: '#fafafa',
         }}>
         {/* <StatusBar hidden={true} /> */}

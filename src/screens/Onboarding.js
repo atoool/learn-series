@@ -151,7 +151,7 @@ export default class Onboarding extends PureComponent {
               this.state.htmlUrl === null &&
               this.setState({
                 htmlUrl: e.url.concat(
-                  `?lang=${lang}&simcountry=in&appname=${
+                  `?lang=${lang ? lang : 'en'}&simcountry=in&appname=${
                     R.strings.bundleId
                   }&iOS`,
                 ),
@@ -161,9 +161,9 @@ export default class Onboarding extends PureComponent {
             // alert('Check your network connectivity');
           })
       : this.setState({
-          htmlUrl: `file:///android_asset/onboarding/onboarding.html?lang=${lang}&simcountry=in&appname=${
-            R.strings.bundleId
-          }`,
+          htmlUrl: `file:///android_asset/onboarding/onboarding.html?lang=${
+            lang ? lang : 'en'
+          }&simcountry=in&appname=${R.strings.bundleId}`,
         });
 
     purchaseListener(this);
