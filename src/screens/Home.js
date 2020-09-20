@@ -145,7 +145,7 @@ export default class Home extends React.PureComponent {
 }
 
 const styles = StyleSheet.create({
-  constainer: {backgroundColor: '#fff', flex: 1},
+  constainer: {backgroundColor: R.colors.background, flex: 1},
   cContainer: {paddingBottom: hp(2.6)},
   cardView: {
     width: '100%',
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: hp(1.3),
     left: wp(2.8),
-    backgroundColor: '#fff',
+    backgroundColor: R.colors.background,
     borderRadius: hp(0.6),
     padding: hp(1.3),
   },

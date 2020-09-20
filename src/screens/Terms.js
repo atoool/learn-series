@@ -44,7 +44,7 @@ export default class Terms extends Component {
               R.locale.appName
             }&lang=${this.state.lang}`,
           }}
-          containerStyle={{flex: 1, paddingTop: hp(6.4)}}
+          containerStyle={{flex: 1}}
           onHttpError={() => {
             this.setState({load: false});
           }}

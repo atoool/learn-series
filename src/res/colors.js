@@ -9,7 +9,7 @@ const colors = {
   statusBar: '#000',
   img: '#d2d4d3',
   background: night ? '#1c1c1f' : '#fefefe',
-  text: night ? '#969697' : '#000',
+  text: night ? '#969697' : '#5e5a61',
   underlay: night ? '#000' : '#f2f2f7',
   border: night ? '#3f3f43' : 'lightgrey',
 };

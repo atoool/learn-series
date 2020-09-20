@@ -262,8 +262,8 @@ const MainNavigator = () => {
       inactiveColor="darkgrey"
       barStyle={
         hideTab
-          ? {opacity: 0, height: 0, backgroundColor: '#fff'}
-          : {backgroundColor: '#fff', elevation: 10}
+          ? {opacity: 0, height: 0, backgroundColor: R.colors.background}
+          : {backgroundColor: R.colors.background, elevation: 10}
       }
       backBehavior="initialRoute">
       <Tab.Screen
@@ -278,7 +278,6 @@ const MainNavigator = () => {
           tabBarIcon: ({color}) => (
             <FontAwesome5Icon name="home" color={color} size={hp(3)} />
           ),
-          tabBarColor: '#fff',
         }}
       />
       <Tab.Screen
@@ -293,7 +292,6 @@ const MainNavigator = () => {
           tabBarIcon: ({color}) => (
             <FontAwesome5Icon name="search" color={color} size={hp(2.6)} />
           ),
-          tabBarColor: '#fff',
         }}
       />
       {/* <Tab.Screen
@@ -337,7 +335,6 @@ const MainNavigator = () => {
           tabBarIcon: ({color}) => (
             <FontAwesome5Icon name="book" color={color} size={hp(2.6)} />
           ),
-          tabBarColor: '#fff',
         }}
       />
       <Tab.Screen
@@ -352,7 +349,6 @@ const MainNavigator = () => {
           tabBarIcon: ({color}) => (
             <FontAwesome5Icon name="cog" color={color} size={hp(2.6)} />
           ),
-          tabBarColor: '#fff',
         }}
       />
     </Tab.Navigator>

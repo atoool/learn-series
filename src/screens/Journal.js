@@ -40,11 +40,19 @@ export default class Jounal extends React.PureComponent {
           // easing="ease-in"
         >
           <Text
-            style={{fontSize: hp(2.8), fontWeight: 'bold', color: '#474a56'}}>
+            style={{
+              fontSize: hp(2.8),
+              fontWeight: 'bold',
+              color: R.colors.text,
+            }}>
             {TimeType()}
           </Text>
           <Text
-            style={{fontSize: hp(2.8), fontWeight: 'bold', color: '#474a56'}}>
+            style={{
+              fontSize: hp(2.8),
+              fontWeight: 'bold',
+              color: R.colors.text,
+            }}>
             {this.state.usr}
           </Text>
         </Animatable.View>

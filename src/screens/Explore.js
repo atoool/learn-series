@@ -42,8 +42,8 @@ const {premiumPurchased}=this.context.reduState
       // <ContextStates.Consumer>
       //   {() => {
       //     return (
-      <View style={{backgroundColor: '#fff', flex: 1}}>
-        <View style={{backgroundColor: '#fff', elevation: 10}}>
+      <View style={{backgroundColor: R.colors.background, flex: 1}}>
+        <View style={{backgroundColor:  R.colors.background, elevation: 10}}>
           <SearchBar
             lightTheme={true}
             onFocus={() => this.setState({selected: true})}
@@ -73,13 +73,13 @@ const {premiumPurchased}=this.context.reduState
               />
             )}
             containerStyle={{
-              backgroundColor: '#fff',
+              backgroundColor:  R.colors.background,
               paddingTop: hp(5.1),
-              padding: hp(2.6),
+              padding: hp(2.6),borderTopWidth:0,borderBottomWidth:0
               // paddingBottom: !selected ? 60 : 20,
             }}
             inputContainerStyle={{
-              backgroundColor: '#f0f0f0',
+              backgroundColor: R.colors.underlay,
               borderRadius: hp(5.1),
               paddingHorizontal: wp(5.6),
             }}

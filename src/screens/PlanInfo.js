@@ -184,7 +184,9 @@ export default class PlanInfo extends React.Component {
         style={{
           flex: 1,
           backgroundColor:
-            this.props.route.params?.type == 'sleep' ? '#1e265f' : '#fff',
+            this.props.route.params?.type == 'sleep'
+              ? '#1e265f'
+              : R.colors.background,
         }}>
         <StatusBar backgroundColor={R.colors.statusBar} />
         <Animated.ScrollView
@@ -219,7 +221,7 @@ export default class PlanInfo extends React.Component {
                 backgroundColor:
                   this.props.route.params?.type === 'sleep'
                     ? '#1e265f'
-                    : '#fff',
+                    : R.colors.background,
                 width: wp(13.9),
                 height: hp(6.4),
                 borderRadius: hp(5.1),
@@ -266,7 +268,8 @@ export default class PlanInfo extends React.Component {
             style={{
               width: '100%',
               padding: hp(1.3),
-              backgroundColor: params?.type === 'sleep' ? '#32407b' : '#eee',
+              backgroundColor:
+                params?.type === 'sleep' ? '#32407b' : R.colors.underlay,
             }}>
             {params.data.lessons.map((lessn, key) => (
               <Collapse
@@ -287,7 +290,7 @@ export default class PlanInfo extends React.Component {
                   backgroundColor:
                     this.props.route.params?.type === 'sleep'
                       ? '#1e265f'
-                      : '#fff',
+                      : R.colors.background,
                   borderRadius: hp(1.3),
                   marginBottom:
                     key === params.data.lessons.length - 1 ? 0 : hp(1.3),
@@ -509,8 +512,12 @@ export default class PlanInfo extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  constainer: {flex: 1, paddingTop: hp(4.1), backgroundColor: '#fff'},
-  cContainer: {paddingBottom: hp(23.1), backgroundColor: '#fff'},
+  constainer: {
+    flex: 1,
+    paddingTop: hp(4.1),
+    backgroundColor: R.colors.background,
+  },
+  cContainer: {paddingBottom: hp(23.1), backgroundColor: R.colors.background},
   list: {
     width: '100%',
     marginTop: hp(3.2),

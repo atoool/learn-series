@@ -87,7 +87,7 @@ class Settings extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
+      <View style={{flex: 1, backgroundColor: R.colors.underlay}}>
         <ScrollView
           contentContainerStyle={{justifyContent: 'space-around'}}
           ref={this.props.scrollRef}>
@@ -167,8 +167,8 @@ class Settings extends Component {
                             item.title === R.locale.getPremium1
                               ? this.state.premiumPurchased
                                 ? 'lightgreen'
-                                : 'lightgrey'
-                              : 'lightgrey'
+                                : R.colors.text
+                              : R.colors.text
                           }
                           containerStyle={Style.buttonArrow}
                         />
@@ -201,7 +201,7 @@ class Settings extends Component {
               }}>
               <View
                 style={{
-                  backgroundColor: '#ffffff',
+                  backgroundColor: R.colors.background,
                   height: hp(6.7),
                   marginBottom: hp(2.1),
                   justifyContent: 'center',
@@ -212,7 +212,7 @@ class Settings extends Component {
                     fontFamily: R.fonts.text,
                     fontWeight: '200',
                     fontSize: hp(2.1),
-                    color: 'red',
+                    color: R.colors.text,
                   }}>
                   {R.locale.more}
                 </Text>
@@ -224,7 +224,7 @@ class Settings extends Component {
                 style={{
                   fontFamily: R.fonts.text,
                   fontSize: hp(1.7),
-                  color: 'lightgrey',
+                  color: 'darkgrey',
                 }}>
                 {R.strings.version}
               </Text>
@@ -241,7 +241,7 @@ const Style = StyleSheet.create({
   buttonView: {
     flex: 1,
     marginBottom: hp(3.2),
-    backgroundColor: 'white',
+    backgroundColor: R.colors.background,
     height: hp(6.7),
     flexDirection: 'row',
     alignItems: 'center',
@@ -255,7 +255,7 @@ const Style = StyleSheet.create({
     fontFamily: R.fonts.textNormal,
     fontWeight: '200',
     fontSize: hp(2.1),
-    color: '#000000',
+    color: R.colors.text,
     textAlign: 'left',
     flex: 3,
     marginLeft: hp(2.5),

@@ -42,40 +42,38 @@ class App extends React.Component {
       notific: null,
     };
   }
+  onRegister = token => {
+    this.setState({registerToken: token?.token, fcmRegistered: true});
+    this.notif?.subscribeTopic();
+  };
+
+  onNotif = notific => {
+    this.notific = notific;
+  };
+
+  handlePerm = perms => {
+    !perms.alert && this.notif?.requestPermissions();
+  };
+  onBackpress = () => {
+    if (!this.navig?.canGoBack()) {
+      this.exit && this.exit?.setState({show: true});
+      return true;
+    } else return false;
+  };
 
   componentDidMount = async () => {
-    this.notif.checkPermission(this.handlePerm);
-    this.notif.scheduleNotif();
+    this.notif?.checkPermission(this.handlePerm);
+    this.notif?.scheduleNotif();
     const data = await init(this.state);
     await this.dispatch({type: 'init', payload: data});
 
-    this.appstate == null &&
-      (this.appstate = AppState.addEventListener('change', (nex) => {
-        if (nex == 'active')
-          this.back == null &&
-            (this.back = BackHandler.addEventListener(
-              'hardwareBackPress',
-              () => {
-                let bck = this.navig ? this.navig.canGoBack() : true;
-                !bck && this.exit && this.exit?.setState({show: true});
-                return !bck;
-              },
-            ));
-        else if (nex === 'inactive')
-          this.back != null &&
-            (this.back = BackHandler.removeEventListener(
-              'hardwareBackPress',
-              () => {
-                return true;
-              },
-            ));
-      }));
+    BackHandler.addEventListener('hardwareBackPress', this.onBackpress);
 
     const result = await RNIap.initConnection();
     result == null && (await RNIap.initConnection());
     this.unsubscribe == null &&
-      (this.unsubscribe = NetInfo.addEventListener((state) => {
-        this.setState({connected: state.isConnected});
+      (this.unsubscribe = NetInfo.addEventListener(state => {
+        this.setState({connected: state?.isConnected});
       }));
   };
 
@@ -85,22 +83,22 @@ class App extends React.Component {
     this.setState({play: !this.state.play, type, playIndex});
   };
 
-  dispatch = async (action) => {
+  dispatch = async action => {
     this.setState(await reducer(this.state, action));
   };
 
-  getActiveRouteName = (state) => {
+  getActiveRouteName = state => {
     if (!state || typeof state.index !== 'number') {
       return 'Unknown';
     }
 
-    const route = state.routes[state.index];
+    const route = state?.routes[state.index];
 
-    if (route.state) {
-      return this.getActiveRouteName(route.state);
+    if (route?.state) {
+      return this.getActiveRouteName(route?.state);
     }
 
-    return route.name;
+    return route?.name;
   };
 
   render() {
@@ -122,9 +120,9 @@ class App extends React.Component {
         <SafeAreaView style={{flex: 1}}>
           <StatusBar backgroundColor={R.colors.statusBar} />
           <NavigationContainer
-            ref={(re) => (this.navig = re)}
+            ref={re => (this.navig = re)}
             theme={Themes}
-            onStateChange={(state) => {
+            onStateChange={state => {
               const previousRouteName = this.routeName ? this.routeName : '';
               const currentRouteName = this.getActiveRouteName(state);
               if (previousRouteName !== currentRouteName) {
@@ -132,9 +130,7 @@ class App extends React.Component {
                 this.routeName = currentRouteName;
               }
             }}>
-            <AppContainer
-              onNotif={this.messageNotif ? this.messageNotif : ''}
-            />
+            <AppContainer />
             {this.state.connected != null && (
               <SnackBar
                 visible={!this.state.connected}
@@ -142,24 +138,12 @@ class App extends React.Component {
                 backgroundColor="#e84a5f"
               />
             )}
-            <ExitAlert ref={(exitalert) => (this.exit = exitalert)} />
+            <ExitAlert ref={exitalert => (this.exit = exitalert)} />
           </NavigationContainer>
         </SafeAreaView>
       </ContextStates.Provider>
     );
   }
-  onRegister = (token) => {
-    this.setState({registerToken: token.token, fcmRegistered: true});
-    this.notif.subscribeTopic();
-  };
-
-  onNotif = (notific) => {
-    this.notific = notific;
-  };
-
-  handlePerm = (perms) => {
-    !perms.alert && this.notif.requestPermissions();
-  };
 }
 export default App;
 

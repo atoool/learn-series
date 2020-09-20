@@ -61,7 +61,7 @@ export default class ChangePref extends Component {
 
   componentDidMount = async () => {
     let lang = await AsyncStorage.getItem('lang').catch(e => {});
-    if (lang == null) lang = 'en';
+    if (!lang) lang = 'en';
     Platform.OS === 'ios'
       ? await fetch('Web.bundle/onboarding/changePref.html')
           .then(
@@ -112,6 +112,10 @@ export default class ChangePref extends Component {
           }}
           originWhitelist={['*']}
           onError={() => {
+            // alert(R.locale.network);
+            this.setState({load: false});
+          }}
+          onHttpError={() => {
             // alert(R.locale.network);
             this.setState({load: false});
           }}

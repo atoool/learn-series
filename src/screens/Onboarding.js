@@ -43,24 +43,27 @@ export default class Onboarding extends PureComponent {
 
   _onNavigationStateChange = async a => {
     let url = a.url;
-    console.warn(url);
 
     // if (url.indexOf('stories.riafy.me') > -1) return false;
     if (url.indexOf('/vibrate') > -1) {
       // console.warn('inside refresh');
       // this.webview.stopLoading();
       this.webview.injectJavaScript(
-        `javascript:setIAPValues('monthly',"${this.state.monthlyPrice}")`,
+        `javascript:setIAPValues('monthly',"${
+          this.context?.reduState?.prices[2]
+        }")`,
       );
       this.webview.injectJavaScript(
-        `javascript:setIAPValues('6month',"${this.state.sixMonthPrice}")`,
+        `javascript:setIAPValues('6month',"${
+          this.context?.reduState?.prices[1]
+        }")`,
       );
       this.webview.injectJavaScript(
-        `javascript:setIAPValues('lifetime',"${this.state.price}"||"${
-          this.state.price
-        }000000")`,
+        `javascript:setIAPValues('lifetime',"${
+          this.context?.reduState?.prices[0]
+        }"||"${this.context?.reduState?.prices[0]}000000")`,
       );
-      return false;
+      return true;
     } else if (url.indexOf('http://riafy.me/onboarding/') > -1) {
       let jsonURL = JSON.parse(
         decodeURI(url.split('http://riafy.me/onboarding/')[1]),
@@ -99,7 +102,7 @@ export default class Onboarding extends PureComponent {
           ['@ONBOARDING', 'HIDE'],
           ['rateus', '2nd'],
         ]).catch(e => {});
-        this.state.purchased
+        this.context?.reduState?.premiumPurchased
           ? this.props.navigation.replace('MainTab')
           : purchasePremium();
         return false;
@@ -134,15 +137,6 @@ export default class Onboarding extends PureComponent {
 
   componentDidMount = async () => {
     const lang = await AsyncStorage.getItem('lang').catch(e => {});
-    let purchased = this.context.reduState.premiumPurchased;
-    let {prices} = this.context.reduState;
-
-    this.setState({
-      price: prices[0],
-      sixMonthPrice: prices[1],
-      monthlyPrice: prices[2],
-      purchased,
-    });
 
     Platform.OS === 'ios'
       ? await fetch('Web.bundle/onboarding/onboarding.html')
@@ -163,7 +157,7 @@ export default class Onboarding extends PureComponent {
       : this.setState({
           htmlUrl: `file:///android_asset/onboarding/onboarding.html?lang=${
             lang ? lang : 'en'
-          }&simcountry=in&appname=${R.strings.bundleId}`,
+          }&simcountry=in&appname=${R?.strings?.bundleId}`,
         });
 
     purchaseListener(this);
@@ -186,11 +180,14 @@ export default class Onboarding extends PureComponent {
         }}>
         <WebView
           ref={re => (this.webview = re)}
-          key={this.context.connected}
+          key={this.context?.connected}
           startInLoadingState
           cacheEnabled
           cacheMode="LOAD_CACHE_ELSE_NETWORK"
           onError={() => {
+            this.setState({load: false});
+          }}
+          onHttpError={() => {
             this.setState({load: false});
           }}
           renderError={() => <Loading load={this} />}

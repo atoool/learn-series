@@ -32,7 +32,7 @@ export default class Privacy extends Component {
     //   return <Loading load={this} />;
     // }
     return (
-      <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: R.colors.background}}>
         <WebView
           renderError={() => {
             return <Loading load={this} />;
@@ -46,7 +46,7 @@ export default class Privacy extends Component {
               R.locale.appName
             }&lang=${this.state.lang}&simcountry=in`,
           }}
-          style={{flex: 1, marginTop: hp(6.4)}}
+          style={{flex: 1, paddingTop: hp(6.4)}}
           onError={() => {
             this.setState({load: false});
           }}

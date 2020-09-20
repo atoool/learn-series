@@ -24,7 +24,7 @@ const {width} = Dimensions.get('screen');
 export default class RateUs extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {data: {}, isVisible: false};
+    this.state = {data: {}, isVisible: false, img: ''};
   }
   componentDidMount = async () => {
     let lang = await AsyncStorage.getItem('lang').catch(e => {});
@@ -36,11 +36,13 @@ export default class RateUs extends PureComponent {
     )
       .then(res => res.json())
       .then(respons => {
-        this.setState({
-          data: respons.splash,
-          isVisible:
-            this.props.isVisible == true ? this.props.isVisible : false,
-        });
+        respons.splash &&
+          this.setState({
+            data: respons.splash,
+            img: respons.splash.image,
+            isVisible:
+              this.props.isVisible == true ? this.props.isVisible : false,
+          });
       });
   };
   onRate = async () => {
@@ -52,13 +54,7 @@ export default class RateUs extends PureComponent {
   render() {
     return (
       <Overlay
-        isVisible={
-          Platform.OS === 'ios'
-            ? this.state.data?.url_iOS
-              ? this.state.isVisible
-              : false
-            : this.state.isVisible
-        }
+        isVisible={this.state.img == '' ? false : this.state.isVisible}
         overlayStyle={{
           padding: 0,
           height: 'auto',
@@ -70,15 +66,15 @@ export default class RateUs extends PureComponent {
         onBackdropPress={() => this.setState({isVisible: false})}>
         <View>
           <StatusBar backgroundColor="#000" />
-          {this.state.data.image == null ? (
+          {this.state.data?.image == null ? (
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <ActivityIndicator color={R.colors.primary} />
             </View>
           ) : (
-            <View>
+            <View style={{backgroundColor: R.colors.background}}>
               <Image
-                source={{uri: this.state.data.image, cache: 'force-cache'}}
+                source={{uri: this.state.data.image}}
                 style={{
                   width: width - wp(8),
                   height: width - hp(6.4),
