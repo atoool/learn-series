@@ -1,0 +1,266 @@
+.modals {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    z-index: 9;
+    display: none;
+    background: rgba(0, 0, 0, 0);
+    transition: .3s all ease;
+    /* opacity: 0; */
+}
+
+.shadowFadeIn{
+  background: rgba(0, 0, 0, 0.5);
+  /* backdrop-filter: saturate(.5); */
+  transition-duration: 1.2s;
+}
+
+.modals.modalBottom {
+    align-items: flex-end;
+}
+
+.modals.showModal{
+  /* opacity: 1; */
+  display: flex;
+}
+
+.modal {
+    width: 100%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    position: relative;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0px 0px 15px 4px rgba(0, 0, 0, 0.11);
+    transition: .3s transform ease;
+    transform: translate(0, 150%);
+}
+
+.modal.createAccount{
+  height: 70%;
+}
+
+.modalVisible{
+  transform: translate(0,0);
+}
+
+.modal .iconHeader {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: -50px;
+}
+
+.modal .iconHeader img {
+    height: 100%;
+    width: auto;
+}
+
+.modal.modalWhite {
+    background: white;
+    color: rgba(0, 0, 0, 0.72);
+}
+
+.flexCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalTopPiece {
+    width: 80%;
+    height: 30%;
+    box-sizing: border-box;
+    justify-content: left;
+}
+
+.modalCentrePiece {
+    width: 80%;
+    max-height: 50%;
+    min-height: 50%;
+    height: 50%;
+    text-align: center;
+    flex-direction: column;
+}
+
+.modalBottomPiece {
+    width: 80%;
+    height: 30%;
+    text-align: center;
+}
+
+.modalHeading {
+    font-size: 21px;
+    font-weight: bold;
+    letter-spacing: .03rem;
+    padding-top: 25px;
+}
+.modalTextContent {
+    font-size: 18px;
+    letter-spacing: .03rem;
+}
+
+.modalWhite .continueBtn {
+    background: #72afd3;
+    color: white;
+}
+
+.keyboardActive{
+  padding-bottom: 100%;
+}
+
+.modal.modalWhite ::placeholder {
+  color: rgba(0,0,0,.7);
+}
+.modal.modalWhite input{
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  width: 100%;
+  color: rgba(0,0,0,.72);
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 8px;
+  margin-bottom: 24px;
+}
+.modalWhite .explanation{
+  color: rgba(0, 0, 0, 0.5);
+  text-align: left;
+  width: 100%;
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: .03rem;
+  padding: 8px 10% 16px 0;
+  box-sizing: border-box;
+}
+
+.modalTextContent{
+  opacity: 1;
+  transition: .3s opacity ease;
+}
+
+.inputsContainer{
+  opacity: 0;
+  transition: .5s opacity ease;
+}
+
+.modals.modalsCenter {
+    align-items: center;
+    justify-content: center;
+}
+
+.modalsCenter .modal {border-radius: 16px;width: 90%;}
+
+.modalTopPiece .extraTextInfo {
+    color: black;
+    text-align: center;
+    margin: 0;
+}
+
+.flexFull {
+  width: 100%;
+}
+
+.achievementUnlocked .modalBottomPiece {
+    background: #2dc69e;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    height: 20%;
+}
+
+.achievementUnlocked .modalTopPiece {
+    height: 20%;
+}
+
+
+.achievementUnlocked .modalCentrePiece {
+    height: 60%;
+    min-height: 60%;
+    max-height: 60%;
+}
+
+.achievementUnlocked .modalCentrePiece img{
+  height: 70%;
+}
+.modal.achievementUnlocked{
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.buttonsContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+}
+
+.modal .buttonsContainer .rightPiece img {
+    filter:invert(1) invert(69%) sepia(34%) saturate(5580%) hue-rotate(305deg) brightness(101%) contrast(101%);
+    height: 36px;
+    padding: 8px;
+}
+.modal .buttonsContainer .leftPiece img {
+    filter:invert(1) invert(34%) sepia(16%) saturate(6%) hue-rotate(33deg) brightness(102%) contrast(92%);
+    height: 36px;
+    padding: 8px;
+}
+
+.grid-2 {
+    width: 50%;
+    height: 100%;
+}
+
+.modalTitle {
+    font-size: 24px;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: .04rem;
+    text-align: left;
+}
+
+.modalCentrePiece p {
+    font-size: 20px;
+    width: 80%;
+    color: gray;
+    letter-spacing: .03rem;
+    text-align: left;
+    word-break: break-word;
+}
+
+.modal.modalWhite.sureToExit {
+    height: 50%;
+}
+
+.modal.modalSpinner {
+    background: transparent;
+    box-shadow: none;
+    transition: none;
+}
+.fetchingText{
+  color: rgba(255,255,255,.7);
+}
+#modalSpinner.shadowFadeIn{
+  /* transition-duration:.3s; */
+  background-color: rgba(0,0,0,.3);
+}
+
+@media (max-width:380px) {
+  .modal.createAccount{height: 75%;}
+  .modal.modalWhite input{
+    font-size: 16px;    padding-bottom: 6px;
+    margin-bottom: 18px;
+  }
+  .modalWhite .explanation{font-size: 12px;}
+  .modalWhite .continueBtn{
+    height: 24px;    font-size: 14px;
+    line-height: 24px;
+  }
+  .modalTextContent{
+    font-size: 16px;
+  }
+}

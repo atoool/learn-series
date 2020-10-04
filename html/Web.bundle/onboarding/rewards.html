@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <script src="js/swiper.min.js"></script>
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/modals.css">
+    <link rel="stylesheet" href="css/analytics.css">
+    <link rel="stylesheet" href="css/rewards.css">
+    <script src="js/fastclick.js" charset="utf-8"></script>
+    <script src="js/colourChanger.js" charset="utf-8"></script>
+    <script src="js/moment.min.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      var urlParams;
+      (window.onpopstate = function () {
+        var match,
+          pl = /\+/g, // Regex for replacing addition symbol with a space
+          search = /([^&=]+)=?([^&]*)/g,
+          decode = function (s) {
+            return decodeURIComponent(s.replace(pl, " "));
+          },
+          query = window.location.search.substring(1);
+
+        urlParams = {};
+        while (match = search.exec(query))
+          urlParams[decode(match[1])] = decode(match[2]);
+      })();
+    </script>
+    <link rel="stylesheet" href="css/daily.css">
+    <title>Daily Log</title>
+  </head>
+  <body>
+    <div class="swiper-container swiper-container-a">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide swiper-no-swiping weeklyStats prepareSlide">
+            <div class="topPiece"></div>
+            <div class="centerPiece">
+              <div class="logoContainer">
+                <img src="icons/cute-monster.png" alt="">
+              </div>
+              <div class="preparingText">
+                Preparing your data, please wait.
+              </div>
+            </div>
+            <div class="bottomPiece"></div>
+          </div>
+          <div class="swiper-slide swiper-no-swiping weeklyStats rewardsContainer">
+            <div class="tabBarArea"></div>
+            <div class="centerPiece flex80 flexCenter">
+              <div class="rewardItem ">
+                <div class="rewardImage">
+                  <img src="" alt="">
+                </div>
+                <div class="rewardTextContainer">
+                  <div class="rewardName">Flame On</div>
+                  <div class="rewardText">Good start. Day 1.</div>
+                </div>
+              </div>
+              <div class="rewardItem inactive">
+                <div class="rewardImage">
+                  <img src="" alt="">
+                </div>
+                <div class="rewardTextContainer">
+                  <div class="rewardName">x2</div>
+                  <div class="rewardText">Turning up the heat</div>
+                </div>
+              </div>
+              <div class="rewardItem inactive">
+                <div class="rewardImage">
+                  <img src="" alt="">
+                </div>
+                <div class="rewardTextContainer">
+                  <div class="rewardName">x3</div>
+                  <div class="rewardText">Yay! fireeee</div>
+                </div>
+              </div>
+              <div class="rewardItem inactive">
+                <div class="rewardImage">
+                  <img src="" alt="">
+                </div>
+                <div class="rewardTextContainer">
+                  <div class="rewardName">x3</div>
+                  <div class="rewardText">Yay! fireeee</div>
+                </div>
+              </div>
+              <div class="rewardItem inactive">
+                <div class="rewardImage">
+                  <img src="" alt="">
+                </div>
+                <div class="rewardTextContainer">
+                  <div class="rewardName">x3</div>
+                  <div class="rewardText">Yay! fireeee</div>
+                </div>
+              </div>
+              <div class="rewardItem inactive">
+                <div class="rewardImage">
+                  <img src="" alt="">
+                </div>
+                <div class="rewardTextContainer">
+                  <div class="rewardName">x3</div>
+                  <div class="rewardText">Yay! fireeee</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide swiper-no-swiping weeklyStats rewardsContainer streaksContainer">
+            <div class="tabBarArea"></div>
+            <div class="centerPiece flex80 flexCenter">
+              <div class="rewardItem">
+                <div class="rewardImage">
+                  <img src="" alt="">
+                </div>
+                <div class="rewardTextContainer">
+                  <div class="rewardName">Flame On</div>
+                  <div class="rewardText">Good start. Day 1.</div>
+                </div>
+              </div>
+              <div class="rewardItem inactive">
+                <div class="rewardImage">
+                  <img src="" alt="">
+                </div>
+                <div class="rewardTextContainer">
+                  <div class="rewardName">x2</div>
+                  <div class="rewardText">Turning up the heat</div>
+                </div>
+              </div>
+              <div class="rewardItem inactive">
+                <div class="rewardImage">
+                  <img src="" alt="">
+                </div>
+                <div class="rewardTextContainer">
+                  <div class="rewardName">x3</div>
+                  <div class="rewardText">Yay! fireeee</div>
+                </div>
+              </div>
+              <div class="rewardItem inactive">
+                <div class="rewardImage">
+                  <img src="" alt="">
+                </div>
+                <div class="rewardTextContainer">
+                  <div class="rewardName">x3</div>
+                  <div class="rewardText">Yay! fireeee</div>
+                </div>
+              </div>
+              <div class="rewardItem inactive">
+                <div class="rewardImage">
+                  <img src="" alt="">
+                </div>
+                <div class="rewardTextContainer">
+                  <div class="rewardName">x3</div>
+                  <div class="rewardText">Yay! fireeee</div>
+                </div>
+              </div>
+              <div class="rewardItem inactive">
+                <div class="rewardImage">
+                  <img src="" alt="">
+                </div>
+                <div class="rewardTextContainer">
+                  <div class="rewardName">x3</div>
+                  <div class="rewardText">Yay! fireeee</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="tabBtnContainer fadeInFromRight">
+      <div class="tabBtnContent">
+        <div onclick="switchTabs('rewards')" class="tabBtns weeklyBtn selected">Rewards</div>
+        <div onclick="switchTabs('streaks')" class="tabBtns monthlyBtn">Streaks</div>
+      </div>
+    </div>
+
+    <div class="modals modalsCenter nonDismiss" id="modalSpinner">
+      <div class="modal modalWhite modalSpinner">
+        <div class="modalTopPiece flexCenter">
+          <!-- <div class="extraTextInfo">achievement unlocked</div> -->
+        </div>
+        <div class="modalCentrePiece flexCenter flexFull fetchingText">
+          Fetching... please wait.
+        </div>
+        <div class="modalBottomPiece flexCenter flexFull">
+          <!-- <div onclick="exitToApp()" class="achievementDone">Awesome</div> -->
+        </div>
+      </div>
+    </div>
+    <div class="modals modalsCenter" id="sureToExit">
+      <div class="modal modalWhite sureToExit">
+        <div class="modalTopPiece flexCenter">
+          <div class="modalTitle">Are you sure?</div>
+        </div>
+        <div class="modalCentrePiece flexCenter flexFull">
+          <p>This story will not be saved, and you cannot get it back!</p>
+        </div>
+        <div class="modalBottomPiece flexCenter flexFull">
+          <div class="buttonsContainer">
+            <div class="grid grid-2 leftPiece" onclick="hideModal('.sureToExit')"><img src="icons/close.png" alt=""></div>
+            <div class="grid grid-2 rightPiece" onclick="exitToApp()"><img src="icons/tick.png" alt=""></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/localforage.min.js" charset="utf-8"></script>
+    <script src="js/modal.js" charset="utf-8"></script>
+    <script src="js/rewards.js" charset="utf-8"></script>
+  </body>
+</html>

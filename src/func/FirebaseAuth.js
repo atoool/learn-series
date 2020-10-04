@@ -10,7 +10,6 @@ export const Signup = async (email, pass) => {
     })
     .catch(error => {
       if (error.code === 'auth/email-already-in-use') {
-        console.warn('That email address is already in use!');
         auth()
           .signInWithEmailAndPassword(email, pass)
           .then(() => {
