@@ -48,7 +48,7 @@ export default class Home extends React.PureComponent {
         const {explore} = this.context.reduState;
         let data = null;
         explore &&
-          (data = explore.filter(f => f.name == notific?.data?.course));
+          (data = explore.filter((f) => f.name == notific?.data?.course));
         data &&
           data.length != 0 &&
           this.props.navigation.navigate('Plan', {
@@ -71,18 +71,17 @@ export default class Home extends React.PureComponent {
   render() {
     const {reduState} = this.context;
     const {params} = this.props.route;
-    console.warn(reduState.premiumPurchased, reduState.prices);
 
     if (reduState.myCourse == null || reduState.mainVideo == null)
       return <Loading load={this} />;
     return (
       <Animated.ScrollView
-        ref={re => (this.scrollRef = re)}
+        ref={(re) => (this.scrollRef = re)}
         showsVerticalScrollIndicator={false}
         style={styles.constainer}
         contentContainerStyle={styles.cContainer}>
         <HomePlayer
-          ref={re => (this.player = re)}
+          ref={(re) => (this.player = re)}
           vidData={reduState.mainVideo}
           that={this}
         />

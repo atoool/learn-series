@@ -10,7 +10,7 @@ export async function IAPCall() {
   let premiumPurchased = false;
   let prices = [0, 0, 0];
   await AsyncStorage.multiGet(['isPremium', 'prices', 'htmlPath'])
-    .then(async r => {
+    .then(async (r) => {
       if (Platform.OS === 'ios') {
         // const results = await RNFS.readDir(RNFS.MainBundlePath);
         // const webFolder = results.filter(f => f.name == 'Web.bundle');
@@ -18,30 +18,28 @@ export async function IAPCall() {
       } else htmlPath = 'file:///android_asset/html';
 
       if (r[0][1] == null || r[1][1] == null) {
-        premiumPurchased = await checkPurchased().catch(e => {});
+        premiumPurchased = await checkPurchased().catch((e) => {});
 
         if (premiumPurchased == false) {
-          prices = await showPrice().catch(e => {});
+          prices = await showPrice().catch((e) => {});
         }
         await AsyncStorage.multiSet([
           ['isPremium', JSON.stringify(premiumPurchased)],
           ['prices', JSON.stringify(prices)],
-        ]).catch(e => {});
+        ]).catch((e) => {});
       } else {
         premiumPurchased = JSON.parse(r[0][1]);
 
         prices = JSON.parse(r[1][1]);
 
-        let isPremium = await checkPurchased().catch(e => {});
+        let isPremium = await checkPurchased().catch((e) => {});
         if (isPremium !== premiumPurchased) premiumPurchased = isPremium;
-        let cPrices = await showPrice().catch(e => {});
+        let cPrices = await showPrice().catch((e) => {});
         // console.warn(prices);
         if (cPrices !== prices) prices = cPrices;
       }
     })
-    .catch(e => {
-      console.warn('ss');
-    });
+    .catch((e) => {});
 
   return [htmlPath, premiumPurchased, prices];
 }
@@ -70,7 +68,8 @@ export async function init(state) {
   let myC = [];
   mainP &&
     mainP.map(
-      m => (myC = [...myC, ...explore.plans.filter(t => t.name === m.plan)]),
+      (m) =>
+        (myC = [...myC, ...explore.plans.filter((t) => t.name === m.plan)]),
     );
   const myCourse = myC.length == 0 ? home.mainPlan : myC;
   return {
@@ -106,13 +105,13 @@ export async function init(state) {
 }
 
 async function session(val, state) {
-  await AsyncStorage.setItem('session', JSON.stringify(val)).catch(e => {});
+  await AsyncStorage.setItem('session', JSON.stringify(val)).catch((e) => {});
   let myCourse = [];
   val.map(
-    m =>
+    (m) =>
       (myCourse = [
         ...myCourse,
-        ...state.explore.filter(t => t.name === m.plan),
+        ...state.explore.filter((t) => t.name === m.plan),
       ]),
   );
 
@@ -120,7 +119,7 @@ async function session(val, state) {
 }
 
 async function sleepSess(val, state) {
-  await AsyncStorage.setItem('sleepSess', JSON.stringify(val)).catch(e => {});
+  await AsyncStorage.setItem('sleepSess', JSON.stringify(val)).catch((e) => {});
   return {...state, session: val};
 }
 

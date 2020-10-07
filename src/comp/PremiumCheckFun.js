@@ -15,7 +15,7 @@ let purchaseErrorSubscription = null;
 let purchaseUpdateSubscription = null;
 export const checkPurchased = async () => {
   await RNIap.getAvailablePurchases()
-    .then(purchase => {
+    .then((purchase) => {
       let purchased = purchase != 0 ? purchase[0].productId : null;
       if (
         purchased === IAPid[0] ||
@@ -27,7 +27,7 @@ export const checkPurchased = async () => {
         premiumPurchased = false;
       }
     })
-    .catch(err => {});
+    .catch((err) => {});
 
   return premiumPurchased;
 };
@@ -36,38 +36,38 @@ export const showPrice = async () => {
   let sixMonthPrice;
   let monthlyPremium;
   await RNIap.getProducts(IAPid)
-    .then(products => {
+    .then((products) => {
       if (products.length > 0) {
         price = products[products.length - 1].localizedPrice;
       }
     })
-    .catch(err => {});
+    .catch((err) => {});
   await RNIap.getSubscriptions(subscriptionsID)
-    .then(prices => {
+    .then((prices) => {
       monthlyPremium = prices[1].localizedPrice;
       sixMonthPrice = prices[0].localizedPrice;
     })
-    .catch(err => {});
+    .catch((err) => {});
 
   return [price, sixMonthPrice, monthlyPremium];
   // return [0, sixMonthPrice, 0];
 };
 
 export const purchasePremium = async () => {
-  await RNIap.requestPurchase(IAPid[0], false).catch(err => {});
+  await RNIap.requestPurchase(IAPid[0], false).catch((err) => {});
 };
-export const purchaseListener = that => {
+export const purchaseListener = (that) => {
   try {
     if (purchaseErrorSubscription == null) {
       try {
-        purchaseErrorSubscription = RNIap.purchaseErrorListener(error => {
+        purchaseErrorSubscription = RNIap.purchaseErrorListener((error) => {
           // Alert.alert(error.message);
         });
       } catch (e) {}
     }
     if (purchaseUpdateSubscription == null) {
       purchaseUpdateSubscription = RNIap.purchaseUpdatedListener(
-        async purchase => {
+        async (purchase) => {
           // console.warn('purchase');
 
           const receipt = purchase.transactionReceipt;
@@ -85,18 +85,13 @@ export const purchaseListener = that => {
                   // console.warn('suc');
                 });
               });
-            } catch (ackErr) {
-              console.warn('ee');
-            }
+            } catch (ackErr) {}
           } else {
-            console.warn('ww');
           }
         },
       );
     }
-  } catch (e) {
-    console.warn('kkk');
-  }
+  } catch (e) {}
 };
 
 export const purchaseListenerRemove = () => {
@@ -111,9 +106,9 @@ export const purchaseListenerRemove = () => {
 };
 
 export const purchaseSixMonthSubs = async () => {
-  await RNIap.requestSubscription(subscriptionsID[0], false).catch(err => {});
+  await RNIap.requestSubscription(subscriptionsID[0], false).catch((err) => {});
 };
 
 export const purchaseMonthlySubs = async () => {
-  await RNIap.requestSubscription(subscriptionsID[1], false).catch(err => {});
+  await RNIap.requestSubscription(subscriptionsID[1], false).catch((err) => {});
 };

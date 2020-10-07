@@ -89,7 +89,7 @@ export default class PlanInfo extends React.Component {
       const {explore} = this.context.reduState;
       for (let i = 0; i < 4; i++) {
         const random = Math.floor(Math.random() * explore.length);
-        const length = randomPlans.filter(r => r.name == explore[random].name)
+        const length = randomPlans.filter((r) => r.name == explore[random].name)
           .length;
         if (data.name != explore[random].name && length == 0)
           randomPlans.push(explore[random]);
@@ -136,7 +136,7 @@ export default class PlanInfo extends React.Component {
     } else {
       let sess = reduState.session;
       sess.length == 3 && sess.pop();
-      let session = sess.filter(t => t.plan !== params.data.name);
+      let session = sess.filter((t) => t.plan !== params.data.name);
       session = [
         {
           plan: params.data.name,
@@ -278,7 +278,7 @@ export default class PlanInfo extends React.Component {
                     ? collapsed[key]
                     : key == (lesson ? lesson - 1 : 0)
                 }
-                onToggle={colps => {
+                onToggle={(colps) => {
                   collapsed[key] = colps;
                   this.setState({
                     collapsed: [...collapsed],
