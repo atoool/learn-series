@@ -59,7 +59,7 @@ export default class RateUs extends PureComponent {
           padding: 0,
           height: 'auto',
           width: 'auto',
-          marginHorizontal: hp(1.9),
+          marginHorizontal: hp(6),
           paddingBottom: hp(1.3),
         }}
         animationType="fade"
@@ -76,8 +76,8 @@ export default class RateUs extends PureComponent {
               <Image
                 source={{uri: this.state.data.image}}
                 style={{
-                  width: width - wp(8),
-                  height: width - hp(6.4),
+                  width: width - wp(22),
+                  height: width - hp(15.4),
                   backgroundColor: 'lightgrey',
                 }}
               />
@@ -91,7 +91,7 @@ export default class RateUs extends PureComponent {
                     marginTop: hp(1.9),
                     backgroundColor: R.colors.primary,
                     paddingHorizontal: hp(1.3),
-                    marginHorizontal: wp(19.4),
+                    marginHorizontal: wp(10.4),
                   }}
                   containerStyle={{width: 'auto'}}
                   onPress={this.onRate}
