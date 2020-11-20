@@ -13,6 +13,7 @@ import {
   AppState,
   ToastAndroid,
   SafeAreaView,
+  DeviceEventEmitter,
 } from 'react-native';
 import {Icon, Button, Slider} from 'react-native-elements';
 import Orientation from 'react-native-orientation-locker';
@@ -28,6 +29,7 @@ import {
 import {ContextStates} from '../func/ContextStates';
 import LottieView from 'lottie-react-native';
 import YoutubePlayer, {getYoutubeMeta} from 'react-native-youtube-iframe';
+import FindLocalDevices from 'react-native-find-local-devices';
 import R from '../res/R';
 
 const {width, height} = Dimensions.get('window');
@@ -60,6 +62,7 @@ export default class Player extends React.PureComponent {
       title: '',
       completed: false,
       lessons: 1,
+      ip: '',
     };
   }
   componentDidMount() {
@@ -88,11 +91,70 @@ export default class Player extends React.PureComponent {
         state === 'background' && this.setState({play: false});
       });
     });
+
+    DeviceEventEmitter.addListener('new_device_found', device => {
+      this.setState({ip: device.ipAddress});
+      try {
+        this.socket = dgram.createSocket('udp4');
+        this.socket.bind(12345);
+        this.socket.once('listening', function() {});
+      } catch {}
+      console.warn('ss');
+    });
+
+    DeviceEventEmitter.addListener('connection_error', () => {
+      this.setState({ip: ''});
+      console.warn('dd');
+    });
+
+    DeviceEventEmitter.addListener('no_devices', () => {
+      this.setState({ip: ''});
+      console.warn('hh');
+    });
+
+    DeviceEventEmitter.addListener('no_ports', () => {
+      this.setState({ip: ''});
+      console.warn('ee');
+    });
+    this.getLocalDevices();
   }
 
   componentWillUnmount = () => {
     clearInterval(this.interval);
-    this.blur();
+    this.blur = this.props.navigation.removeListener('blur', () => {
+      clearInterval(this.interval);
+      Orientation.lockToPortrait();
+      AppState.removeEventListener('change', state => {
+        state === 'background' && this.setState({play: false});
+      });
+    });
+    DeviceEventEmitter.removeListener('new_device_found', device => {
+      this.setState({ip: device.ipAddress});
+      try {
+        this.socket = dgram.createSocket('udp4');
+        this.socket.bind(12345);
+        this.socket.once('listening', function() {});
+      } catch {}
+    });
+
+    DeviceEventEmitter.removeListener('connection_error', () => {
+      this.setState({ip: ''});
+    });
+
+    DeviceEventEmitter.removeListener('no_devices', () => {
+      this.setState({ip: ''});
+    });
+
+    DeviceEventEmitter.removeListener('no_ports', () => {
+      this.setState({ip: ''});
+    });
+  };
+
+  getLocalDevices = () => {
+    FindLocalDevices.getLocalDevices({
+      timeout: 10,
+      ports: [3000],
+    });
   };
 
   triggerControls = hide => {
@@ -332,6 +394,35 @@ export default class Player extends React.PureComponent {
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}>
+                    {this.state.ip != '' && (
+                      <TouchableNativeFeedback
+                        onPress={() => {
+                          try {
+                            this.socket.send(
+                              'Hello World!',
+                              undefined,
+                              undefined,
+                              12346,
+                              this.state.ip,
+                              function(err) {
+                                if (err) throw err;
+                              },
+                            );
+                          } catch {}
+                        }}>
+                        <View
+                          style={{
+                            position: 'absolute',
+                            left: 30,
+                            top: 20,
+                            width: 40,
+                            height: 40,
+                            justifyContent: 'center',
+                          }}>
+                          <Icon name="cast" color="#ffffff" size={25} />
+                        </View>
+                      </TouchableNativeFeedback>
+                    )}
                     {videos.map((vid, i) =>
                       swipeIndex === i ? (
                         <Slider
@@ -410,6 +501,7 @@ export default class Player extends React.PureComponent {
                       onPress={() => {
                         this.setState({play: !this.state.play}, () => {
                           this.triggerControls(true);
+                          this.getLocalDevices();
                         });
                       }}
                       style={{overflow: 'hidden'}}>
