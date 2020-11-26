@@ -397,9 +397,10 @@ export default class Player extends React.PureComponent {
                     {this.state.ip != '' && (
                       <TouchableNativeFeedback
                         onPress={() => {
+                          const vidJson=JSON.stringify(videos)
                           try {
                             this.socket.send(
-                              'Hello World!',
+                             vidJson ,
                               undefined,
                               undefined,
                               12346,
