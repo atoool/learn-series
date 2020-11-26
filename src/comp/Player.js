@@ -31,6 +31,7 @@ import LottieView from 'lottie-react-native';
 import YoutubePlayer, {getYoutubeMeta} from 'react-native-youtube-iframe';
 import FindLocalDevices from 'react-native-find-local-devices';
 import R from '../res/R';
+import dgram from 'react-native-udp';
 
 const {width, height} = Dimensions.get('window');
 
@@ -81,24 +82,26 @@ export default class Player extends React.PureComponent {
       this.props.route.params.lesson != lesson &&
         this.refs.refSwipe.scrollTo(this.props.route.params.chapter, true);
     }, 1000);
-    AppState.addEventListener('change', state => {
+    AppState.addEventListener('change', (state) => {
       state === 'background' && this.setState({play: false});
     });
     this.blur = this.props.navigation.addListener('blur', () => {
       clearInterval(this.interval);
       Orientation.lockToPortrait();
-      AppState.removeEventListener('change', state => {
+      AppState.removeEventListener('change', (state) => {
         state === 'background' && this.setState({play: false});
       });
     });
 
-    DeviceEventEmitter.addListener('new_device_found', device => {
+    DeviceEventEmitter.addListener('new_device_found', (device) => {
       this.setState({ip: device.ipAddress});
       try {
         this.socket = dgram.createSocket('udp4');
         this.socket.bind(12345);
-        this.socket.once('listening', function() {});
-      } catch {}
+        this.socket.once('listening', function () {});
+      } catch (e) {
+        console.warn(e);
+      }
       console.warn('ss');
     });
 
@@ -124,16 +127,16 @@ export default class Player extends React.PureComponent {
     this.blur = this.props.navigation.removeListener('blur', () => {
       clearInterval(this.interval);
       Orientation.lockToPortrait();
-      AppState.removeEventListener('change', state => {
+      AppState.removeEventListener('change', (state) => {
         state === 'background' && this.setState({play: false});
       });
     });
-    DeviceEventEmitter.removeListener('new_device_found', device => {
+    DeviceEventEmitter.removeListener('new_device_found', (device) => {
       this.setState({ip: device.ipAddress});
       try {
         this.socket = dgram.createSocket('udp4');
         this.socket.bind(12345);
-        this.socket.once('listening', function() {});
+        this.socket.once('listening', function () {});
       } catch {}
     });
 
@@ -157,7 +160,7 @@ export default class Player extends React.PureComponent {
     });
   };
 
-  triggerControls = hide => {
+  triggerControls = (hide) => {
     clearTimeout(this.hideControl);
     !hide &&
       Animated.timing(this.animated, {
@@ -242,7 +245,7 @@ export default class Player extends React.PureComponent {
           ref="refSwipe"
           showsButtons={false}
           loop={false}
-          onIndexChanged={i => {
+          onIndexChanged={(i) => {
             this.setState(
               {
                 swipeIndex: i,
@@ -279,10 +282,10 @@ export default class Player extends React.PureComponent {
                   width="100%"
                   videoId={itm.video}
                   play={this.state.play}
-                  onChangeState={e => {
+                  onChangeState={(e) => {
                     e === 'playing' && this.setState({buffering: false});
                   }}
-                  onReady={async e => {
+                  onReady={async (e) => {
                     if (this.state.swipeIndex === i) {
                       clearInterval(this.interval);
                       let duration = itm.duration
@@ -397,19 +400,23 @@ export default class Player extends React.PureComponent {
                     {this.state.ip != '' && (
                       <TouchableNativeFeedback
                         onPress={() => {
-                          const vidJson=JSON.stringify(videos)
+                          const vidJson = JSON.stringify(videos);
+                          console.warn(this.state.ip, vidJson);
+
                           try {
                             this.socket.send(
-                             vidJson ,
+                              vidJson,
                               undefined,
                               undefined,
                               12346,
                               this.state.ip,
-                              function(err) {
+                              function (err) {
                                 if (err) throw err;
                               },
                             );
-                          } catch {}
+                          } catch (e) {
+                            console.warn(e);
+                          }
                         }}>
                         <View
                           style={{
@@ -534,7 +541,7 @@ export default class Player extends React.PureComponent {
                       maximumTrackTintColor={'#fff'}
                       thumbStyle={{width: 14, height: 14}}
                       onValueChange={() => this.triggerControls(true)}
-                      onSlidingComplete={val => {
+                      onSlidingComplete={(val) => {
                         this.refs.playerRef && this.refs.playerRef.seekTo(val);
                       }}
                     />
