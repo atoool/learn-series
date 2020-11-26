@@ -27,15 +27,13 @@ export default class RateUs extends PureComponent {
     this.state = {data: {}, isVisible: false, img: ''};
   }
   componentDidMount = async () => {
-    let lang = await AsyncStorage.getItem('lang').catch(e => {});
+    let lang = await AsyncStorage.getItem('lang').catch((e) => {});
     lang == null && 'en';
     await fetch(
-      `http://riafy.me/splash.php?appname=${
-        R.strings.bundleId
-      }&country=IN&simcountry=in&version=1.3.2&versioncode=24&lang=${lang}&inputlang=${lang}&network=wifi&loadcount=3&devtype=p&fbclid=IwAR0M6OClxu5DMoJl3efjkEwRSLlJx26JVP9yX8Ywfw70iHDPEWODl1YHUJs`,
+      `http://riafy.me/splash.php?appname=${R.strings.bundleId}&country=IN&simcountry=in&version=1.3.2&versioncode=24&lang=${lang}&inputlang=${lang}&network=wifi&loadcount=3&devtype=p&fbclid=IwAR0M6OClxu5DMoJl3efjkEwRSLlJx26JVP9yX8Ywfw70iHDPEWODl1YHUJs`,
     )
-      .then(res => res.json())
-      .then(respons => {
+      .then((res) => res.json())
+      .then((respons) => {
         respons.splash &&
           this.setState({
             data: respons.splash,
@@ -46,9 +44,9 @@ export default class RateUs extends PureComponent {
       });
   };
   onRate = async () => {
-    await AsyncStorage.setItem('rateus', 'rated').catch(e => {});
+    await AsyncStorage.setItem('rateus', 'rated').catch((e) => {});
     this.setState({isVisible: false}, () => {
-      Linking.openURL(this.state.data.url).catch(e => {});
+      Linking.openURL(this.state.data.url).catch((e) => {});
     });
   };
   render() {
@@ -57,10 +55,10 @@ export default class RateUs extends PureComponent {
         isVisible={this.state.img == '' ? false : this.state.isVisible}
         overlayStyle={{
           padding: 0,
-          height: 'auto',
-          width: 'auto',
+          width: width - wp(22),
+          height: width - hp(15.4),
           marginHorizontal: hp(6),
-          paddingBottom: hp(1.3),
+          justifyContent: 'center',
         }}
         animationType="fade"
         onBackdropPress={() => this.setState({isVisible: false})}>

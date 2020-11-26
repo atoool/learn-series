@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StatusBar, SafeAreaView} from 'react-native';
+import {View} from 'react-native';
 import WebView from 'react-native-webview';
 import Loading from '../comp/Loading';
 import R from '../res/R';
@@ -16,7 +16,7 @@ export default class Privacy extends Component {
   state = {load: true, lang: 'en'};
 
   componentDidMount = async () => {
-    let lang = await AsyncStorage.getItem('lang').catch(e => {});
+    let lang = await AsyncStorage.getItem('lang').catch((e) => {});
     lang && this.setState({lang});
     // firebase.analytics().setCurrentScreen('Privacy screen', 'Privacy');
   };
@@ -32,7 +32,7 @@ export default class Privacy extends Component {
     //   return <Loading load={this} />;
     // }
     return (
-      <SafeAreaView style={{flex: 1, backgroundColor: R.colors.background}}>
+      <View style={{flex: 1, backgroundColor: R.colors.background}}>
         <WebView
           renderError={() => {
             return <Loading load={this} />;
@@ -42,18 +42,16 @@ export default class Privacy extends Component {
           cacheEnabled
           cacheMode="LOAD_CACHE_ELSE_NETWORK"
           source={{
-            uri: `http://riafy.me/wellness/privacy.php?appname=${
-              R.locale.appName
-            }&lang=${this.state.lang}&simcountry=in`,
+            uri: `http://riafy.me/wellness/privacy.php?appname=${R.locale.appName}&lang=${this.state.lang}&simcountry=in`,
           }}
-          style={{flex: 1, paddingTop: hp(6.4)}}
+          style={{flex: 1}}
           onError={() => {
             this.setState({load: false});
           }}
           renderLoading={() => <Loading load={this} />}
           startInLoadingState
         />
-      </SafeAreaView>
+      </View>
     );
   }
 }

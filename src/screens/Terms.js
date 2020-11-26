@@ -1,13 +1,9 @@
 import React, {Component} from 'react';
-import {StatusBar, SafeAreaView} from 'react-native';
+import {View} from 'react-native';
 import WebView from 'react-native-webview';
 import Loading from '../comp/Loading';
 import R from '../res/R';
 import AsyncStorage from '@react-native-community/async-storage';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
 import {ContextStates} from '../func/ContextStates';
 // import firebase from 'react-native-firebase';
 
@@ -15,7 +11,7 @@ export default class Terms extends Component {
   static contextType = ContextStates;
   state = {load: false, lang: 'en'};
   componentDidMount = async () => {
-    let lang = await AsyncStorage.getItem('lang').catch(e => {});
+    let lang = await AsyncStorage.getItem('lang').catch((e) => {});
     lang && this.setState({lang});
     // firebase.analytics().setCurrentScreen('Terms screen', 'Terms');
   };
@@ -30,7 +26,7 @@ export default class Terms extends Component {
     //   return <Loading load={this} />;
     // }
     return (
-      <SafeAreaView style={{flex: 1, backgroundColor: R.colors.background}}>
+      <View style={{flex: 1, backgroundColor: R.colors.background}}>
         {/* <StatusBar barStyle="dark-content" /> */}
         <WebView
           key={this.context.connected}
@@ -40,11 +36,9 @@ export default class Terms extends Component {
             return <Loading load={this} />;
           }}
           source={{
-            uri: `http://riafy.me/wellness/terms.php?appname=${
-              R.locale.appName
-            }&lang=${this.state.lang}`,
+            uri: `http://riafy.me/wellness/terms.php?appname=${R.locale.appName}&lang=${this.state.lang}`,
           }}
-          containerStyle={{flex: 1}}
+          style={{flex: 1}}
           onHttpError={() => {
             this.setState({load: false});
           }}
@@ -55,7 +49,7 @@ export default class Terms extends Component {
           startInLoadingState
           renderLoading={() => <Loading load={this} />}
         />
-      </SafeAreaView>
+      </View>
     );
   }
 }

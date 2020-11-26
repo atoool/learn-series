@@ -414,6 +414,7 @@ export default class Player extends React.PureComponent {
                                 if (err) throw err;
                               },
                             );
+                            this.setState({play: false});
                           } catch (e) {
                             console.warn(e);
                           }
