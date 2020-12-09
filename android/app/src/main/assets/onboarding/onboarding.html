@@ -17,10 +17,10 @@
        var now = new Date();
        var hrs = now.getHours();
        var greet;
-       if (hrs >= 19 || hrs <= 6)
-       {
-         document.querySelector('body').classList.add('night');
-       }
+    //   if (hrs >= 19 || hrs <= 6)
+    //   {
+    //     document.querySelector('body').classList.add('night');
+    //   }
     }
       var urlParams;
       (window.onpopstate = function () {
@@ -71,14 +71,14 @@ input{
     }
 
     body{
-        padding-top: env(safe-area-inset-top);
+        /* padding-top: env(safe-area-inset-top); */
       font-family: "Roboto",sans-serif;
     }
     body,html{
       overflow-x: hidden;
       overflow-y: scroll; /* has to be scroll, not auto */
       -webkit-overflow-scrolling: touch;
-      height: calc(100% + env(safe-area-inset-bottom))!important;
+      height:100%;
     }
     .swiper-container {
   width: 100%;
@@ -691,7 +691,9 @@ pointer-events: none;
     </style>
   </head>
   <body class="noscroll">
-    <script type="text/javascript">nightModeSwitch();</script>
+    <script type="text/javascript">
+    //nightModeSwitch();
+    </script>
     <div id="spinner" class="loaded"><div class="processing"><div class="ispinner"><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div></div></div></div>
     <script type="text/javascript">
     var retryTimer,spinnerHTML='<div class="ispinner"><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div></div>';
@@ -1161,7 +1163,7 @@ font-size: 14px; font-weight:400;color:#666
                     <div class="optionsBtnContent">
                       <div class="option">
                         <div class="subscTitle">3 DAY FREE TRIAL</div>
-                        <div class="subscDetails">Cancel any time. <span class="mthval month6">$49.99</span> / 6 month</div>
+                        <div class="subscDetails">Cancel any time. <span class="mthval month6">$49.99</span> / 6 month, after trial period</div>
                       </div>
                     </div>
                   </div>
@@ -1194,7 +1196,7 @@ font-size: 14px; font-weight:400;color:#666
                       <div class="optionsBtnContent">
                         <div class="option">
                           <div class="subscTitle">6 MONTH</div>
-                          <div class="subscDetails"><span class="origvalContainer"><span class="mthval month6">$49.99</span> / 6 month</div>
+                          <div class="subscDetails"><span class="origvalContainer"><span class="mthval month6">$49.99</span> / 6 month, after trial period</div>
                         </div>
                       </div>
                     </div>
@@ -1209,7 +1211,7 @@ font-size: 14px; font-weight:400;color:#666
                   <div onclick="IAP('6month')" class="optionSelected" id="iOS-6month">
                     <div class="optionsBtnContent">
                       <div class="option">
-                        <div class="subscDetails"><div class="subscTitle">3 days free</div>, then <span class="mthval month6">$49.99</span> / 6 month</div>
+                        <div class="subscDetails"><div class="subscTitle">3 days free</div>, then <span class="mthval month6">$49.99</span> / 6 month, after trial period</div>
                       </div>
                     </div>
                   </div>
@@ -1245,7 +1247,7 @@ font-size: 14px; font-weight:400;color:#666
                     <div class="optionsBtnContent">
                       <div class="option">
                         <div class="subscTitle">3 DAY FREE TRIAL</div>
-                        <div class="subscDetails">Cancel any time. <span class="mthval month6">$49.99</span> / 6 month</div>
+                        <div class="subscDetails">Cancel any time. <span class="mthval month6">$49.99</span> / 6 month, after trial period</div>
                       </div>
                     </div>
                   </div>
@@ -1278,7 +1280,7 @@ font-size: 14px; font-weight:400;color:#666
                       <div class="optionsBtnContent">
                         <div class="option">
                           <div class="subscTitle">6 MONTH</div>
-                          <div class="subscDetails"><span class="origvalContainer"><span class="mthval month6">$49.99</span> / 6 month</div>
+                          <div class="subscDetails"><span class="origvalContainer"><span class="mthval month6">$49.99</span> / 6 month, after trial period</div>
                         </div>
                       </div>
                     </div>
@@ -1320,6 +1322,7 @@ After free trial ends, premium subscription renews automatically, unless it is c
       <!-- Initialize Swiper -->
       <script>
       function setIAPValues(type,value){
+        try{
               switch (type) {
                 case 'monthly':
                   document.querySelector(".monthly").innerHTML= value;
@@ -1344,14 +1347,14 @@ After free trial ends, premium subscription renews automatically, unless it is c
                   break;
                 case '6month_period':
                   if (value=='P1M') {
-                    document.querySelector(divChooser+" .subscDetails").innerHTML= document.querySelector(divChooser+" .subscDetails").innerHTML.replace("6 month",data['1m']);
+                    document.querySelector(divChooser+" .subscDetails").innerHTML= document.querySelector(divChooser+" .subscDetails").innerHTML.replace("6 month, after trial period",data['1m']);
                   }
                   else if(value=='P1W')
                   {
-                    document.querySelector(divChooser+" .subscDetails").innerHTML= document.querySelector(divChooser+" .subscDetails").innerHTML.replace("6 month",data['1w']);
+                    document.querySelector(divChooser+" .subscDetails").innerHTML= document.querySelector(divChooser+" .subscDetails").innerHTML.replace("6 month, after trial period",data['1w']);
                   }
                   else{
-                    document.querySelector(divChooser+" .subscDetails").innerHTML= document.querySelector(divChooser+" .subscDetails").innerHTML.replace("6 month",data['6m']);
+                    document.querySelector(divChooser+" .subscDetails").innerHTML= document.querySelector(divChooser+" .subscDetails").innerHTML.replace("6 month, after trial period",data['6m']);
                   }
                   break;
                 case 'monthly_period':
@@ -1380,6 +1383,10 @@ After free trial ends, premium subscription renews automatically, unless it is c
 
               }
             }
+        catch(e){
+
+        }
+      }
       // var xhttp = new XMLHttpRequest();
       // xhttp.onreadystatechange = function() {
       //   if (this.readyState == 4 && this.status == 200) {

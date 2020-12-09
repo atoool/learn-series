@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <!-- <link href="https://fonts.googleapis.com/css?family=Leckerli+One|Patua+One" rel="stylesheet"> -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <script src="js/swiper.min.js"></script>
@@ -17,10 +18,10 @@
        var now = new Date();
        var hrs = now.getHours();
        var greet;
-       if (hrs >= 19 || hrs <= 6)
-       {
-         document.querySelector('body').classList.add('night');
-       }
+    //   if (hrs >= 19 || hrs <= 6)
+    //   {
+    //     document.querySelector('body').classList.add('night');
+    //   }
     }
       var urlParams;
       (window.onpopstate = function () {
@@ -41,6 +42,7 @@
       //   data=dataAll[urlParams.lang];
       // }
       // else data=dataAll['en'];
+
     </script>
 
     <title>Riafy</title>
@@ -76,14 +78,14 @@ input{
     }
 
     body{
-        padding-top: env(safe-area-inset-top);
+        /* padding-top: env(safe-area-inset-top); */
       font-family: "Roboto",sans-serif;
     }
     body,html{
       overflow-x: hidden;
       overflow-y: scroll; /* has to be scroll, not auto */
       -webkit-overflow-scrolling: touch;
-      height: calc(100% + env(safe-area-inset-bottom))!important;
+      height: 100%;
     }
     .swiper-container {
   width: 100%;
@@ -504,12 +506,32 @@ body.ja .option {
 .arabic input.unitVal{
   margin: 0 0 0 8px;
 }
+
     </style>
-  </head>
-  <body class="noscroll">
-    <script type="text/javascript">nightModeSwitch();</script>
-    <div id="spinner" class="loaded"><div class="processing"><div class="ispinner"><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div></div></div></div>
-    <script type="text/javascript">
+</head>
+<body class="noscroll">
+<script type="text/javascript">
+//nightModeSwitch();
+</script>
+<div id="spinner" class="loaded">
+    <div class="processing">
+        <div class="ispinner">
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+            <div class="ispinner-blade"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
     var retryTimer,spinnerHTML='<div class="ispinner"><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div></div>';
     function removeSpinner(loadingText){
       if (loadingText==undefined) {
@@ -549,8 +571,9 @@ body.ja .option {
       },150);
       eval(ctaFunction);
     }
-    </script>
-    <style media="screen">
+
+</script>
+<style media="screen">
     .night #spinner{
         background: #1c1c1f;
         color: #eee;
@@ -624,8 +647,9 @@ body.ja .option {
 }
 
 .night .heading{color: #eee;}
-    </style>
-    <style media="screen">
+
+</style>
+<style media="screen">
     .settingUp{
     background: #fafafa!important;
     color: #fafafa!important;
@@ -996,233 +1020,321 @@ img.icons {height: 32px!important;}
 }
 
 
-    </style>
-    <!-- Swiper -->
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide swiper-no-swiping" data-hash="slide1" style="display:none;">
+
+</style>
+<!-- Swiper -->
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide swiper-no-swiping" data-hash="slide1" style="display:none;">
             <div class="container">
-              <div class="topPiece"><img id="launchScreenImg" src="" alt="" class="heroShot"></div>
-              <div class="centerPiece">
-                <div class="introTitle" id="launchScreenText"></div>
-              </div>
-              <div class="bottomPiece">
-                <div class="bottomContent">
-                  <div class="next continueBtn" id="launchScreenBtn"></div>
-                  <div class="footer" id="footer">By continuing you accept our <a id="terms" href="#">Terms of use</a> & <a id="privacy" href="#">Privacy policy</a>.</div>
+                <div class="topPiece"><img id="launchScreenImg" src="" alt="" class="heroShot">
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide" data-hash="slide2" id="fitnessLevelContent">
-            <div class="container optionsContainer fitness">
-              <div class="headingPiece"><div class="heading"><b id="fitnessLevelHeading"></b></div></div>
-              <div class="centerPiece">
-              </div>
-              <div class="bottomPiece">
-                <div class="bottomContent">
-                  <div class="next continueBtn">NEXT STEP</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide" data-hash="slide3" id="goalsContent">
-            <div class="container optionsContainer goals" id="goalSegment">
-              <div class="headingPiece"><div class="heading"><b id="goalsHeading"></b></div></div>
-              <div class="centerPiece">
-              </div>
-              <div class="bottomPiece">
-                <div class="bottomContent">
-                  <div class="next continueBtn">NEXT STEP</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide" data-hash="slide4" id="toggleContent">
-            <div class="container optionsContainer goals prefs">
-              <div class="headingPiece"><div class="heading"><b id="toggleHeading"></b></div></div>
-              <div class="centerPiece">
-              </div>
-              <div class="bottomPiece">
-                <div class="bottomContent">
-                  <div class="next continueBtn">NEXT STEP</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide swiper-no-swiping" data-hash="slide5"  id="parametersContent">
-            <div class="container optionsContainer parameters">
-              <div class="parent">
-                <div class="headingPiece"><div class="heading"><b id="parametersHeading">Enter your parameters</b></div></div>
                 <div class="centerPiece">
-                  <div class="metricContainer"><div onclick="convert('metric')" class="siselected sival metric" id="opt-metric">Metric</div><div onclick="convert('us')" id="opt-us" class="sival us">US</div></div>
-                      <div onclick="measure('weight')" class="optionsBtn" id="opt-weight">
-                        <div class="optionsBtnContent">
-                          <div class="option"><img src="icons/weight.png" class="iconsSmall"><span class="optionText">Weight</span><span class="measurement "><input onkeypress="checkNext(event);" onfocus="this.select();" type="number" class="unitVal weight" value="-"><span class="unit wunit">Kg</span></span></div>
+                    <div class="introTitle" id="launchScreenText"></div>
+                </div>
+                <div class="bottomPiece">
+                    <div class="bottomContent">
+                        <div class="next continueBtn" id="launchScreenBtn"></div>
+                        <div class="footer" id="footer">By continuing you accept our <a id="terms"
+                                                                                        href="#">Terms
+                            of use</a> & <a id="privacy" href="#">Privacy policy</a>.
                         </div>
-                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-slide" data-hash="slide2" id="fitnessLevelContent">
+            <div class="container optionsContainer fitness">
+                <div class="headingPiece">
+                    <div class="heading"><b id="fitnessLevelHeading"></b></div>
+                </div>
+                <div class="centerPiece">
+                </div>
+                <div class="bottomPiece">
+                    <div class="bottomContent">
+                        <div class="next continueBtn">NEXT STEP</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-slide" data-hash="slide3" id="goalsContent">
+            <div class="container optionsContainer goals" id="goalSegment">
+                <div class="headingPiece">
+                    <div class="heading"><b id="goalsHeading"></b></div>
+                </div>
+                <div class="centerPiece">
+                </div>
+                <div class="bottomPiece">
+                    <div class="bottomContent">
+                        <div class="next continueBtn">NEXT STEP</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-slide" data-hash="slide4" id="toggleContent">
+            <div class="container optionsContainer goals prefs">
+                <div class="headingPiece">
+                    <div class="heading"><b id="toggleHeading"></b></div>
+                </div>
+                <div class="centerPiece">
+                </div>
+                <div class="bottomPiece">
+                    <div class="bottomContent">
+                        <div class="next continueBtn">NEXT STEP</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-slide swiper-no-swiping" data-hash="slide5" id="parametersContent">
+            <div class="container optionsContainer parameters">
+                <div class="parent">
+                    <div class="headingPiece">
+                        <div class="heading"><b id="parametersHeading">Enter your parameters</b>
+                        </div>
+                    </div>
+                    <div class="centerPiece">
+                        <div class="metricContainer">
+                            <div onclick="convert('metric')" class="siselected sival metric"
+                                 id="opt-metric">Metric
+                            </div>
+                            <div onclick="convert('us')" id="opt-us" class="sival us">US</div>
+                        </div>
+                        <div onclick="measure('weight')" class="optionsBtn" id="opt-weight">
+                            <div class="optionsBtnContent">
+                                <div class="option"><img src="icons/weight.png"
+                                                         class="iconsSmall"><span
+                                        class="optionText">Weight</span><span
+                                        class="measurement "><input onkeypress="checkNext(event);"
+                                                                    onfocus="this.select();"
+                                                                    type="number"
+                                                                    class="unitVal weight"
+                                                                    value="-"><span
+                                        class="unit wunit">Kg</span></span></div>
+                            </div>
+                        </div>
                         <div onclick="measure('height')" class="optionsBtn" id="opt-fit">
-                          <div class="optionsBtnContent">
-                          <div class="option"><img src="icons/scale.png" class="iconsSmall"><span class="optionText">Height</span><span class="measurement "><input onkeypress="checkNext(event);" onfocus="this.select();" type="number" class="unitVal height" value="-"><span class="unit lunit">cm</span></span></div>
+                            <div class="optionsBtnContent">
+                                <div class="option"><img src="icons/scale.png"
+                                                         class="iconsSmall"><span
+                                        class="optionText">Height</span><span
+                                        class="measurement "><input onkeypress="checkNext(event);"
+                                                                    onfocus="this.select();"
+                                                                    type="number"
+                                                                    class="unitVal height"
+                                                                    value="-"><span
+                                        class="unit lunit">cm</span></span></div>
+                            </div>
                         </div>
+                        <div onclick="measure('tweight')" class="optionsBtn" id="opt-sleep">
+                            <div class="optionsBtnContent">
+                                <div class="option"><img src="icons/target.png"
+                                                         class="iconsSmall"><span
+                                        class="optionText">Target weight</span><span
+                                        class="measurement "><input onkeypress="checkNext(event);"
+                                                                    onfocus="this.select();"
+                                                                    type="number"
+                                                                    class="unitVal tweight"
+                                                                    value="-"><span
+                                        class="unit wunit">Kg</span></span></div>
+                            </div>
                         </div>
-                      <div onclick="measure('tweight')" class="optionsBtn" id="opt-sleep">
-                        <div class="optionsBtnContent">
-                          <div class="option"><img src="icons/target.png" class="iconsSmall"><span class="optionText">Target weight</span><span class="measurement "><input onkeypress="checkNext(event);" onfocus="this.select();" type="number" class="unitVal tweight" value="-"><span class="unit wunit">Kg</span></span></div>
-                        </div>
-                      </div>
+                    </div>
                 </div>
-              </div>
-              <div class="bottomPiece">
-                <div class="bottomContent">
-                  <div onclick="paramNext()" class="paramNext continueBtn targets">NEXT STEP</div>
+                <div class="bottomPiece">
+                    <div class="bottomContent">
+                        <div onclick="paramNext()" class="paramNext continueBtn targets">NEXT STEP
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-          <div class="swiper-slide swiper-no-swiping iosApp" data-hash="slide6" id="subContent">
+        </div>
+        <div class="swiper-slide swiper-no-swiping iosApp" data-hash="slide6" id="subContent">
             <div class="container subscription">
-              <div class="topPiece"><img id="premiumImage" src="" alt="" class="heroShot">
-                <div class="skeleton"></div>
-              </div>
-              <div class="centerPiece">
-
-
-                <div class="iOS-sub">
-                  <div class="stars">⭐️⭐️⭐️⭐️⭐️</div>
-                  <div class="userReview" id="reviewText"></div>
+                <div class="topPiece"><img id="premiumImage" src="" alt="" class="heroShot">
+                    <div class="skeleton"></div>
                 </div>
+                <div class="centerPiece">
 
-                <div class="subContent" style="display:none;">
-                  <div class="stars">⭐️⭐️⭐️⭐️⭐️</div>
-                  <div class="userReview" id="reviewText"></div>
-                  <div onclick="IAP('6month')" class="optionsBtn wide optionSelected" id="opt-6month">
-                    <div class="optionsBtnContent">
-                      <div class="option">
-                        <div class="subscTitle">3 DAY FREE TRIAL</div>
-                        <div class="subscDetails">Cancel any time. <span class="mthval month6">$49.99</span> / 6 month</div>
-                      </div>
+
+                    <div class="iOS-sub">
+                        <div class="stars">⭐️⭐️⭐️⭐️⭐️</div>
+                        <div class="userReview" id="reviewText"></div>
                     </div>
-                  </div>
-                  <div onclick="IAP('lifetime')" style="display:none" class="optionsBtn wide optionSelected" id="opt-lifetime">
-                    <div class="optionsBtnContent">
-                      <div class="option">
-                        <div class="subscTitle">LIFETIME PREMIUM</div>
-                        <div class="subscDetails"><span class="origvalContainer"><span class="origval lifetimeOrig">$225</span><span class="strike"></span></span> <span class="mthval lifetime">$112.5</span></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="premPacks" style="display:none">
-                    <div onclick="IAP('monthly')" class="optionsBtn" id="opt-monthly">
-                      <div class="optionsBtnContent">
-                        <div class="option">
-                          <div class="subscTitle">MONTHLY</div>
-                          <div class="subscDetails"><span class="mthval monthly">$9.99</span></div>
+
+                    <div class="subContent" style="display:none;">
+                        <div class="stars">⭐️⭐️⭐️⭐️⭐️</div>
+                        <div class="userReview" id="reviewText"></div>
+                        <div onclick="IAP('6month')" class="optionsBtn wide optionSelected"
+                             id="opt-6month">
+                            <div class="optionsBtnContent">
+                                <div class="option">
+                                    <div class="subscTitle">3 DAY FREE TRIAL</div>
+                                    <div class="subscDetails">Cancel any time. <span
+                                            class="mthval month6">$49.99</span> / 6 month, after trial period
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                    <div onclick="IAP('lifetime')" class="optionsBtn" id="opt-lifetime">
-                      <div class="optionsBtnContent">
-                        <div class="option">
-                          <div class="subscTitle">LIFETIME</div>
-                          <div class="subscDetails"><span class="origvalContainer"><span class="origval lifetimeOrig">$225</span><span class="strike"></span></span> <span class="mthval lifetime">$112.5</span></div>
+                        <div onclick="IAP('lifetime')" style="display:none"
+                             class="optionsBtn wide optionSelected" id="opt-lifetime">
+                            <div class="optionsBtnContent">
+                                <div class="option">
+                                    <div class="subscTitle">LIFETIME PREMIUM</div>
+                                    <div class="subscDetails"><span class="origvalContainer"><span
+                                            class="origval lifetimeOrig">$225</span><span
+                                            class="strike"></span></span> <span
+                                            class="mthval lifetime">$112.5</span></div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                    <div onclick="IAP('6month')" style="display:none" class="optionsBtn" id="opt-6month">
-                      <div class="optionsBtnContent">
-                        <div class="option">
-                          <div class="subscTitle">6 MONTH</div>
-                          <div class="subscDetails"><span class="origvalContainer"><span class="mthval month6">$49.99</span> / 6 month</div>
+                        <div class="premPacks" style="display:none">
+                            <div onclick="IAP('monthly')" class="optionsBtn" id="opt-monthly">
+                                <div class="optionsBtnContent">
+                                    <div class="option">
+                                        <div class="subscTitle">MONTHLY</div>
+                                        <div class="subscDetails"><span
+                                                class="mthval monthly">$9.99</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div onclick="IAP('lifetime')" class="optionsBtn" id="opt-lifetime">
+                                <div class="optionsBtnContent">
+                                    <div class="option">
+                                        <div class="subscTitle">LIFETIME</div>
+                                        <div class="subscDetails"><span
+                                                class="origvalContainer"><span
+                                                class="origval lifetimeOrig">$225</span><span
+                                                class="strike"></span></span> <span
+                                                class="mthval lifetime">$112.5</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div onclick="IAP('6month')" style="display:none" class="optionsBtn"
+                                 id="opt-6month">
+                                <div class="optionsBtnContent">
+                                    <div class="option">
+                                        <div class="subscTitle">6 MONTH</div>
+                                        <div class="subscDetails"><span
+                                                class="origvalContainer"><span
+                                                class="mthval month6">$49.99</span> / 6 month, after trial period</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
                     </div>
                 </div>
-                </div>
-                </div>
-              <div class="bottomPiece">
-                <div class="bottomContent">
-                  <div onclick="paramNext()" class="paramNext continueBtn pulse">START</div>
-                  <div onclick="IAP('6month')" class="optionSelected" id="iOS-6month">
-                    <div class="optionsBtnContent">
-                      <div class="option">
-                        <div class="subscDetails"><div class="subscTitle">3 days free</div>, then <span class="mthval month6">$49.99</span> / 6 month</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="iosTerms footer">
-                      <br><br><a id="terms" href="http://riafy.me/terms">Terms of use</a> &amp; <a id="privacy" href="http://riafy.me/privacy">Privacy policy</a><br><br>
-                      <a id="terms" href="http://riafy.me/restore">Restore purchase</a><br><br>
-                      After free trial ends, premium subscription renews automatically, unless it is canceled before 24-hours of the end of the trial period. Payment will be charged to iTunes Account at confirmation of purchase and renews automatically unless auto-renew is turned off. Subscriptions may be managed by the user and auto-renewal may be turned off by going to the users Account Settings after purchase. Your AppleID account will be charged for renewal within 24-hours before the end of the trial period. You can manage and cancel your subscriptions by going to your account settings on the App Store. Any unused portion of a free trial period, if offered, will be forfeited when the user purchases a subscription to that publication, where applicable.
+                <div class="bottomPiece">
+                    <div class="bottomContent">
+                        <div onclick="paramNext()" class="paramNext continueBtn pulse">START</div>
+                        <div onclick="IAP('6month')" class="optionSelected" id="iOS-6month">
+                            <div class="optionsBtnContent">
+                                <div class="option">
+                                    <div class="subscDetails">
+                                        <div class="subscTitle">3 days free</div>
+                                        , then <span class="mthval month6">$49.99</span> / 6 month, after trial period
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
+                    <div class="iosTerms footer">
+                        <br><br><a id="terms" href="http://riafy.me/terms">Terms of use</a> &amp; <a
+                            id="privacy" href="http://riafy.me/privacy">Privacy policy</a><br><br>
+                        <a id="terms" href="http://riafy.me/restore">Restore purchase</a><br><br>
+                        After free trial ends, premium subscription renews automatically, unless it
+                        is canceled before 24-hours of the end of the trial period. Payment will be
+                        charged to iTunes Account at confirmation of purchase and renews
+                        automatically unless auto-renew is turned off. Subscriptions may be managed
+                        by the user and auto-renewal may be turned off by going to the users Account
+                        Settings after purchase. Your AppleID account will be charged for renewal
+                        within 24-hours before the end of the trial period. You can manage and
+                        cancel your subscriptions by going to your account settings on the App
+                        Store. Any unused portion of a free trial period, if offered, will be
+                        forfeited when the user purchases a subscription to that publication, where
+                        applicable.
+                    </div>
 
-              </div>
+
+                </div>
             </div>
-          </div>
-          <div class="swiper-slide swiper-no-swiping android" data-hash="slide6" id="subContent">
+        </div>
+        <div class="swiper-slide swiper-no-swiping android" data-hash="slide6" id="subContent">
             <div class="container subscription">
-              <div class="topPiece"><img id="premiumImage" src="" alt="" class="heroShot">
-                <div class="skeleton"></div>
-              </div>
-              <div class="centerPiece">
-                <div class="subContent">
-                  <div class="stars">⭐️⭐️⭐️⭐️⭐️</div>
-                  <div class="userReview" id="reviewText"></div>
-                  <div onclick="IAP('6month')" class="optionsBtn wide optionSelected" id="opt-6month">
-                    <div class="optionsBtnContent">
-                      <div class="option">
-                        <div class="subscTitle">3 DAY FREE TRIAL</div>
-                        <div class="subscDetails">Cancel any time. <span class="mthval month6">$49.99</span> / 6 month</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div onclick="IAP('lifetime')" style="display:none" class="optionsBtn wide optionSelected" id="opt-lifetime">
-                    <div class="optionsBtnContent">
-                      <div class="option">
-                        <div class="subscTitle">LIFETIME PREMIUM</div>
-                        <div class="subscDetails"><span class="origvalContainer"><span class="origval lifetimeOrig">$225</span><span class="strike"></span></span> <span class="mthval lifetime">$112.5</span></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="premPacks">
-                    <div onclick="IAP('monthly')" class="optionsBtn" id="opt-monthly">
-                      <div class="optionsBtnContent">
-                        <div class="option">
-                          <div class="subscTitle">MONTHLY</div>
-                          <div class="subscDetails"><span class="mthval monthly">$9.99</span></div>
+                <div class="topPiece"><img id="premiumImage" src="" alt="" class="heroShot">
+                    <div class="skeleton"></div>
+                </div>
+                <div class="centerPiece">
+                    <div class="subContent">
+                        <div class="stars">⭐️⭐️⭐️⭐️⭐️</div>
+                        <div class="userReview" id="reviewText"></div>
+                        <div onclick="IAP('6month')" class="optionsBtn wide optionSelected"
+                             id="opt-6month">
+                            <div class="optionsBtnContent">
+                                <div class="option">
+                                    <div class="subscTitle">3 DAY FREE TRIAL</div>
+                                    <div class="subscDetails">Cancel any time. <span
+                                            class="mthval month6">$49.99</span> / 6 month, after trial period
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                    <div onclick="IAP('lifetime')" class="optionsBtn" id="opt-lifetime">
-                      <div class="optionsBtnContent">
-                        <div class="option">
-                          <div class="subscTitle">LIFETIME</div>
-                          <div class="subscDetails"><span class="origvalContainer"><span class="origval lifetimeOrig">$225</span><span class="strike"></span></span> <span class="mthval lifetime">$112.5</span></div>
+                        <div onclick="IAP('lifetime')" style="display:none"
+                             class="optionsBtn wide optionSelected" id="opt-lifetime">
+                            <div class="optionsBtnContent">
+                                <div class="option">
+                                    <div class="subscTitle">LIFETIME PREMIUM</div>
+                                    <div class="subscDetails"><span class="origvalContainer"><span
+                                            class="origval lifetimeOrig">$225</span><span
+                                            class="strike"></span></span> <span
+                                            class="mthval lifetime">$112.5</span></div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                    <div onclick="IAP('6month')" style="display:none" class="optionsBtn" id="opt-6month">
-                      <div class="optionsBtnContent">
-                        <div class="option">
-                          <div class="subscTitle">6 MONTH</div>
-                          <div class="subscDetails"><span class="origvalContainer"><span class="mthval month6">$49.99</span> / 6 month</div>
+                        <div class="premPacks">
+                            <div onclick="IAP('monthly')" class="optionsBtn" id="opt-monthly">
+                                <div class="optionsBtnContent">
+                                    <div class="option">
+                                        <div class="subscTitle">MONTHLY</div>
+                                        <div class="subscDetails"><span
+                                                class="mthval monthly">$9.99</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div onclick="IAP('lifetime')" class="optionsBtn" id="opt-lifetime">
+                                <div class="optionsBtnContent">
+                                    <div class="option">
+                                        <div class="subscTitle">LIFETIME</div>
+                                        <div class="subscDetails"><span
+                                                class="origvalContainer"><span
+                                                class="origval lifetimeOrig">$225</span><span
+                                                class="strike"></span></span> <span
+                                                class="mthval lifetime">$112.5</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div onclick="IAP('6month')" style="display:none" class="optionsBtn"
+                                 id="opt-6month">
+                                <div class="optionsBtnContent">
+                                    <div class="option">
+                                        <div class="subscTitle">6 MONTH</div>
+                                        <div class="subscDetails"><span
+                                                class="origvalContainer"><span
+                                                class="mthval month6">$49.99</span> / 6 month, after trial period</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
                     </div>
                 </div>
+                <div class="bottomPiece">
+                    <div class="bottomContent">
+                        <div onclick="paramNext()" class="paramNext continueBtn pulse">DONE</div>
+                    </div>
                 </div>
-                </div>
-              <div class="bottomPiece">
-                <div class="bottomContent">
-                  <div onclick="paramNext()" class="paramNext continueBtn pulse">DONE</div>
-                </div>
-              </div>
             </div>
-          </div>
-          <script type="text/javascript">
+        </div>
+        <script type="text/javascript">
           if (urlParams.iOS!=undefined) {
             document.querySelector('.android').remove();
             // document.querySelector('.skeleton').style.display="none";
@@ -1230,12 +1342,13 @@ img.icons {height: 32px!important;}
           else{
             document.querySelector('.iosApp').remove();
           }
-          </script>
-        </div>
-      </div>
 
-      <!-- Initialize Swiper -->
-      <script>
+        </script>
+    </div>
+</div>
+
+<!-- Initialize Swiper -->
+<script>
       // var urlParams;
       // (window.onpopstate = function () {
       //   var match,
@@ -1252,6 +1365,7 @@ img.icons {height: 32px!important;}
       // })();
 
       function setIAPValues(type,value){
+        try{
               switch (type) {
                 case 'monthly':
                   document.querySelector(".monthly").innerHTML= value;
@@ -1277,14 +1391,14 @@ img.icons {height: 32px!important;}
                   break;
                 case '6month_period':
                   if (value=='P1M') {
-                    document.querySelector("#opt-6month .subscDetails").innerHTML= document.querySelector("#opt-6month .subscDetails").innerHTML.replace("6 month",data['1m']);
+                    document.querySelector("#opt-6month .subscDetails").innerHTML= document.querySelector("#opt-6month .subscDetails").innerHTML.replace("6 month, after trial period",data['1m']);
                   }
                   else if(value=='P1W')
                   {
-                    document.querySelector("#opt-6month .subscDetails").innerHTML= document.querySelector("#opt-6month .subscDetails").innerHTML.replace("6 month",data['1w']);
+                    document.querySelector("#opt-6month .subscDetails").innerHTML= document.querySelector("#opt-6month .subscDetails").innerHTML.replace("6 month, after trial period",data['1w']);
                   }
                   else{
-                    document.querySelector("#opt-6month .subscDetails").innerHTML= document.querySelector("#opt-6month .subscDetails").innerHTML.replace("6 month",data['6m']);
+                    document.querySelector("#opt-6month .subscDetails").innerHTML= document.querySelector("#opt-6month .subscDetails").innerHTML.replace("6 month, after trial period",data['6m']);
                   }
                   break;
                 case 'monthly_period':
@@ -1310,6 +1424,10 @@ img.icons {height: 32px!important;}
                   break;
                 default:
 
+              }
+              }
+              catch(e){
+                
               }
             }
       // var xhttp = new XMLHttpRequest();
@@ -1478,9 +1596,10 @@ img.icons {height: 32px!important;}
         // window.location.assign("http://riafy.me/premium/"+JSON.stringify(onboardingData));
       }
 
-      </script>
 
-      <style>
+</script>
+
+<style>
       .pulse {
       -webkit-animation-name: pulse;
       animation-name: pulse;
@@ -1573,10 +1692,11 @@ img.icons {height: 32px!important;}
         color: rgba(0, 0, 0, 0.6);
       }
 
-      </style>
 
-      <!-- Premium skip trigger and timer -->
-      <style media="screen">
+</style>
+
+<!-- Premium skip trigger and timer -->
+<style media="screen">
       .skip {
           margin-top: 8px;
           text-decoration: underline;
@@ -1607,8 +1727,9 @@ img.iconsSmall {
     margin-right: 8px;
 }
 span.optionText {width: 60%;}
-      </style>
-      <script type="text/javascript">
+
+</style>
+<script type="text/javascript">
         function skip(){
           window.location.href="http://riafy.me/skip";
         }
@@ -1649,8 +1770,9 @@ span.optionText {width: 60%;}
         }
 
 
-      </script>
-      <style type="text/css">
+
+</script>
+<style type="text/css">
       .spinning {
           display: flex;width: 100%;height: 100%;
           align-items: center;
@@ -1661,8 +1783,9 @@ span.optionText {width: 60%;}
           background: white;
       }
 
-      </style>
-      <script type="text/javascript">
+
+</style>
+<script type="text/javascript">
       var selectorG,prevValue;
       function convertToSpinner(selector){
         selectorG=selector;
@@ -1900,6 +2023,7 @@ xhttp.send();
         // },10000);
         // });
 
-      </script>
-  </body>
+
+</script>
+</body>
 </html>
