@@ -31,6 +31,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import SignIn from '../screens/SignIn';
 
 const Stack = createStackNavigator();
 
@@ -232,6 +233,14 @@ const SettingsStack = () => {
       <Stack.Screen
         name="Premium"
         component={Premium}
+        options={{
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="SignIn"
+        component={SignIn}
         options={{
           headerShown: false,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

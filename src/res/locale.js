@@ -68,6 +68,8 @@ let locale = new LocalizedStrings({
     packages: {tags: ['Weightloss', 'Health']},
     continue: 'CONTINUE',
     ok: 'Ok',
+    signin: 'Sign In / Sign Up',
+    logout: 'Logout',
   },
 });
 // console.warn(jsonLang);

@@ -45,6 +45,14 @@ class Settings extends Component {
         image: require(`../res/imgs/premium_crown.png`),
         title: R.locale.getPremium1,
       },
+      {
+        image: this.context.reduState.isSignedIn
+          ? require(`../res/imgs/logout.png`)
+          : require(`../res/imgs/user.png`),
+        title: this.context.reduState.isSignedIn
+          ? R.locale.logout
+          : R.locale.signin,
+      },
       {image: require(`../res/imgs/pencil.png`), title: R.locale.scp},
       // {image: require('../res/imgs/bell.png'), title: R.locale.Notification},
       // {image: require(`../res/imgs/lang.png`), title: R.locale.lang},
@@ -107,6 +115,9 @@ class Settings extends Component {
                         ? Linking.openURL(R.strings.rateURL).catch(err => {})
                         : item.title === R.locale.scp
                         ? this.props.navigation.navigate('ChangePref')
+                        : item.title === R.locale.signin ||
+                          item.title === R.locale.logout
+                        ? this.props.navigation.navigate('SignIn')
                         : item.title === R.locale.getPremium1
                         ? this.state.premiumPurchased
                           ? this.setState({
@@ -131,13 +142,28 @@ class Settings extends Component {
                     }}>
                     <View style={Style.buttonView}>
                       <View style={Style.buttonImageView}>
-                        <Image source={item.image} style={Style.buttonImage} />
+                        <Image
+                          source={
+                            item.title === R.locale.signin ||
+                            item.title === R.locale.logout
+                              ? this.context.reduState.isSignedIn
+                                ? require('../res/imgs/logout.png')
+                                : require('../res/imgs/user.png')
+                              : item.image
+                          }
+                          style={Style.buttonImage}
+                        />
                       </View>
                       <Text style={Style.buttonText}>
                         {item.title === R.locale.getPremium1
                           ? this.state.premiumPurchased
                             ? R.locale.getPremium2
                             : item.title
+                          : item.title === R.locale.signin ||
+                            item.title === R.locale.logout
+                          ? this.context.reduState.isSignedIn
+                            ? R.locale.logout
+                            : R.locale.signin
                           : item.title}
                       </Text>
                       {item.title === R.locale.Notification ? (

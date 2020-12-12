@@ -3,6 +3,7 @@ import {fetchData} from './ApiCalls';
 import Home from '../screens/Home';
 import {Platform} from 'react-native';
 import {checkPurchased, showPrice} from '../comp/PremiumCheckFun';
+import {GoogleSignin} from '@react-native-community/google-signin';
 // import RNFS from 'react-native-fs';
 
 export async function IAPCall() {
@@ -10,7 +11,7 @@ export async function IAPCall() {
   let premiumPurchased = false;
   let prices = [0, 0, 0];
   await AsyncStorage.multiGet(['isPremium', 'prices', 'htmlPath'])
-    .then(async (r) => {
+    .then(async r => {
       if (Platform.OS === 'ios') {
         // const results = await RNFS.readDir(RNFS.MainBundlePath);
         // const webFolder = results.filter(f => f.name == 'Web.bundle');
@@ -18,28 +19,28 @@ export async function IAPCall() {
       } else htmlPath = 'file:///android_asset/html';
 
       if (r[0][1] == null || r[1][1] == null) {
-        premiumPurchased = await checkPurchased().catch((e) => {});
+        premiumPurchased = await checkPurchased().catch(e => {});
 
         if (premiumPurchased == false) {
-          prices = await showPrice().catch((e) => {});
+          prices = await showPrice().catch(e => {});
         }
         await AsyncStorage.multiSet([
           ['isPremium', JSON.stringify(premiumPurchased)],
           ['prices', JSON.stringify(prices)],
-        ]).catch((e) => {});
+        ]).catch(e => {});
       } else {
         premiumPurchased = JSON.parse(r[0][1]);
 
         prices = JSON.parse(r[1][1]);
 
-        let isPremium = await checkPurchased().catch((e) => {});
+        let isPremium = await checkPurchased().catch(e => {});
         if (isPremium !== premiumPurchased) premiumPurchased = isPremium;
-        let cPrices = await showPrice().catch((e) => {});
+        let cPrices = await showPrice().catch(e => {});
         // console.warn(prices);
         if (cPrices !== prices) prices = cPrices;
       }
     })
-    .catch((e) => {});
+    .catch(e => {});
 
   return [htmlPath, premiumPurchased, prices];
 }
@@ -57,6 +58,12 @@ export const reduState = {
   rateUs: false,
 };
 
+export async function onSignedIn() {
+  const userInfo = await GoogleSignin.getCurrentUser();
+  if (userInfo?.user?.name) return true;
+  else false;
+}
+
 export async function init(state) {
   const local = await AsyncStorage.multiGet(['session', 'sleepSess']);
   const home = await fetchData('home');
@@ -65,11 +72,11 @@ export async function init(state) {
   const mainP = local[0][1] ? JSON.parse(local[0][1]) : null;
   const sleepPr = local[1][1] ? JSON.parse(local[1][1]) : null;
   const IAP = await IAPCall();
+  const isSignedIn = await onSignedIn();
   let myC = [];
   mainP &&
     mainP.map(
-      (m) =>
-        (myC = [...myC, ...explore.plans.filter((t) => t.name === m.plan)]),
+      m => (myC = [...myC, ...explore.plans.filter(t => t.name === m.plan)]),
     );
   const myCourse = myC.length == 0 ? home.mainPlan : myC;
   return {
@@ -101,17 +108,18 @@ export async function init(state) {
     htmlPath: IAP[0],
     premiumPurchased: IAP[1],
     prices: IAP[2],
+    isSignedIn,
   };
 }
 
 async function session(val, state) {
-  await AsyncStorage.setItem('session', JSON.stringify(val)).catch((e) => {});
+  await AsyncStorage.setItem('session', JSON.stringify(val)).catch(e => {});
   let myCourse = [];
   val.map(
-    (m) =>
+    m =>
       (myCourse = [
         ...myCourse,
-        ...state.explore.filter((t) => t.name === m.plan),
+        ...state.explore.filter(t => t.name === m.plan),
       ]),
   );
 
@@ -119,7 +127,7 @@ async function session(val, state) {
 }
 
 async function sleepSess(val, state) {
-  await AsyncStorage.setItem('sleepSess', JSON.stringify(val)).catch((e) => {});
+  await AsyncStorage.setItem('sleepSess', JSON.stringify(val)).catch(e => {});
   return {...state, session: val};
 }
 
@@ -133,6 +141,8 @@ export async function reducer(state, action) {
       return {...state, videos: action.payload};
     case 'rateus':
       return {...state, rateUs: action.payload};
+    case 'signIn':
+      return {...state, isSignedIn: action.payload};
     case 'init':
       return action.payload;
     default:

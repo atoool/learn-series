@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "936442884198-gv1e66cs9c2oeg8b1mrn095or5ro97b0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "academy.learn.piano",
+            "certificate_hash": "0554a00794aec4cca1d8a8864a0b76ebb5990d95"
+          }
+        },
+        {
           "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -32,11 +40,46 @@
               "client_type": 3
             },
             {
-              "client_id": "936442884198-r6bh197h3qb0dev808smcb0dbua31dst.apps.googleusercontent.com",
+              "client_id": "936442884198-1je9tbiptkcqum5vj5ra5pgidiiahiln.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "weightloss.zero.fastingtracker.ios",
-                "app_store_id": "1514726105"
+                "bundle_id": "walking.workout.weightloss"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936442884198:android:1c5af6e1b9513942f1bda7",
+        "android_client_info": {
+          "package_name": "audio.books.summaries"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi-uzEpqjgAwAHAf_ZmkwMVafvoqILzLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "936442884198-1je9tbiptkcqum5vj5ra5pgidiiahiln.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "walking.workout.weightloss"
               }
             }
           ]
@@ -69,11 +112,10 @@
               "client_type": 3
             },
             {
-              "client_id": "936442884198-r6bh197h3qb0dev808smcb0dbua31dst.apps.googleusercontent.com",
+              "client_id": "936442884198-1je9tbiptkcqum5vj5ra5pgidiiahiln.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "weightloss.zero.fastingtracker.ios",
-                "app_store_id": "1514726105"
+                "bundle_id": "walking.workout.weightloss"
               }
             }
           ]
@@ -114,11 +156,10 @@
               "client_type": 3
             },
             {
-              "client_id": "936442884198-r6bh197h3qb0dev808smcb0dbua31dst.apps.googleusercontent.com",
+              "client_id": "936442884198-1je9tbiptkcqum5vj5ra5pgidiiahiln.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "weightloss.zero.fastingtracker.ios",
-                "app_store_id": "1514726105"
+                "bundle_id": "walking.workout.weightloss"
               }
             }
           ]
@@ -151,11 +192,118 @@
               "client_type": 3
             },
             {
-              "client_id": "936442884198-r6bh197h3qb0dev808smcb0dbua31dst.apps.googleusercontent.com",
+              "client_id": "936442884198-1je9tbiptkcqum5vj5ra5pgidiiahiln.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "weightloss.zero.fastingtracker.ios",
-                "app_store_id": "1514726105"
+                "bundle_id": "walking.workout.weightloss"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936442884198:android:757ba7f803bd6099f1bda7",
+        "android_client_info": {
+          "package_name": "com.storybook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi-uzEpqjgAwAHAf_ZmkwMVafvoqILzLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "936442884198-1je9tbiptkcqum5vj5ra5pgidiiahiln.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "walking.workout.weightloss"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936442884198:android:e2c299a526cf7dd2f1bda7",
+        "android_client_info": {
+          "package_name": "learn.crafts.diy.arts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi-uzEpqjgAwAHAf_ZmkwMVafvoqILzLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "936442884198-1je9tbiptkcqum5vj5ra5pgidiiahiln.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "walking.workout.weightloss"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936442884198:android:ba1d86ebdebe04cff1bda7",
+        "android_client_info": {
+          "package_name": "learn.mindfulness.calm.sleep"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi-uzEpqjgAwAHAf_ZmkwMVafvoqILzLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936442884198-uvh4bif5p8jkn3fmgrneb1olr9vuq7h9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "936442884198-1je9tbiptkcqum5vj5ra5pgidiiahiln.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "walking.workout.weightloss"
               }
             }
           ]
@@ -196,11 +344,10 @@
               "client_type": 3
             },
             {
-              "client_id": "936442884198-r6bh197h3qb0dev808smcb0dbua31dst.apps.googleusercontent.com",
+              "client_id": "936442884198-1je9tbiptkcqum5vj5ra5pgidiiahiln.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "weightloss.zero.fastingtracker.ios",
-                "app_store_id": "1514726105"
+                "bundle_id": "walking.workout.weightloss"
               }
             }
           ]
@@ -233,11 +380,10 @@
               "client_type": 3
             },
             {
-              "client_id": "936442884198-r6bh197h3qb0dev808smcb0dbua31dst.apps.googleusercontent.com",
+              "client_id": "936442884198-1je9tbiptkcqum5vj5ra5pgidiiahiln.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "weightloss.zero.fastingtracker.ios",
-                "app_store_id": "1514726105"
+                "bundle_id": "walking.workout.weightloss"
               }
             }
           ]
@@ -270,11 +416,10 @@
               "client_type": 3
             },
             {
-              "client_id": "936442884198-r6bh197h3qb0dev808smcb0dbua31dst.apps.googleusercontent.com",
+              "client_id": "936442884198-1je9tbiptkcqum5vj5ra5pgidiiahiln.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "weightloss.zero.fastingtracker.ios",
-                "app_store_id": "1514726105"
+                "bundle_id": "walking.workout.weightloss"
               }
             }
           ]
