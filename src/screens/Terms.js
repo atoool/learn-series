@@ -30,7 +30,7 @@ export default class Terms extends Component {
     //   return <Loading load={this} />;
     // }
     return (
-      <View style={{flex: 1, backgroundColor: R.colors.background,paddingTop:hp(3.5)}}>
+      <View style={{flex: 1, backgroundColor: R.colors.background}}>
         {/* <StatusBar barStyle="dark-content" /> */}
         <WebView
           key={this.context.connected}
