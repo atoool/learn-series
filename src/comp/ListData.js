@@ -45,12 +45,12 @@ export const ListData = props => {
           ]}>
           <TouchableNativeFeedback
             onPress={() => {
-              props.scroll &&
-                props.scroll.refs.scrollRef
-                  ?.getNode()
-                  ?.scrollTo({x: 0, y: 0, animated: true});
-              props.scroll && props.scroll.onMount();
-
+              // props.scroll &&
+              //   props.scroll.refs.scrollRef
+              //     ?.getNode()
+              //     ?.scrollTo({x: 0, y: 0, animated: true});
+              // props.scroll && props.scroll.onMount();
+              props?.scroll ?nav.push('Plan', {data: item, type: props.type}):
               nav.navigate('Plan', {data: item, type: props.type});
             }}
             style={{padding: hp(0.6)}}

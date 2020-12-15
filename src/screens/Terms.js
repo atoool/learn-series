@@ -5,6 +5,10 @@ import Loading from '../comp/Loading';
 import R from '../res/R';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ContextStates} from '../func/ContextStates';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 // import firebase from 'react-native-firebase';
 
 export default class Terms extends Component {
@@ -26,7 +30,7 @@ export default class Terms extends Component {
     //   return <Loading load={this} />;
     // }
     return (
-      <View style={{flex: 1, backgroundColor: R.colors.background}}>
+      <View style={{flex: 1, backgroundColor: R.colors.background,paddingTop:hp(3.5)}}>
         {/* <StatusBar barStyle="dark-content" /> */}
         <WebView
           key={this.context.connected}

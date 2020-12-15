@@ -45,14 +45,14 @@ class Settings extends Component {
         image: require(`../res/imgs/premium_crown.png`),
         title: R.locale.getPremium1,
       },
-      {
-        image: this.context.reduState.isSignedIn
-          ? require(`../res/imgs/logout.png`)
-          : require(`../res/imgs/user.png`),
-        title: this.context.reduState.isSignedIn
-          ? R.locale.logout
-          : R.locale.signin,
-      },
+      // {
+      //   image: this.context.reduState.isSignedIn
+      //     ? require(`../res/imgs/logout.png`)
+      //     : require(`../res/imgs/user.png`),
+      //   title: this.context.reduState.isSignedIn
+      //     ? R.locale.logout
+      //     : R.locale.signin,
+      // },
       {image: require(`../res/imgs/pencil.png`), title: R.locale.scp},
       // {image: require('../res/imgs/bell.png'), title: R.locale.Notification},
       // {image: require(`../res/imgs/lang.png`), title: R.locale.lang},

@@ -29,9 +29,9 @@ import {
 import {ContextStates} from '../func/ContextStates';
 import LottieView from 'lottie-react-native';
 import YoutubePlayer, {getYoutubeMeta} from 'react-native-youtube-iframe';
-import FindLocalDevices from 'react-native-find-local-devices';
+// import FindLocalDevices from 'react-native-find-local-devices';
 import R from '../res/R';
-import dgram from 'react-native-udp';
+// import dgram from 'react-native-udp';
 
 const {width, height} = Dimensions.get('window');
 
@@ -93,33 +93,33 @@ export default class Player extends React.PureComponent {
       });
     });
 
-    DeviceEventEmitter.addListener('new_device_found', (device) => {
-      this.setState({ip: device.ipAddress});
-      try {
-        this.socket = dgram.createSocket('udp4');
-        this.socket.bind(12345);
-        this.socket.once('listening', function () {});
-      } catch (e) {
-        console.warn(e);
-      }
-      console.warn('ss');
-    });
+    // DeviceEventEmitter.addListener('new_device_found', (device) => {
+    //   this.setState({ip: device.ipAddress});
+    //   try {
+    //     this.socket = dgram.createSocket('udp4');
+    //     this.socket.bind(12345);
+    //     this.socket.once('listening', function () {});
+    //   } catch (e) {
+    //     console.warn(e);
+    //   }
+    //   console.warn('ss');
+    // });
 
-    DeviceEventEmitter.addListener('connection_error', () => {
-      this.setState({ip: ''});
-      console.warn('dd');
-    });
+    // DeviceEventEmitter.addListener('connection_error', () => {
+    //   this.setState({ip: ''});
+    //   console.warn('dd');
+    // });
 
-    DeviceEventEmitter.addListener('no_devices', () => {
-      this.setState({ip: ''});
-      console.warn('hh');
-    });
+    // DeviceEventEmitter.addListener('no_devices', () => {
+    //   this.setState({ip: ''});
+    //   console.warn('hh');
+    // });
 
-    DeviceEventEmitter.addListener('no_ports', () => {
-      this.setState({ip: ''});
-      console.warn('ee');
-    });
-    this.getLocalDevices();
+    // DeviceEventEmitter.addListener('no_ports', () => {
+    //   this.setState({ip: ''});
+    //   console.warn('ee');
+    // });
+    // this.getLocalDevices();
   }
 
   componentWillUnmount = () => {
@@ -131,33 +131,33 @@ export default class Player extends React.PureComponent {
         state === 'background' && this.setState({play: false});
       });
     });
-    DeviceEventEmitter.removeListener('new_device_found', (device) => {
-      this.setState({ip: device.ipAddress});
-      try {
-        this.socket = dgram.createSocket('udp4');
-        this.socket.bind(12345);
-        this.socket.once('listening', function () {});
-      } catch {}
-    });
+    // DeviceEventEmitter.removeListener('new_device_found', (device) => {
+    //   this.setState({ip: device.ipAddress});
+    //   try {
+    //     this.socket = dgram.createSocket('udp4');
+    //     this.socket.bind(12345);
+    //     this.socket.once('listening', function () {});
+    //   } catch {}
+    // });
 
-    DeviceEventEmitter.removeListener('connection_error', () => {
-      this.setState({ip: ''});
-    });
+    // DeviceEventEmitter.removeListener('connection_error', () => {
+    //   this.setState({ip: ''});
+    // });
 
-    DeviceEventEmitter.removeListener('no_devices', () => {
-      this.setState({ip: ''});
-    });
+    // DeviceEventEmitter.removeListener('no_devices', () => {
+    //   this.setState({ip: ''});
+    // });
 
-    DeviceEventEmitter.removeListener('no_ports', () => {
-      this.setState({ip: ''});
-    });
+    // DeviceEventEmitter.removeListener('no_ports', () => {
+    //   this.setState({ip: ''});
+    // });
   };
 
   getLocalDevices = () => {
-    FindLocalDevices.getLocalDevices({
-      timeout: 10,
-      ports: [3000],
-    });
+    // FindLocalDevices.getLocalDevices({
+    //   timeout: 10,
+    //   ports: [3000],
+    // });
   };
 
   triggerControls = (hide) => {
@@ -397,7 +397,7 @@ export default class Player extends React.PureComponent {
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}>
-                    {this.state.ip != '' && (
+                    {/* {this.state.ip != '' && (
                       <TouchableNativeFeedback
                         onPress={() => {
                           const vidJson = JSON.stringify(videos);
@@ -431,7 +431,7 @@ export default class Player extends React.PureComponent {
                           <Icon name="cast" color="#ffffff" size={25} />
                         </View>
                       </TouchableNativeFeedback>
-                    )}
+                    )} */}
                     {videos.map((vid, i) =>
                       swipeIndex === i ? (
                         <Slider
@@ -510,7 +510,7 @@ export default class Player extends React.PureComponent {
                       onPress={() => {
                         this.setState({play: !this.state.play}, () => {
                           this.triggerControls(true);
-                          this.getLocalDevices();
+                          // this.getLocalDevices();
                         });
                       }}
                       style={{overflow: 'hidden'}}>

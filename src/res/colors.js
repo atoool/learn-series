@@ -1,9 +1,9 @@
 let now = new Date();
 let hrs = now.getHours();
 let night = false;
-if (hrs >= 19 || hrs <= 6) {
-  night = true;
-}
+// if (hrs >= 19 || hrs <= 6) {
+//   night = true;
+// }
 const colors = {
   primary: 'orange',
   statusBar: '#000',

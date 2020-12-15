@@ -32,7 +32,7 @@ export default class Privacy extends Component {
     //   return <Loading load={this} />;
     // }
     return (
-      <View style={{flex: 1, backgroundColor: R.colors.background}}>
+      <View style={{flex: 1, backgroundColor: R.colors.background,paddingTop:hp(3.5)}}>
         <WebView
           renderError={() => {
             return <Loading load={this} />;
