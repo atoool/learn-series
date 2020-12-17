@@ -17,9 +17,9 @@ export const fetchData = async type => {
   } else {
     setTimeout(async () => {
       newData = await Axios.get(R.strings.api + type).catch(e => {});
-      if (!isEqual(data, newData.data)) {
-        data = newData.data;
-        await AsyncStorage.setItem(type, JSON.stringify(newData.data)).catch(
+      if (newData?.data&&!isEqual(data, newData?.data)) {
+        data = newData?.data;
+        await AsyncStorage.setItem(type, JSON.stringify(newData?.data)).catch(
           e => {},
         );
       }
