@@ -2738,7 +2738,7 @@ eventemitter3@^3.0.0:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.2.tgz#2d3d48f9c346698fce83a85d7d664e98535df6e7"
   integrity sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==
 
-events@^3.0.0, events@^3.1.0:
+events@^3.1.0, events@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/events/-/events-3.2.0.tgz#93b87c18f8efcd4202a461aec4dfc0556b639379"
   integrity sha512-/46HWwbfCX2xTawVfkKLGxMifJYQBWMwY1mjywRtb4c9x8l5NP3KoJtnIOiL1hfdRkIuYhETxQlo62IF8tcnlg==
@@ -5644,10 +5644,10 @@ react-native-webview@^10.4.1:
     invariant "2.2.4"
 
 "react-native-youtube-iframe@https://github.com/atoool/react-native-youtube-iframe":
-  version "1.2.4"
-  resolved "https://github.com/atoool/react-native-youtube-iframe#71d0e32000046e3da08af981b6845009e777b54a"
+  version "1.4.0"
+  resolved "https://github.com/atoool/react-native-youtube-iframe#2cd1b850196f332257e08455c16effde0b794251"
   dependencies:
-    events "^3.0.0"
+    events "^3.2.0"
 
 react-native@0.62.2:
   version "0.62.2"

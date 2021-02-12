@@ -82,13 +82,13 @@ export default class Player extends React.PureComponent {
       this.props.route.params.lesson != lesson &&
         this.refs.refSwipe.scrollTo(this.props.route.params.chapter, true);
     }, 1000);
-    AppState.addEventListener('change', (state) => {
+    AppState.addEventListener('change', state => {
       state === 'background' && this.setState({play: false});
     });
     this.blur = this.props.navigation.addListener('blur', () => {
       clearInterval(this.interval);
       Orientation.lockToPortrait();
-      AppState.removeEventListener('change', (state) => {
+      AppState.removeEventListener('change', state => {
         state === 'background' && this.setState({play: false});
       });
     });
@@ -127,7 +127,7 @@ export default class Player extends React.PureComponent {
     this.blur = this.props.navigation.removeListener('blur', () => {
       clearInterval(this.interval);
       Orientation.lockToPortrait();
-      AppState.removeEventListener('change', (state) => {
+      AppState.removeEventListener('change', state => {
         state === 'background' && this.setState({play: false});
       });
     });
@@ -160,7 +160,7 @@ export default class Player extends React.PureComponent {
     // });
   };
 
-  triggerControls = (hide) => {
+  triggerControls = hide => {
     clearTimeout(this.hideControl);
     !hide &&
       Animated.timing(this.animated, {
@@ -245,7 +245,7 @@ export default class Player extends React.PureComponent {
           ref="refSwipe"
           showsButtons={false}
           loop={false}
-          onIndexChanged={(i) => {
+          onIndexChanged={i => {
             this.setState(
               {
                 swipeIndex: i,
@@ -277,15 +277,17 @@ export default class Player extends React.PureComponent {
               {this.state.swipeIndex === i && (
                 <YoutubePlayer
                   key={this.state.swipeIndex}
-                  ref="playerRef"
-                  height="100%"
+                  ref={re => (this.playerRef = re)}
                   width="100%"
+                  height="100%"
                   videoId={itm.video}
                   play={this.state.play}
-                  onChangeState={(e) => {
+                  contentScale={0.65}
+                  webViewStyle={{marginTop: -10}}
+                  onChangeState={e => {
                     e === 'playing' && this.setState({buffering: false});
                   }}
-                  onReady={async (e) => {
+                  onReady={async e => {
                     if (this.state.swipeIndex === i) {
                       clearInterval(this.interval);
                       let duration = itm.duration
@@ -307,12 +309,14 @@ export default class Player extends React.PureComponent {
                           : length == 3
                           ? parseInt(duration.substr(1))
                           : parseInt(duration.substr(0));
-                      this.refs.playerRef.seekTo(start);
-                      let totalTim = await this.refs.playerRef.getDuration();
+                      let totalTime = 60;
+                      this.playerRef.seekTo(start);
 
-                      let totalTime = totalTim - ends;
                       this.interval = setInterval(async () => {
-                        const currentTime = await this.refs.playerRef.getCurrentTime();
+                        let totalTim = await this.playerRef.getDuration();
+
+                        totalTime = totalTim === 0 ? 60 : totalTim - ends;
+                        const currentTime = await this.playerRef.getCurrentTime();
 
                         if (currentTime >= totalTime)
                           this.setState(
@@ -326,6 +330,7 @@ export default class Player extends React.PureComponent {
                           );
                         this.setState({
                           currentTime,
+                          totalTime,
                         });
                       }, 1000);
                       this.setState({totalTime}, () => {
@@ -542,8 +547,8 @@ export default class Player extends React.PureComponent {
                       maximumTrackTintColor={'#fff'}
                       thumbStyle={{width: 14, height: 14}}
                       onValueChange={() => this.triggerControls(true)}
-                      onSlidingComplete={(val) => {
-                        this.refs.playerRef && this.refs.playerRef.seekTo(val);
+                      onSlidingComplete={val => {
+                        this.playerRef && this.playerRef.seekTo(val);
                       }}
                     />
                     <Text
