@@ -106,7 +106,7 @@ export default class ChangePref extends Component {
           cacheMode="LOAD_CACHE_ELSE_NETWORK"
           source={{uri: this.state.htmlUrl}}
           onShouldStartLoadWithRequest={(a) => {
-            if (a.url.indexOf('stories.riafy.me') > -1) return false;
+            if (a.url.indexOf('/tech') > -1) return false;
             this._onNavigationStateChange(a);
             return true;
           }}

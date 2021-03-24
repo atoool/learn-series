@@ -10,7 +10,7 @@ let strings = {
       ? 'https://apps.apple.com/in/app/fasting-tracker-intermittent/id1514726105'
       : `https://play.google.com/store/apps/details?id=${bundleId}`,
   api: `https://cookbookapp.in/RIA/learningAPI.php?appname=${bundleId}&shrink&type=`,
-  version: '1.1.48',
+  version: '1.1.51',
 };
 export default strings;
 // jump.rope.workout.counter

@@ -36,7 +36,7 @@ export default class DailyLog extends React.PureComponent {
               'file:///android_asset/onboarding/dailyLog.html?lang=en&appname=keto.weightloss.diet.plan',
           }}
           onShouldStartLoadWithRequest={(res) => {
-            if (res.url === 'https://stories.riafy.me/') return false;
+            if (res.url === 'https:///tech/') return false;
             this.responses(res.url);
             return true;
           }}

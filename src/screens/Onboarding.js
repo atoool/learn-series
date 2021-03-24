@@ -44,7 +44,7 @@ export default class Onboarding extends PureComponent {
   _onNavigationStateChange = async a => {
     let url = a.url;
 
-    // if (url.indexOf('stories.riafy.me') > -1) return false;
+    // if (url.indexOf('/tech') > -1) return false;
     if (url.indexOf('/vibrate') > -1) {
       // console.warn('inside refresh');
       // this.webview.stopLoading();
@@ -63,7 +63,7 @@ export default class Onboarding extends PureComponent {
           this.context?.reduState?.prices[0]
         }"||"${this.context?.reduState?.prices[0]}000000")`,
       );
-      return true;
+      return false;
     } else if (url.indexOf('http://riafy.me/onboarding/') > -1) {
       let jsonURL = JSON.parse(
         decodeURI(url.split('http://riafy.me/onboarding/')[1]),
@@ -204,7 +204,7 @@ export default class Onboarding extends PureComponent {
           javaScriptEnabled
           domStorageEnabled
           onShouldStartLoadWithRequest={a => {
-            if (a.url.indexOf('stories.riafy.me') > -1) return false;
+            if (a.url.indexOf('/tech') > -1) return false;
             this._onNavigationStateChange(a);
             return true;
           }}

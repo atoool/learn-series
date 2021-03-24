@@ -149,7 +149,7 @@ export default class Premium extends Component {
           allowsBackForwardNavigationGestures={true}
           originWhitelist={['*']}
           onShouldStartLoadWithRequest={a => {
-            if (a.url.indexOf('stories.riafy.me') > -1) return false;
+            if (a.url.indexOf('/tech') > -1) return false;
             this._onNavigationStateChange(a);
             return true;
           }}
