@@ -42,16 +42,16 @@ class App extends React.Component {
       notific: null,
     };
   }
-  onRegister = (token) => {
+  onRegister = token => {
     this.setState({registerToken: token?.token, fcmRegistered: true});
     this.notif?.subscribeTopic();
   };
 
-  onNotif = (notific) => {
+  onNotif = notific => {
     this.notific = notific;
   };
 
-  handlePerm = (perms) => {
+  handlePerm = perms => {
     !perms.alert && this.notif?.requestPermissions();
   };
   onBackpress = () => {
@@ -72,7 +72,7 @@ class App extends React.Component {
     const result = await RNIap.initConnection();
     result == null && (await RNIap.initConnection());
     this.unsubscribe == null &&
-      (this.unsubscribe = NetInfo.addEventListener((state) => {
+      (this.unsubscribe = NetInfo.addEventListener(state => {
         this.setState({connected: state?.isConnected});
       }));
   };
@@ -83,11 +83,11 @@ class App extends React.Component {
     this.setState({play: !this.state.play, type, playIndex});
   };
 
-  dispatch = async (action) => {
+  dispatch = async action => {
     this.setState(await reducer(this.state, action));
   };
 
-  getActiveRouteName = (state) => {
+  getActiveRouteName = state => {
     if (!state || typeof state.index !== 'number') {
       return 'Unknown';
     }
@@ -120,9 +120,9 @@ class App extends React.Component {
         <SafeAreaView style={{flex: 1}}>
           <StatusBar backgroundColor={R.colors.statusBar} />
           <NavigationContainer
-            ref={(re) => (this.navig = re)}
+            ref={re => (this.navig = re)}
             theme={Themes}
-            onStateChange={(state) => {
+            onStateChange={state => {
               const previousRouteName = this.routeName ? this.routeName : '';
               const currentRouteName = this.getActiveRouteName(state);
               if (previousRouteName !== currentRouteName) {
@@ -138,7 +138,7 @@ class App extends React.Component {
                 backgroundColor="#e84a5f"
               />
             )}
-            <ExitAlert ref={(exitalert) => (this.exit = exitalert)} />
+            <ExitAlert ref={exitalert => (this.exit = exitalert)} />
           </NavigationContainer>
         </SafeAreaView>
       </ContextStates.Provider>

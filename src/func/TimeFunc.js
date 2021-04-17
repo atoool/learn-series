@@ -1,4 +1,5 @@
 import moment from 'moment';
+import R from '../res/R';
 
 const format = 'HH:mm';
 
@@ -21,12 +22,12 @@ export const TimeType = () => {
   const afterNi = moment('23:59', format);
 
   time.isBetween(befoMo, afterMo)
-    ? (type = 'Good Morning')
+    ? (type = R.locale.morning)
     : time.isBetween(befoNo, afterNo)
-    ? (type = 'Good Afternoon')
+    ? (type = R.locale.afternoon)
     : time.isBetween(befoEv, afterEv)
-    ? (type = 'Good Evening')
-    : time.isBetween(befoNi, afterNi) && (type = 'Good Night');
+    ? (type = R.locale.evening)
+    : time.isBetween(befoNi, afterNi) && (type = R.locale.night);
 
   return type;
 };

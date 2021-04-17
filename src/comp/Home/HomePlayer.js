@@ -28,6 +28,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import R from '../../res/R';
 
 const {width, height} = Dimensions.get('window');
 // const vids = ['2dc7GuiQP0A', 'nP-i7AlROK4', '8iJ_gxjDuHM', 'JAX1cESZnFA'];
@@ -169,7 +170,7 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
                   {vidData[0].desc.substr(0, 50)}...
                 </Text>
                 <Button
-                  title="WATCH"
+                  title={R.locale.watch}
                   titleStyle={styles.btnText}
                   icon={{name: 'play-arrow', color: '#fff', size: hp(2.6)}}
                   containerStyle={styles.btnContainer}

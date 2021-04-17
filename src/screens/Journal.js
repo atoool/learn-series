@@ -12,6 +12,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import moment from 'moment';
 
 export default class Jounal extends React.PureComponent {
   state = {usr: '', pulse: 'pulse'};
@@ -29,6 +30,7 @@ export default class Jounal extends React.PureComponent {
     this.blur();
   };
   render() {
+    const dt = moment();
     return (
       <ScrollView
         style={{flex: 1, padding: hp(2.6), paddingTop: hp(12.8)}}
@@ -74,14 +76,16 @@ export default class Jounal extends React.PureComponent {
                 padding: hp(2.6),
                 backgroundColor: R.colors.img,
               }}>
-              <Text style={{fontSize: hp(2.1), color: '#fff'}}>Monday</Text>
-              <Text
-                style={{fontSize: hp(2.6), color: '#fff', fontWeight: 'bold'}}>
-                May
+              <Text style={{fontSize: hp(2.1), color: '#fff'}}>
+                {dt.format('dddd')}
               </Text>
               <Text
                 style={{fontSize: hp(2.6), color: '#fff', fontWeight: 'bold'}}>
-                11
+                {dt.format('MMMM')}
+              </Text>
+              <Text
+                style={{fontSize: hp(2.6), color: '#fff', fontWeight: 'bold'}}>
+                {dt.format('DD')}
               </Text>
               <Text
                 style={{
@@ -89,13 +93,13 @@ export default class Jounal extends React.PureComponent {
                   color: '#fff',
                   marginBottom: hp(7.7),
                 }}>
-                How do you feel today?
+                {R.locale.journal1}
               </Text>
               <Button
                 onPress={() => {
                   this.props.navigation.navigate('DailyLog');
                 }}
-                title="Create Story"
+                title={R.locale.story}
                 useForeground
                 titleStyle={{fontSize: hp(1.7)}}
                 containerStyle={{overflow: 'hidden', borderRadius: hp(2.6)}}
@@ -131,7 +135,7 @@ export default class Jounal extends React.PureComponent {
                 backgroundColor: R.colors.img,
               }}>
               <Text style={{fontSize: hp(2.1), color: '#fff'}}>
-                Track your progress
+                {R.locale.journal2}
               </Text>
             </ImageBackground>
           </View>
@@ -157,7 +161,7 @@ export default class Jounal extends React.PureComponent {
                 backgroundColor: R.colors.img,
               }}>
               <Text style={{fontSize: hp(2.1), color: '#fff'}}>
-                Your achievements
+                {R.locale.journal3}
               </Text>
             </ImageBackground>
           </View>

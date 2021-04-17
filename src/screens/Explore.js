@@ -83,7 +83,7 @@ const {premiumPurchased}=this.context.reduState
               borderRadius: hp(5.1),
               paddingHorizontal: wp(5.6),
             }}
-            placeholder="Search courses"
+            placeholder={R.locale.search}
             onChangeText={this.updateSearch}
             // onClear={this.updateSearch}
             value={search}

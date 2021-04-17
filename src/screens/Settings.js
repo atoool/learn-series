@@ -55,7 +55,7 @@ class Settings extends Component {
       // },
       {image: require(`../res/imgs/pencil.png`), title: R.locale.scp},
       // {image: require('../res/imgs/bell.png'), title: R.locale.Notification},
-      // {image: require(`../res/imgs/lang.png`), title: R.locale.lang},
+      {image: require(`../res/imgs/lang.png`), title: R.locale.lang},
       {image: require(`../res/imgs/privacy.png`), title: R.locale.spp},
       {image: require(`../res/imgs/terms.png`), title: R.locale.stu},
       {image: require(`../res/imgs/tellfriend.png`), title: R.locale.stf},
@@ -129,12 +129,14 @@ class Settings extends Component {
                         ? this.props.navigation.navigate('Privacy', {
                             type: 'settings',
                           })
-                        : item.title === R.locale.stu &&
-                          this.props.navigation.navigate('Terms', {
+                        : item.title === R.locale.stu
+                        ? this.props.navigation.navigate('Terms', {
                             type: 'settings',
+                          })
+                        : item.title === R.locale.lang &&
+                          this.props.navigation.navigate('Language', {
+                            nav: 'settings',
                           });
-                      // : item.title === R.locale.lang
-                      // ? this.props.navigation.navigate('Language')
                       // item.title === R.locale.Notification &&
                       //   this.state.notific === R.locale.on
                       // ? this.offNotific()

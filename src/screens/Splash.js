@@ -18,6 +18,7 @@ export default class Splash extends React.PureComponent {
     const initApp = await AsyncStorage.multiGet([
       '@ONBOARDING',
       'rateus',
+      'langSaw',
     ]).catch(e => {});
 
     if (initApp)
@@ -28,8 +29,9 @@ export default class Splash extends React.PureComponent {
           }, 3000);
   };
   redirect = initApp => {
-    if (initApp[0][1] == 'HIDE') this.props.navigation.replace('MainTab');
-    else this.props.navigation.replace('Onboarding');
+    if (!initApp[2][1]) this.props.navigation.replace('Language');
+    else if (!initApp[0][1]) this.props.navigation.replace('Onboarding');
+    else this.props.navigation.replace('MainTab');
 
     initApp[1][1] != null &&
       initApp[1][1] == '2nd' &&

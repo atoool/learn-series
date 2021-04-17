@@ -1,14 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Home from '../screens/Home';
 import Journal from '../screens/Journal';
 import Sleep from '../screens/Sleep';
 import Explore from '../screens/Explore';
-import {Icon} from 'react-native-elements';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Player from '../comp/Player';
 import PlanInfo from '../screens/PlanInfo';
-import {set} from 'react-native-reanimated';
 import ExploreList from '../screens/ExploreList';
 import ExploreFList from '../screens/ExploreFlist';
 import DailyLog from '../screens/DailyLog';
@@ -23,20 +20,14 @@ import Privacy from '../screens/Privacy';
 import {
   createStackNavigator,
   CardStyleInterpolators,
-  TransitionPresets,
 } from '@react-navigation/stack';
-import {useRoute} from '@react-navigation/native';
 import R from '../res/R';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import SignIn from '../screens/SignIn';
 
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
-  const route = useRoute();
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="Home" component={Home} />
@@ -255,7 +246,6 @@ const Tab = createMaterialBottomTabNavigator();
 const MainNavigator = () => {
   const [hideTab, setHide] = useState(false);
   const [focused, setfocus] = useState(true);
-  const route = useRoute();
 
   useEffect(() => {
     focused &&
@@ -284,6 +274,7 @@ const MainNavigator = () => {
           route.state?.index === 1 && setHide(true);
         }}
         options={{
+          tabBarLabel: R.locale.home,
           tabBarIcon: ({color}) => (
             <FontAwesome5Icon name="home" color={color} size={hp(3)} />
           ),
@@ -298,6 +289,7 @@ const MainNavigator = () => {
           route.state?.index === 1 && setHide(true);
         }}
         options={{
+          tabBarLabel: R.locale.explore,
           tabBarIcon: ({color}) => (
             <FontAwesome5Icon name="search" color={color} size={hp(2.6)} />
           ),
@@ -341,6 +333,7 @@ const MainNavigator = () => {
           route.state?.index === 1 && setHide(true);
         }}
         options={{
+          tabBarLabel: R.locale.journal,
           tabBarIcon: ({color}) => (
             <FontAwesome5Icon name="book" color={color} size={hp(2.6)} />
           ),
@@ -355,6 +348,7 @@ const MainNavigator = () => {
           route.state?.index === 1 && setHide(true);
         }}
         options={{
+          tabBarLabel: R.locale.settings,
           tabBarIcon: ({color}) => (
             <FontAwesome5Icon name="cog" color={color} size={hp(2.6)} />
           ),

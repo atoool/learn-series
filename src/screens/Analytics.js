@@ -4,7 +4,7 @@ import {View} from 'react-native';
 
 export default class Analytics extends React.PureComponent {
   state = {};
-  responses = async (url) => {
+  responses = async url => {
     if (url.indexOf('goback') > -1) this.props.navigation.goBack();
     else if (url.indexOf('/premium') > -1)
       this.props.navigation.navigate('Premium');
@@ -15,14 +15,16 @@ export default class Analytics extends React.PureComponent {
     return (
       <View style={{backgroundColor: '#dfc4fc', flex: 1}}>
         <WebView
-          ref={(r) => (this.webview = r)}
+          ref={r => (this.webview = r)}
           style={{flex: 1}}
           source={{
             uri:
-              'file:///android_asset/onboarding/analytics.html?lang=en&appname=keto.weightloss.diet.plan&data=1',
+              'file:///android_asset/onboarding/analytics.html?lang=&appname=keto.weightloss.diet.plan&data=1',
           }}
-          onShouldStartLoadWithRequest={(res) => {
-            if (res.url === 'https:///tech/') return false;
+          onShouldStartLoadWithRequest={res => {
+            if (res.url.indexOf('/tech') > -1) {
+              return false;
+            }
             this.responses(res.url);
             return true;
           }}

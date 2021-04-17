@@ -48,7 +48,7 @@ export default class Home extends React.PureComponent {
         const {explore} = this.context.reduState;
         let data = null;
         explore &&
-          (data = explore.filter((f) => f.name == notific?.data?.course));
+          (data = explore.filter(f => f.name == notific?.data?.course));
         data &&
           data.length != 0 &&
           this.props.navigation.navigate('Plan', {
@@ -76,17 +76,17 @@ export default class Home extends React.PureComponent {
       return <Loading load={this} />;
     return (
       <Animated.ScrollView
-        ref={(re) => (this.scrollRef = re)}
+        ref={re => (this.scrollRef = re)}
         showsVerticalScrollIndicator={false}
         style={styles.constainer}
         contentContainerStyle={styles.cContainer}>
         <HomePlayer
-          ref={(re) => (this.player = re)}
+          ref={re => (this.player = re)}
           vidData={reduState.mainVideo}
           that={this}
         />
         <View style={styles.cardView}>
-          <HeadText title="Ready?" caption={`Keep learning piano lessons`} />
+          <HeadText title={R.locale.ready} caption={R.locale.caption} />
           <View style={{paddingHorizontal: wp(5.6), width: '100%'}}>
             <TouchableNativeFeedback
               onPress={() => {
@@ -124,7 +124,7 @@ export default class Home extends React.PureComponent {
         </View>
 
         <View style={styles.cardView}>
-          <HeadText title="My courses" />
+          <HeadText title={R.locale.myCourse} />
           {reduState.myCourse.map((itm, key) => (
             <View key={key}>
               <SimpleList data={itm} type="home" />
@@ -133,7 +133,7 @@ export default class Home extends React.PureComponent {
         </View>
 
         <View style={styles.cardView}>
-          <HeadText title="Recommended for you" />
+          <HeadText title={R.locale.recom} />
           <ListData data={reduState.recomPlan} type="home" />
         </View>
 
