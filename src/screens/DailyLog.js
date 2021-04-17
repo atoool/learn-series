@@ -2,9 +2,11 @@ import React from 'react';
 import WebView from 'react-native-webview';
 import {Signup} from '../func/FirebaseAuth';
 import AsyncStorage from '@react-native-community/async-storage';
+import {ContextStates} from '../func/ContextStates';
+import {StyleSheet} from 'react-native';
 
 export default class DailyLog extends React.PureComponent {
-  state = {};
+  static contextType = ContextStates;
   responses = async url => {
     if (url.indexOf('/signUpFbase/') > -1) {
       let u = url.substring(url.indexOf('%'));
@@ -13,10 +15,10 @@ export default class DailyLog extends React.PureComponent {
       let success = await Signup(j.email, j.pwd);
       success
         ? this.webview.injectJavaScript(
-            "javascript:signUpCallback('" + true + "','')",
+            `javascript:signUpCallback('${true}','')`,
           )
         : this.webview.injectJavaScript(
-            "javascript:signUpCallback('" + false + "','')",
+            `javascript:signUpCallback('${false}','')`,
           );
       await AsyncStorage.setItem('username', j.username).catch(e => {});
       return false;
@@ -26,14 +28,14 @@ export default class DailyLog extends React.PureComponent {
     }
   };
   render() {
+    const {lang} = this.context.reduState;
     return (
       <>
         <WebView
           ref={r => (this.webview = r)}
-          style={{flex: 1}}
+          style={styles.webview}
           source={{
-            uri:
-              'file:///android_asset/onboarding/dailyLog.html?lang=en&appname=keto.weightloss.diet.plan',
+            uri: `file:///android_asset/onboarding/dailyLog.html?lang=${lang}&appname=keto.weightloss.diet.plan`,
           }}
           onShouldStartLoadWithRequest={res => {
             if (res.url.indexOf('/tech') > -1) {
@@ -47,3 +49,6 @@ export default class DailyLog extends React.PureComponent {
     );
   }
 }
+const styles = StyleSheet.create({
+  webview: {flex: 1},
+});

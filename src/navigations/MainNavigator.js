@@ -1,13 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import Home from '../screens/Home';
 import Journal from '../screens/Journal';
-import Sleep from '../screens/Sleep';
 import Explore from '../screens/Explore';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Player from '../comp/Player';
 import PlanInfo from '../screens/PlanInfo';
-import ExploreList from '../screens/ExploreList';
-import ExploreFList from '../screens/ExploreFlist';
 import DailyLog from '../screens/DailyLog';
 import Analytics from '../screens/Analytics';
 import Rewards from '../screens/Rewards';
@@ -24,6 +21,7 @@ import {
 import R from '../res/R';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import SignIn from '../screens/SignIn';
+import {StyleSheet} from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -85,73 +83,10 @@ const ExploreStack = () => {
         }}
       />
       <Stack.Screen
-        name="ExploreList"
-        component={ExploreList}
-        options={{
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}
-      />
-      <Stack.Screen
-        name="ExploreFList"
-        component={ExploreFList}
-        initialParams={{type: 'explore'}}
-        options={{
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}
-      />
-      <Stack.Screen
         name="Premium"
         component={Premium}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-        }}
-      />
-    </Stack.Navigator>
-  );
-};
-
-const SleepStack = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Sleep"
-        component={Sleep}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="Plan"
-        component={PlanInfo}
-        initialParams={{type: 'sleep'}}
-        options={{
-          headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}
-      />
-      <Stack.Screen
-        name="Player"
-        component={Player}
-        options={{
-          headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}
-      />
-      {/* <Stack.Screen
-        name="ExploreList"
-        component={ExploreList}
-        options={{
-          headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}
-      /> */}
-      <Stack.Screen
-        name="ExploreFList"
-        initialParams={{type: 'sleep'}}
-        component={ExploreFList}
-        options={{
-          headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
       />
     </Stack.Navigator>
@@ -259,11 +194,7 @@ const MainNavigator = () => {
       sceneAnimationEnabled={false}
       activeColor={R.colors.primary}
       inactiveColor="darkgrey"
-      barStyle={
-        hideTab
-          ? {opacity: 0, height: 0, backgroundColor: R.colors.background}
-          : {backgroundColor: R.colors.background, elevation: 10}
-      }
+      barStyle={hideTab ? styles.hide : styles.show}
       backBehavior="initialRoute">
       <Tab.Screen
         name="Home"
@@ -358,3 +289,8 @@ const MainNavigator = () => {
   );
 };
 export default MainNavigator;
+
+const styles = StyleSheet.create({
+  hide: {opacity: 0, height: 0, backgroundColor: R.colors.background},
+  show: {backgroundColor: R.colors.background, elevation: 10},
+});

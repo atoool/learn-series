@@ -17,12 +17,10 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import YoutubeIframe, {getYoutubeMeta} from 'react-native-youtube-iframe';
-import Loading from '../Loading';
 import {useFocusEffect} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 import Gradient from 'react-native-linear-gradient';
 import * as Animatable from 'react-native-animatable';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {ContextStates} from '../../func/ContextStates';
 import {
   widthPercentageToDP as wp,
@@ -34,7 +32,6 @@ const {width, height} = Dimensions.get('window');
 // const vids = ['2dc7GuiQP0A', 'nP-i7AlROK4', '8iJ_gxjDuHM', 'JAX1cESZnFA'];
 export const HomePlayer = forwardRef(({that, vidData}, ref) => {
   let view = createRef(null);
-  let timeout = createRef(null);
   const context = useContext(ContextStates);
   const [playing, setPlay] = useState(false);
   const [thumb, setThumb] = useState('');
@@ -46,9 +43,12 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
   useFocusEffect(() => {
     AppState.addEventListener('change', c => (appState.current = c));
     if (vidData != null) {
-      getYoutubeMeta(vidData[0]?.video).then(meta => {
-        setThumb(meta.thumbnail_url);
-      });
+      const mount = async () => {
+        await getYoutubeMeta(vidData[0]?.video).then(meta => {
+          setThumb(meta.thumbnail_url);
+        });
+      };
+      mount();
     }
     return () => {
       view.current && onPause();
@@ -65,23 +65,23 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
     setPlay(false);
     view.current.zoomIn(600);
   };
-  appState.current == 'background' && view.current && onPause();
+  appState.current === 'background' && view.current && onPause();
   useImperativeHandle(ref, () => ({
     playerPause() {
       onPause();
     },
   }));
-  if (vidData == null) return <View />;
+  if (vidData == null) {
+    return <View />;
+  }
   return (
-    <View key={context.connected} style={styles.constainer}>
-      {/* {vids.map((vid, i) => ( */}
+    <View key={context.connected} style={styles.container}>
       <View style={styles.youtube}>
         <YoutubeIframe
           key={index}
-          playList={videos}
+          videoId={videos[index]}
           play={playing}
           height={'100%'}
-          playListStartIndex={index}
           forceAndroidAutoplay={true}
           initialPlayerParams={{
             rel: false,
@@ -93,37 +93,23 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
             containerStyle: {backgroundColor: '#000'},
           }}
           width={'auto'}
-          onReady={() => {
-            // view.current && playing == false ? onPlay() : onPause();
-          }}
           onChangeState={e => {
             if (e === 'ended') {
-              if (videos.length - 1 == index) {
+              if (videos.length - 1 === index) {
                 setIndex(1);
                 setIndex(0);
-              } else setIndex(index + 1);
+              } else {
+                setIndex(index + 1);
+              }
 
               setBuff(true);
             }
-            // else if (e === 'buffering') {
-            //   clearTimeout(timeout);
-            //   timeout.current = setTimeout(() => {
-            //     if (buff) {
-            //       onPause();
-            //     }
-            //   }, 5000);
-            // }
             e === 'playing' && setBuff(false);
           }}
         />
-        {!playing && buff && (
+        {!playing && buff && thumb !== '' && (
           <ImageBackground
-            style={{
-              position: 'absolute',
-              width,
-              height: hp(26.9),
-              backgroundColor: '#fff',
-            }}
+            style={styles.thumb}
             source={{
               cache: 'force-cache',
               uri: thumb,
@@ -131,15 +117,7 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
           />
         )}
         {playing && buff && (
-          <View
-            style={{
-              backgroundColor: '#000',
-              height: hp(28.2),
-              width,
-              justifyContent: 'center',
-              alignItems: 'center',
-              position: 'absolute',
-            }}>
+          <View style={styles.lottieBox}>
             <LottieView
               source={require('../../res/imgs/buffer.json')}
               loop
@@ -162,9 +140,7 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
               start={{x: 0, y: 0}}
               end={{x: 0, y: 1}}
               style={styles.contentContainer}>
-              {/* <Text style={styles.subHead}></Text> */}
-
-              <Animatable.View style={{alignItems: 'center'}} ref={view}>
+              <Animatable.View style={styles.animBox} ref={view}>
                 <Text style={styles.head}>{vidData[0].title}</Text>
                 <Text style={styles.subHead}>
                   {vidData[0].desc.substr(0, 50)}...
@@ -182,13 +158,12 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
           </View>
         </TouchableWithoutFeedback>
       </View>
-      {/* ))} */}
     </View>
   );
 });
 
 const styles = StyleSheet.create({
-  constainer: {
+  container: {
     height: hp(28.2),
     width: '100%',
     overflow: 'hidden',
@@ -238,4 +213,19 @@ const styles = StyleSheet.create({
     paddingLeft: wp(2.8),
     borderRadius: hp(2.6),
   },
+  thumb: {
+    position: 'absolute',
+    width,
+    height: hp(26.9),
+    backgroundColor: '#fff',
+  },
+  lottieBox: {
+    backgroundColor: '#000',
+    height: hp(28.2),
+    width,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+  },
+  animBox: {alignItems: 'center'},
 });

@@ -1,39 +1,27 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import Axios from 'axios';
-import {isEqual} from 'lodash';
 import R from '../res/R';
 
-export const fetchData = async type => {
+export const api = async (type, lang) => {
+  const data = await Axios.get(
+    `${R.strings.api}${type}&appname=${R.strings.bundleId}${
+      !lang || lang === 'en' ? '' : `_${lang}`
+    }`,
+  ).catch(e => {});
+  await AsyncStorage.setItem(type, JSON.stringify(data.data)).catch(e => {});
+  return data.data;
+};
+
+export const fetchData = async (type, lang) => {
   let data = null;
-  let newData = null;
-  const json = await AsyncStorage.multiGet([type, 'lang']).catch(e => {});
-  if (json[0][1]) {
-    data = JSON.parse(json[0][1]);
-  }
-  if (data == null) {
-    newData = await Axios.get(
-      `${R.strings.api}${type}&appname=${R.strings.bundleId}${
-        json[1][1] === 'en' ? '' : `_${json[1][1]}`
-      }`,
-    ).catch(e => {});
-    data = newData.data;
-    await AsyncStorage.setItem(type, JSON.stringify(newData.data)).catch(
-      e => {},
-    );
-  } else {
+  const json = await AsyncStorage.getItem(type).catch(e => {});
+  if (json) {
+    data = JSON.parse(json);
     setTimeout(async () => {
-      newData = await Axios.get(
-        `${R.strings.api}${type}&appname=${R.strings.bundleId}${
-          json[1][1] === 'en' ? '' : `_${json[1][1]}`
-        }`,
-      ).catch(e => {});
-      if (newData?.data && !isEqual(data, newData?.data)) {
-        data = newData?.data;
-        await AsyncStorage.setItem(type, JSON.stringify(newData?.data)).catch(
-          e => {},
-        );
-      }
-    }, 200);
+      await api(type, lang);
+    }, 100);
+    return data;
+  } else {
+    return await api(type, lang);
   }
-  return data;
 };

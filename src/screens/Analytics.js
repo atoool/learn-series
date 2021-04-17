@@ -1,25 +1,30 @@
 import React from 'react';
 import WebView from 'react-native-webview';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
+import {ContextStates} from '../func/ContextStates';
 
 export default class Analytics extends React.PureComponent {
-  state = {};
+  static contextType = ContextStates;
+  state = {lang: 'en'};
+
   responses = async url => {
-    if (url.indexOf('goback') > -1) this.props.navigation.goBack();
-    else if (url.indexOf('/premium') > -1)
+    if (url.indexOf('goback') > -1) {
+      this.props.navigation.goBack();
+    } else if (url.indexOf('/premium') > -1) {
       this.props.navigation.navigate('Premium');
-    else {
     }
   };
   render() {
+    const {lang} = this.context.reduState;
     return (
-      <View style={{backgroundColor: '#dfc4fc', flex: 1}}>
+      <View style={styles.container}>
         <WebView
           ref={r => (this.webview = r)}
-          style={{flex: 1}}
+          style={styles.webView}
           source={{
-            uri:
-              'file:///android_asset/onboarding/analytics.html?lang=&appname=keto.weightloss.diet.plan&data=1',
+            uri: `file:///android_asset/onboarding/analytics.html?lang=${
+              lang ? lang : 'en'
+            }&appname=keto.weightloss.diet.plan&data=1`,
           }}
           onShouldStartLoadWithRequest={res => {
             if (res.url.indexOf('/tech') > -1) {
@@ -33,3 +38,8 @@ export default class Analytics extends React.PureComponent {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {backgroundColor: '#dfc4fc', flex: 1},
+  webView: {flex: 1},
+});

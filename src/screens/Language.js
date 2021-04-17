@@ -5,14 +5,15 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  StatusBar,
-  ToastAndroid,
-  ActivityIndicator,
 } from 'react-native';
 import R from '../res/R';
 import RadioForm from 'react-native-simple-radio-button';
 import AsyncStorage from '@react-native-community/async-storage';
 import RNRestart from 'react-native-restart';
+import {api} from '../func/ApiCalls';
+import {ToastAndroid} from 'react-native';
+import Loading from '../comp/Loading';
+import {StyleSheet} from 'react-native';
 
 const res = {
   languages: [
@@ -67,96 +68,48 @@ export default class Language extends React.PureComponent {
   };
 
   setLanguage = async () => {
-    await AsyncStorage.setItem('lang', this.state.lang)
-      .then(() => {
-        if (this.props.route?.params?.nav === 'settings') {
-          this.props.navigation.pop();
-          RNRestart.Restart();
-        } else {
-          this.props.navigation.navigate('Onboarding');
-        }
-      })
-      .catch(e => {});
-    await AsyncStorage.setItem('langSaw', 'yes').catch(e => {});
+    this.setState({loading: true});
+    const {lang} = this.state;
+    try {
+      await AsyncStorage.multiSet([['lang', lang], ['langSaw', 'yes']]);
+      await Promise.all([api('home', lang), api('explore', lang)]);
+      RNRestart.Restart();
+    } catch (e) {
+      ToastAndroid.show(R.strings.error, ToastAndroid.SHORT);
+      this.setState({loading: false});
+    }
   };
   render() {
+    const {loading} = this.state;
+    if (loading) {
+      return <Loading load={this} />;
+    }
     return (
-      <SafeAreaView style={{flex: 1, margin: 40, marginTop: 70}}>
-        {/* <StatusBar hidden={true} /> */}
-        <Text
-          style={{fontFamily: R.fonts.text, fontWeight: 'bold', fontSize: 30}}>
-          Change
-        </Text>
-        <Text
-          style={{
-            fontFamily: R.fonts.text,
-            fontWeight: 'bold',
-            fontSize: 30,
-            marginBottom: 40,
-          }}>
-          Language
-        </Text>
-        <ScrollView style={{marginBottom: 90}}>
-          {this.state.loading ? (
-            <View style={{justifyContent: 'center'}}>
-              <ActivityIndicator
-                color={R.colors.primary}
-                style={{alignSelf: 'center'}}
-              />
-            </View>
-          ) : (
-            <RadioForm
-              ref={re => (this.radioForm = re)}
-              radio_props={this.state.radio_props}
-              initial={0}
-              animation={true}
-              labelColor={'grey'}
-              labelStyle={{
-                fontFamily: R.fonts.text,
-                fontSize: 20,
-                height: 50,
-                justifyContent: 'center',
-                paddingVertical: 7,
-              }}
-              style={{justifyContent: 'center'}}
-              buttonColor={'grey'}
-              selectedButtonColor={R.colors.primary}
-              onPress={value => {
-                this.setState({lang: value});
-              }}
-            />
-          )}
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.title}>{'Change \nLanguage'}</Text>
+        <ScrollView style={styles.scroll}>
+          <RadioForm
+            ref={re => (this.radioForm = re)}
+            radio_props={this.state.radio_props}
+            initial={0}
+            animation={true}
+            labelColor={'grey'}
+            labelStyle={styles.radioLabel}
+            style={styles.radio}
+            buttonColor={'grey'}
+            selectedButtonColor={R.colors.primary}
+            onPress={value => {
+              this.setState({lang: value});
+            }}
+          />
         </ScrollView>
-        <View
-          style={{
-            height: 70,
-            position: 'absolute',
-            bottom: 0,
-            width: '100%',
-            alignItems: 'center',
-          }}>
+        <View style={styles.buttonBox}>
           <TouchableOpacity
             onPress={() => {
               this.setLanguage();
             }}>
-            <View
-              style={{
-                borderWidth: 0.25,
-                borderColor: 'lightgrey',
-                borderRadius: 16,
-                width: 150,
-                height: 60,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  fontFamily: R.fonts.text,
-                  fontSize: 15,
-                  color: R.colors.primary,
-                }}>
-                Set language
-              </Text>
+            <View style={styles.buttonSubBox}>
+              <Text style={styles.buttonText}>Set language</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -164,3 +117,50 @@ export default class Language extends React.PureComponent {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {flex: 1, margin: 40, marginTop: 70},
+  title: {
+    fontFamily: R.fonts.text,
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginBottom: 40,
+  },
+  scroll: {marginBottom: 90},
+  radioLabel: {
+    fontFamily: R.fonts.text,
+    fontSize: 20,
+    height: 50,
+    justifyContent: 'center',
+    paddingVertical: 7,
+  },
+  buttonLabel: {
+    height: 70,
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    alignItems: 'center',
+  },
+  radio: {justifyContent: 'center'},
+  buttonSubBox: {
+    borderWidth: 0.25,
+    borderColor: 'lightgrey',
+    borderRadius: 16,
+    width: 150,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontFamily: R.fonts.text,
+    fontSize: 15,
+    color: R.colors.primary,
+  },
+  buttonBox: {
+    height: 70,
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    alignItems: 'center',
+  },
+});

@@ -1,23 +1,14 @@
 import React from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   ImageBackground,
-  Image,
-  FlatList,
   StatusBar,
   TouchableNativeFeedback,
-  AppState,
 } from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {HomePlayer} from '../comp/Home/HomePlayer';
 import {HeadText} from '../comp/Home/HeadText';
-import {SmallCard} from '../comp/SmallCard';
 import {LockedText} from '../comp/LockedText';
-import Canvas from 'react-native-canvas';
-import WebView from 'react-native-webview';
-import {Icon} from 'react-native-elements';
 import {ListData} from '../comp/ListData';
 import {SimpleList} from '../comp/SimpleList';
 import {ContextStates} from '../func/ContextStates';
@@ -43,25 +34,27 @@ export default class Home extends React.PureComponent {
 
   onNotification = () => {
     const {notific} = this.context;
-    if (notific)
+    if (notific) {
       if (notific?.data && notific?.data?.course) {
         const {explore} = this.context.reduState;
         let data = null;
         explore &&
-          (data = explore.filter(f => f.name == notific?.data?.course));
+          (data = explore.filter(f => f.name === notific?.data?.course));
         data &&
-          data.length != 0 &&
+          data.length !== 0 &&
           this.props.navigation.navigate('Plan', {
             data: data[0],
             type: 'explore',
           });
-      } else
+      } else {
         setTimeout(() => {
           notific.message &&
             notific.message === 'Scheduled' &&
             this.scrollRef &&
             this.scrollRef?.getNode()?.scrollTo({x: 0, y: 100, animated: true});
         }, 2000);
+      }
+    }
   };
 
   componentWillUnmount() {
@@ -70,15 +63,15 @@ export default class Home extends React.PureComponent {
 
   render() {
     const {reduState} = this.context;
-    const {params} = this.props.route;
 
-    if (reduState.myCourse == null || reduState.mainVideo == null)
+    if (reduState.myCourse == null || reduState.mainVideo == null) {
       return <Loading load={this} />;
+    }
     return (
       <Animated.ScrollView
         ref={re => (this.scrollRef = re)}
         showsVerticalScrollIndicator={false}
-        style={styles.constainer}
+        style={styles.container}
         contentContainerStyle={styles.cContainer}>
         <HomePlayer
           ref={re => (this.player = re)}
@@ -87,7 +80,7 @@ export default class Home extends React.PureComponent {
         />
         <View style={styles.cardView}>
           <HeadText title={R.locale.ready} caption={R.locale.caption} />
-          <View style={{paddingHorizontal: wp(5.6), width: '100%'}}>
+          <View style={styles.cardTouchView}>
             <TouchableNativeFeedback
               onPress={() => {
                 const data = reduState.myCourse[0];
@@ -96,9 +89,9 @@ export default class Home extends React.PureComponent {
                   type: 'home',
                 });
               }}
-              style={{width: '100%', height: '100%'}}
+              style={styles.cardTouch}
               useForeground>
-              <View style={{borderRadius: hp(1.3), overflow: 'hidden'}}>
+              <View style={styles.touchBox}>
                 <ImageBackground
                   style={[styles.card]}
                   source={{
@@ -144,7 +137,7 @@ export default class Home extends React.PureComponent {
 }
 
 const styles = StyleSheet.create({
-  constainer: {backgroundColor: R.colors.background, flex: 1},
+  container: {backgroundColor: R.colors.background, flex: 1},
   cContainer: {paddingBottom: hp(2.6)},
   cardView: {
     width: '100%',
@@ -178,4 +171,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: hp(0.2),
   },
+  cardTouchView: {paddingHorizontal: wp(5.6), width: '100%'},
+  cardTouch: {width: '100%', height: '100%'},
+  touchBox: {borderRadius: hp(1.3), overflow: 'hidden'},
 });
