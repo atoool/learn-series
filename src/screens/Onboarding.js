@@ -43,28 +43,7 @@ export default class Onboarding extends PureComponent {
 
   _onNavigationStateChange = async a => {
     let url = a.url;
-
-    // if (url.indexOf('/tech') > -1) return false;
-    if (url.indexOf('/vibrate') > -1) {
-      // console.warn('inside refresh');
-      // this.webview.stopLoading();
-      this.webview.injectJavaScript(
-        `javascript:setIAPValues('monthly',"${
-          this.context?.reduState?.prices[2]
-        }")`,
-      );
-      this.webview.injectJavaScript(
-        `javascript:setIAPValues('6month',"${
-          this.context?.reduState?.prices[1]
-        }")`,
-      );
-      this.webview.injectJavaScript(
-        `javascript:setIAPValues('lifetime',"${
-          this.context?.reduState?.prices[0]
-        }"||"${this.context?.reduState?.prices[0]}000000")`,
-      );
-      return false;
-    } else if (url.indexOf('http://riafy.me/onboarding/') > -1) {
+    if (url.indexOf('http://riafy.me/onboarding/') > -1) {
       let jsonURL = JSON.parse(
         decodeURI(url.split('http://riafy.me/onboarding/')[1]),
       );
@@ -167,6 +146,14 @@ export default class Onboarding extends PureComponent {
   };
 
   render() {
+    const inject = `javascript:setIAPValues('monthly',"${
+      this.context?.reduState?.prices[2]
+    }");javascript:setIAPValues('6month',"${
+      this.context?.reduState?.prices[1]
+    }");javascript:setIAPValues('lifetime',"${
+      this.context?.reduState?.prices[0]
+    }"||"${this.context?.reduState?.prices[0]}000000")`;
+
     if (
       this.state.purchasedPremium === 'yup' ||
       this.state.purchasedPremium === 'success'
@@ -202,9 +189,12 @@ export default class Onboarding extends PureComponent {
           allowsBackForwardNavigationGestures={true}
           originWhitelist={['*']}
           javaScriptEnabled
+          injectedJavaScript={inject}
           domStorageEnabled
           onShouldStartLoadWithRequest={a => {
-            if (a.url.indexOf('/tech') > -1) return false;
+            if (a.url.indexOf('/tech') > -1 || a.url.indexOf('/vibrate') > -1) {
+              return false;
+            }
             this._onNavigationStateChange(a);
             return true;
           }}

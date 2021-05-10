@@ -8,6 +8,6 @@
         <domain includeSubdomains="true">cookbookrecipes.in</domain>
         <domain includeSubdomains="true">cookbook.ai</domain>
         <domain includeSubdomains="true">herokuapp.com</domain>
-        <domain includeSubdomains="true">192.168.10.2</domain>
+        <domain includeSubdomains="true">192.168.10.8</domain>
     </domain-config>
 </network-security-config>
