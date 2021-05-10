@@ -1,6 +1,5 @@
 import React, {PureComponent} from 'react';
 import {
-  SafeAreaView,
   ScrollView,
   ActivityIndicator,
   RefreshControl,
@@ -8,12 +7,9 @@ import {
 } from 'react-native';
 import R from '../res/R';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
-
+import {StyleSheet} from 'react-native';
 export default class Loading extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {refresh: false};
-  }
+  state = {refresh: false};
 
   onRefresh = () => {
     this.setState({refresh: true});
@@ -24,19 +20,9 @@ export default class Loading extends PureComponent {
   };
   render() {
     return (
-      <View
-        style={{
-          position: 'absolute',
-          height: '100%',
-          width: '100%',
-          backgroundColor: R.colors.background,
-        }}>
+      <View style={styles.container}>
         <ScrollView
-          contentContainerStyle={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
+          contentContainerStyle={styles.scroll}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refresh}
@@ -56,3 +42,17 @@ export default class Loading extends PureComponent {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    backgroundColor: R.colors.background,
+  },
+  scroll: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

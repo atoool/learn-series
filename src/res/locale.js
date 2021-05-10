@@ -90,6 +90,7 @@ let locale = new LocalizedStrings({
     explore: 'Explore',
     journal: 'Journal',
     settings: 'Settings',
+    error: 'Something went wrong! try again later',
   },
 });
 // console.warn(jsonLang);
