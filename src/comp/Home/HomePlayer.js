@@ -5,6 +5,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useRef,
+  useCallback,
 } from 'react';
 import {
   StyleSheet,
@@ -16,7 +17,7 @@ import {
   AppState,
 } from 'react-native';
 import {Button} from 'react-native-elements';
-import YoutubeIframe, {getYoutubeMeta} from 'react-native-youtube-iframe';
+import YoutubeIframe from 'react-native-youtube-iframe';
 import {useFocusEffect} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 import Gradient from 'react-native-linear-gradient';
@@ -29,32 +30,25 @@ import {
 import R from '../../res/R';
 
 const {width, height} = Dimensions.get('window');
-// const vids = ['2dc7GuiQP0A', 'nP-i7AlROK4', '8iJ_gxjDuHM', 'JAX1cESZnFA'];
+
 export const HomePlayer = forwardRef(({that, vidData}, ref) => {
   let view = createRef(null);
   const context = useContext(ContextStates);
   const [playing, setPlay] = useState(false);
-  const [thumb, setThumb] = useState('');
   const [buff, setBuff] = useState(true);
   const [index, setIndex] = useState(0);
-  const videos = [];
   let appState = useRef(AppState.currentState);
-  vidData.map(v => videos.push(v.video));
-  useFocusEffect(() => {
-    AppState.addEventListener('change', c => (appState.current = c));
-    if (vidData != null) {
-      const mount = async () => {
-        await getYoutubeMeta(vidData[0]?.video).then(meta => {
-          setThumb(meta.thumbnail_url);
-        });
+
+  useFocusEffect(
+    useCallback(() => {
+      AppState.addEventListener('change', c => (appState.current = c));
+      return () => {
+        view.current && onPause();
+        AppState.removeEventListener('change', c => (appState.current = c));
       };
-      mount();
-    }
-    return () => {
-      view.current && onPause();
-      AppState.removeEventListener('change', c => (appState.current = c));
-    };
-  }, []);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
+  );
 
   const onPlay = () => {
     view.current
@@ -74,6 +68,8 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
   if (vidData == null) {
     return <View />;
   }
+  const videos = vidData?.map(i => i?.video);
+
   return (
     <View key={context.connected} style={styles.container}>
       <View style={styles.youtube}>
@@ -107,12 +103,12 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
             e === 'playing' && setBuff(false);
           }}
         />
-        {!playing && buff && thumb !== '' && (
+        {!playing && buff && vidData && (
           <ImageBackground
             style={styles.thumb}
             source={{
               cache: 'force-cache',
-              uri: thumb,
+              uri: vidData[index].thumbnailUrl,
             }}
           />
         )}
@@ -143,7 +139,7 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
               <Animatable.View style={styles.animBox} ref={view}>
                 <Text style={styles.head}>{vidData[0].title}</Text>
                 <Text style={styles.subHead}>
-                  {vidData[0].desc.substr(0, 50)}...
+                  {vidData[0].description.substr(0, 50)}...
                 </Text>
                 <Button
                   title={R.locale.watch}

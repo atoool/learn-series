@@ -429,19 +429,6 @@ export default class PlanInfo extends React.Component {
               </Collapse>
             ))}
           </View>
-          {/* <View style={styles.list}>
-            <HeadText title="Techniques" type={this.props.route.params?.type} />
-            <SimpleList
-              type={this.props.route.params?.type}
-              title={'title'}
-              image={''}
-            />
-            <SimpleList
-              type={this.props.route.params?.type}
-              title={'title'}
-              image={''}
-            />
-          </View> */}
           <View style={styles.list}>
             <HeadText title={R.locale.related} type={params?.type} />
 

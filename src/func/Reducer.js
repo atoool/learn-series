@@ -3,7 +3,15 @@ import {fetchData} from './ApiCalls';
 import {Platform} from 'react-native';
 import {checkPurchased, showPrice} from '../comp/PremiumCheckFun';
 import {GoogleSignin} from '@react-native-community/google-signin';
-// import RNFS from 'react-native-fs';
+
+export function getRandomArray(orgArray) {
+  var arr = [];
+  while (arr.length < 4) {
+    var r = Math.floor(Math.random() * orgArray.length);
+    arr.push(orgArray[r]);
+  }
+  return arr;
+}
 
 export async function IAPCall() {
   let htmlPath = '';
@@ -51,33 +59,29 @@ export async function onSignedIn() {
 export async function init(state) {
   const IAP = await IAPCall();
   const local = await AsyncStorage.multiGet(['session', 'sleepSess']);
-  const home = await fetchData('home', IAP[3]);
-  const explore = await fetchData('explore', IAP[3]);
+  const data = await fetchData(IAP[3]);
+  const home = data?.home;
+  const explore = home;
   const mainP = local[0][1] ? JSON.parse(local[0][1]) : null;
 
   const isSignedIn = await onSignedIn();
   let myC = [];
   mainP &&
     mainP.map(
-      m => (myC = [...myC, ...explore.plans.filter(t => t.name === m.plan)]),
+      m => (myC = [...myC, ...explore?.plans?.filter(t => t.name === m.plan)]),
     );
-  const myCourse = myC.length === 0 ? home.mainPlan : myC;
+
+  const mainPlan = [home?.plans[0]];
+  const myCourse = myC.length === 0 ? mainPlan : myC;
+  const recomPlan = getRandomArray(explore.plans);
+  const mainVideo = home?.heroes.map(o => o?.chapters[0]);
   return {
     ...state,
-    session: mainP
-      ? mainP
-      : [{plan: home.mainPlan[0].name, lesson: 1, chapter: 1}],
-    mainPlan: home.mainPlan,
-    recomPlan: home.recommended,
-    mainVideo: home.mainVideo,
-    imgHome: home.images,
-    imgExplore: explore.images,
-    titHome: home.titles,
-    titExplore: home.titles,
-    desc: home.descriptions,
-    descHome: home.descriptions,
-    descExplore: explore.descriptions,
-    explore: explore.plans,
+    session: mainP ? mainP : [{plan: mainPlan[0].name, lesson: 1, chapter: 1}],
+    mainPlan,
+    recomPlan,
+    mainVideo,
+    explore: explore?.plans,
     videos: [],
     myCourse,
     rateUs: false,
@@ -103,17 +107,10 @@ async function session(val, state) {
   return {...state, myCourse, session: val};
 }
 
-async function sleepSess(val, state) {
-  await AsyncStorage.setItem('sleepSess', JSON.stringify(val)).catch(e => {});
-  return {...state, session: val};
-}
-
 export async function reducer(state, action) {
   switch (action.type) {
     case 'session':
       return await session(action.payload, state);
-    case 'sleepSess':
-      return await sleepSess(action.payload, state);
     case 'videos':
       return {...state, videos: action.payload};
     case 'rateus':

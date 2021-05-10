@@ -64,7 +64,7 @@ export default class Home extends React.PureComponent {
   render() {
     const {reduState} = this.context;
 
-    if (reduState.myCourse == null || reduState.mainVideo == null) {
+    if (reduState.myCourse === null || reduState.mainVideo === null) {
       return <Loading load={this} />;
     }
     return (
@@ -95,7 +95,7 @@ export default class Home extends React.PureComponent {
                 <ImageBackground
                   style={[styles.card]}
                   source={{
-                    uri: reduState.imgHome[reduState.myCourse[0].coverImage],
+                    uri: reduState.myCourse[0].coverImage,
                   }}>
                   <View style={styles.cardTextView}>
                     <LockedText

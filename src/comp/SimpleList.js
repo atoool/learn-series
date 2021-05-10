@@ -12,7 +12,6 @@ import {
 } from 'react-native-responsive-screen';
 
 export const SimpleList = ({data, type, playerPause}) => {
-  const context = useContext(ContextStates);
   const nav = useNavigation();
   return (
     <View style={styles.mainContainer}>
@@ -24,12 +23,7 @@ export const SimpleList = ({data, type, playerPause}) => {
         <View style={styles.container}>
           <Image
             source={{
-              uri:
-                type == 'home'
-                  ? context.reduState.imgHome[data.coverImage]
-                  : type == 'explore'
-                  ? context.reduState.imgExplore[data.coverImage]
-                  : context.reduState.imgSleep[data.coverImage],
+              uri: data.coverImage,
             }}
             style={styles.img}
           />
