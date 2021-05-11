@@ -11,10 +11,11 @@ import {
   AppState,
   SafeAreaView,
 } from 'react-native';
-import {Icon, Slider} from 'react-native-elements';
+import Slider from 'react-native-smooth-slider';
+import {Icon} from 'react-native-elements';
 import Orientation from 'react-native-orientation-locker';
 import LinearGradient from 'react-native-linear-gradient';
-import Swiper from 'react-native-swiper';
+import {SwiperFlatList} from 'react-native-swiper-flatlist';
 import {TouchableWithoutFeedback} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {ContextStates} from '../func/ContextStates';
@@ -24,7 +25,7 @@ import YoutubePlayer from 'react-native-youtube-iframe';
 import R from '../res/R';
 // import dgram from 'react-native-udp';
 
-const {height} = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
 
 function fmtMSS(s) {
   return (s - (s %= 60)) / 60 + (s > 9 ? ':' : ':0') + s;
@@ -42,7 +43,7 @@ export default class Player extends React.PureComponent {
       fullScreen: true,
       close: false,
       currentTime: 0,
-      totalTime: 0,
+      totalTime: 60,
       crntVideo: '',
       swipeIndex: 0,
       buffering: true,
@@ -70,7 +71,10 @@ export default class Player extends React.PureComponent {
     });
     setTimeout(() => {
       this.props.route.params.lesson !== lesson &&
-        this.refSwipe.scrollTo(this.props.route.params.chapter, true);
+        this.refSwipe.scrollToIndex({
+          index: this.props.route.params.chapter,
+          animated: true,
+        });
     }, 1000);
     AppState.addEventListener('change', state => {
       state === 'background' && this.setState({play: false});
@@ -180,7 +184,10 @@ export default class Player extends React.PureComponent {
     !ignore &&
       show === 'false' &&
       this.props.route.params.videos.length - 1 !== this.state.swipeIndex &&
-      this.refSwipe.scrollTo(this.state.swipeIndex + 1, true);
+      this.refSwipe.scrollToIndex({
+        index: this.state.swipeIndex + 1,
+        animated: true,
+      });
     show === 'true' && (await this.saveIndex());
   };
 
@@ -236,14 +243,13 @@ export default class Player extends React.PureComponent {
     return (
       <SafeAreaView
         style={{height: '100%', width: '100%', backgroundColor: '#000'}}>
-        <Swiper
+        <SwiperFlatList
+          index={0}
           ref={r => (this.refSwipe = r)}
-          showsButtons={false}
-          loop={false}
-          onIndexChanged={i => {
+          onMomentumScrollEnd={({index}) => {
             this.setState(
               {
-                swipeIndex: i,
+                swipeIndex: index,
                 play: true,
                 currentTime: 0,
                 buffering: true,
@@ -260,15 +266,9 @@ export default class Player extends React.PureComponent {
               setTimeout(() => {
                 this.triggerControls(true);
               }, 3000);
-          }}
-          showsPagination={false}>
+          }}>
           {videos.map((itm, i) => (
-            <View
-              key={i}
-              style={{
-                height: '100%',
-                width: '100%',
-              }}>
+            <View key={i} style={{width: height}}>
               {this.state.swipeIndex === i && (
                 <YoutubePlayer
                   key={this.state.swipeIndex}
@@ -293,11 +293,12 @@ export default class Player extends React.PureComponent {
                       this.interval = setInterval(async () => {
                         let totalTim =
                           ends === 0
-                            ? await this.playerRef.getDuration()
+                            ? await this.playerRef.getDuration().catch(() => {})
                             : ends;
 
                         totalTime = totalTim === 0 ? 60 : totalTim;
-                        const currentTime = await this.playerRef.getCurrentTime();
+                        const currentTime =
+                          await this.playerRef.getCurrentTime();
 
                         if (currentTime >= totalTime) {
                           this.setState(
@@ -424,14 +425,14 @@ export default class Player extends React.PureComponent {
                         <Slider
                           key={ind}
                           style={{width: 200}}
-                          value={this.state.currentTime}
-                          maximumValue={this.state.totalTime}
+                          value={this.state.currentTime / this.state.totalTime}
+                          maximumValue={1}
                           trackStyle={{
                             height: 7,
                             marginLeft: ind === 0 ? 0 : 10,
                             borderRadius: 10,
                           }}
-                          thumbTouchSize={{height: 0, width: 0}}
+                          thumbTouchSize={{height: 1, width: 1}}
                           thumbStyle={{height: 7, width: 7}}
                           minimumTrackTintColor="#fff"
                           maximumTrackTintColor="lightgrey"
@@ -520,8 +521,8 @@ export default class Player extends React.PureComponent {
                       </View>
                     </TouchableWithoutFeedback>
                     <Slider
-                      value={this.state.currentTime}
-                      maximumValue={this.state.totalTime}
+                      value={this.state.currentTime / this.state.totalTime}
+                      maximumValue={1}
                       style={{width: '85%'}}
                       thumbTintColor={R.colors.primary}
                       minimumTrackTintColor={R.colors.primary}
@@ -530,7 +531,8 @@ export default class Player extends React.PureComponent {
                       thumbStyle={{width: 14, height: 14}}
                       onValueChange={() => this.triggerControls(true)}
                       onSlidingComplete={val => {
-                        this.playerRef && this.playerRef.seekTo(val);
+                        const to = val * this.state.totalTime;
+                        this.playerRef && this.playerRef.seekTo(to);
                       }}
                     />
                     <Text
@@ -553,7 +555,7 @@ export default class Player extends React.PureComponent {
               </View>
             </View>
           ))}
-        </Swiper>
+        </SwiperFlatList>
         <Animated.View
           style={{
             position: 'absolute',
@@ -629,6 +631,9 @@ var styles = StyleSheet.create({
     bottom: 0,
     right: 0,
   },
+  container: {flex: 1, backgroundColor: 'white'},
+  child: {width, justifyContent: 'center'},
+  text: {fontSize: width * 0.5, textAlign: 'center'},
 });
 
 // position: absolute;

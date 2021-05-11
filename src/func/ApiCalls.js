@@ -4,9 +4,11 @@ import R from '../res/R';
 
 const key = 'appData';
 export const api = async lang => {
-  const data = await Axios.get(R.strings.api).catch(e => {});
-  await AsyncStorage.setItem(key, JSON.stringify(data.data)).catch(e => {});
-  return data.data;
+  const result = await Axios.get(R.strings.api + lang).catch(e => {});
+  const data = result?.data;
+  const dt = data?.home?.plans ? data : [];
+  await AsyncStorage.setItem(key, JSON.stringify(dt)).catch(e => {});
+  return dt;
 };
 
 export const fetchData = async lang => {
@@ -19,6 +21,7 @@ export const fetchData = async lang => {
     }, 100);
     return data;
   } else {
-    return await api(lang);
+    data = await api(lang);
+    return data?.home?.plans ? data : [];
   }
 };

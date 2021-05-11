@@ -71,8 +71,9 @@ export default class PlanInfo extends React.Component {
       const {explore} = this.context.reduState;
       for (let i = 0; i < 4; i++) {
         const random = Math.floor(Math.random() * explore.length);
-        const length = randomPlans.filter(r => r.name === explore[random].name)
-          .length;
+        const length = randomPlans.filter(
+          r => r.name === explore[random].name,
+        ).length;
         if (data.name !== explore[random].name && length === 0) {
           randomPlans.push(explore[random]);
         } else {
@@ -168,7 +169,7 @@ export default class PlanInfo extends React.Component {
           <View style={styles.accordionBox}>
             {params.data.lessons.map((lessn, key) => (
               <Collapse
-                isCollapsed={
+                isExpanded={
                   collapsed[key]
                     ? collapsed[key]
                     : key === (lesson ? lesson - 1 : 0)
