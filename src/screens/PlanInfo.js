@@ -162,7 +162,7 @@ export default class PlanInfo extends React.Component {
           <View style={{paddingHorizontal: wp(5.6), marginVertical: hp(2.6)}}>
             <Text style={[styles.cardTitle]}>{params.data.name}</Text>
             <Text style={[styles.cardSubTitle]}>
-              {params.data.lessons.length} LESSONS
+              {params.data.lessons.length} {R.locale.lessons}
             </Text>
           </View>
           <Text style={[styles.description]}>{params.data.description}</Text>
