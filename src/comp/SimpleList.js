@@ -4,8 +4,6 @@ import {Icon} from 'react-native-elements';
 import {LockedText} from '../comp/LockedText';
 import {useNavigation} from '@react-navigation/native';
 import R from '../res/R';
-import {useContext} from 'react';
-import {ContextStates} from '../func/ContextStates';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,

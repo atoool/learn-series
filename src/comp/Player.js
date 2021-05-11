@@ -1,46 +1,36 @@
 import React from 'react';
 import {
-  NativeModules,
   View,
   StyleSheet,
   TouchableNativeFeedback,
   Text,
   StatusBar,
   Dimensions,
-  BackHandler,
   Animated,
   Easing,
   AppState,
-  ToastAndroid,
   SafeAreaView,
-  DeviceEventEmitter,
 } from 'react-native';
-import {Icon, Button, Slider} from 'react-native-elements';
+import {Icon, Slider} from 'react-native-elements';
 import Orientation from 'react-native-orientation-locker';
 import LinearGradient from 'react-native-linear-gradient';
 import Swiper from 'react-native-swiper';
 import {TouchableWithoutFeedback} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {
-  heightPercentageToDP,
-  widthPercentageToDP,
-  listenOrientationChange,
-} from 'react-native-responsive-screen';
 import {ContextStates} from '../func/ContextStates';
 import LottieView from 'lottie-react-native';
-import YoutubePlayer, {getYoutubeMeta} from 'react-native-youtube-iframe';
+import YoutubePlayer from 'react-native-youtube-iframe';
 // import FindLocalDevices from 'react-native-find-local-devices';
 import R from '../res/R';
 // import dgram from 'react-native-udp';
 
-const {width, height} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 function fmtMSS(s) {
-  return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + s;
+  return (s - (s %= 60)) / 60 + (s > 9 ? ':' : ':0') + s;
 }
 const LinearGr = Animated.createAnimatedComponent(LinearGradient);
 
-const Swipr = Animated.createAnimatedComponent(Swiper);
 export default class Player extends React.PureComponent {
   static contextType = ContextStates;
   constructor(props) {
@@ -79,8 +69,8 @@ export default class Player extends React.PureComponent {
       lesson,
     });
     setTimeout(() => {
-      this.props.route.params.lesson != lesson &&
-        this.refs.refSwipe.scrollTo(this.props.route.params.chapter, true);
+      this.props.route.params.lesson !== lesson &&
+        this.refSwipe.scrollTo(this.props.route.params.chapter, true);
     }, 1000);
     AppState.addEventListener('change', state => {
       state === 'background' && this.setState({play: false});
@@ -182,27 +172,31 @@ export default class Player extends React.PureComponent {
   triggerSwipe = async (show, ignore) => {
     clearTimeout(this.hideSwipe);
     Animated.timing(this.animSwipe, {
-      toValue: show == 'false' ? 0 : 1,
+      toValue: show === 'false' ? 0 : 1,
       duration: 700,
       useNativeDriver: true,
       easing: Easing.cubic,
     }).start();
     !ignore &&
-      show == 'false' &&
+      show === 'false' &&
       this.props.route.params.videos.length - 1 !== this.state.swipeIndex &&
-      this.refs.refSwipe.scrollTo(this.state.swipeIndex + 1, true);
-    show == 'true' && (await this.saveIndex());
+      this.refSwipe.scrollTo(this.state.swipeIndex + 1, true);
+    show === 'true' && (await this.saveIndex());
   };
 
   saveIndex = async () => {
     let {swipeIndex, chapter, lesson} = this.state;
     const {type, videos, lessons} = this.props.route.params;
     const playLesson = this.props.route.params.lesson;
-    if (lesson <= playLesson)
-      if (chapter - 1 <= swipeIndex && type != 'random' && lessons != lesson) {
+    if (lesson <= playLesson) {
+      if (
+        chapter - 1 <= swipeIndex &&
+        type !== 'random' &&
+        lessons !== lesson
+      ) {
         chapter = swipeIndex + 1;
         lesson = this.state.lesson;
-        if (swipeIndex == videos.length - 1 && lessons != lesson) {
+        if (swipeIndex === videos.length - 1 && lessons !== lesson) {
           lesson = this.state.lesson + 1;
           chapter = 1;
         }
@@ -218,11 +212,12 @@ export default class Player extends React.PureComponent {
           payload: [...session],
         });
       }
+    }
   };
 
   render() {
-    const {play, buffering, swipeIndex, completed} = this.state;
-    const {videos, type} = this.props.route.params;
+    const {play, swipeIndex} = this.state;
+    const {videos} = this.props.route.params;
 
     const transY1 = this.animated.interpolate({
       inputRange: [0, 1],
@@ -242,7 +237,7 @@ export default class Player extends React.PureComponent {
       <SafeAreaView
         style={{height: '100%', width: '100%', backgroundColor: '#000'}}>
         <Swiper
-          ref="refSwipe"
+          ref={r => (this.refSwipe = r)}
           showsButtons={false}
           loop={false}
           onIndexChanged={i => {
@@ -290,44 +285,31 @@ export default class Player extends React.PureComponent {
                   onReady={async e => {
                     if (this.state.swipeIndex === i) {
                       clearInterval(this.interval);
-                      let duration = itm.duration
-                        ? itm.duration.toString()
-                        : null;
-
-                      let length = duration ? duration.length : 0;
-                      let start =
-                        length == 0 || length == 2
-                          ? 0
-                          : length == 3
-                          ? parseInt(duration.substr(0, 1))
-                          : parseInt(duration.substr(0, 2));
-                      let ends =
-                        length == 4
-                          ? parseInt(duration.substr(2))
-                          : length == 0
-                          ? 0
-                          : length == 3
-                          ? parseInt(duration.substr(1))
-                          : parseInt(duration.substr(0));
+                      let start = itm?.start_time;
+                      let ends = itm?.end_time;
                       let totalTime = 60;
                       this.playerRef.seekTo(start);
 
                       this.interval = setInterval(async () => {
-                        let totalTim = await this.playerRef.getDuration();
+                        let totalTim =
+                          ends === 0
+                            ? await this.playerRef.getDuration()
+                            : ends;
 
-                        totalTime = totalTim === 0 ? 60 : totalTim - ends;
+                        totalTime = totalTim === 0 ? 60 : totalTim;
                         const currentTime = await this.playerRef.getCurrentTime();
 
-                        if (currentTime >= totalTime)
+                        if (currentTime >= totalTime) {
                           this.setState(
                             {
                               play: false,
-                              completed: videos.length - 1 == swipeIndex,
+                              completed: videos.length - 1 === swipeIndex,
                             },
                             async () => {
                               this.triggerSwipe('true');
                             },
                           );
+                        }
                         this.setState({
                           currentTime,
                           totalTime,
@@ -437,16 +419,16 @@ export default class Player extends React.PureComponent {
                         </View>
                       </TouchableNativeFeedback>
                     )} */}
-                    {videos.map((vid, i) =>
-                      swipeIndex === i ? (
+                    {videos.map((vid, ind) =>
+                      swipeIndex === ind ? (
                         <Slider
-                          key={i}
+                          key={ind}
                           style={{width: 200}}
                           value={this.state.currentTime}
                           maximumValue={this.state.totalTime}
                           trackStyle={{
                             height: 7,
-                            marginLeft: i === 0 ? 0 : 10,
+                            marginLeft: ind === 0 ? 0 : 10,
                             borderRadius: 10,
                           }}
                           thumbTouchSize={{height: 0, width: 0}}
@@ -457,13 +439,13 @@ export default class Player extends React.PureComponent {
                         />
                       ) : (
                         <View
-                          key={i}
+                          key={ind}
                           style={{
                             width: 7,
                             backgroundColor: 'lightgrey',
                             height: 7,
                             borderRadius: 10,
-                            marginLeft: i === 0 ? 0 : 5,
+                            marginLeft: ind === 0 ? 0 : 5,
                           }}
                         />
                       ),

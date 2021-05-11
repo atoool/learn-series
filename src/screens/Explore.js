@@ -165,7 +165,7 @@ const {premiumPurchased}=this.context.reduState
                   {/* {!selected ? ( */}
                   <View style={{}}>
                     <ImageBackground
-                      source={{uri:this.context.reduState.imgExplore[item.coverImage]}}
+                      source={{uri:item.coverImage}}
                       style={{
                         width: '100%',
                         backgroundColor: R.colors.img,
