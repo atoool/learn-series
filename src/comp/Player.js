@@ -222,6 +222,21 @@ export default class Player extends React.PureComponent {
     }
   };
 
+  onSwipe = index => {
+    this.setState(
+      {
+        swipeIndex: index,
+        play: true,
+        currentTime: 0,
+        buffering: true,
+      },
+      () => {
+        this.triggerControls(false);
+        this.triggerSwipe('false', 'ignore');
+      },
+    );
+  };
+
   render() {
     const {play, swipeIndex} = this.state;
     const {videos} = this.props.route.params;
@@ -244,21 +259,9 @@ export default class Player extends React.PureComponent {
       <SafeAreaView
         style={{height: '100%', width: '100%', backgroundColor: '#000'}}>
         <SwiperFlatList
-          index={0}
           ref={r => (this.refSwipe = r)}
-          onMomentumScrollEnd={({index}) => {
-            this.setState(
-              {
-                swipeIndex: index,
-                play: true,
-                currentTime: 0,
-                buffering: true,
-              },
-              () => {
-                this.triggerControls(false);
-                this.triggerSwipe('false', 'ignore');
-              },
-            );
+          onChangeIndex={({index}) => {
+            this.onSwipe(index);
           }}
           onTouchEnd={() => {
             this.triggerControls(false);
@@ -424,12 +427,11 @@ export default class Player extends React.PureComponent {
                       swipeIndex === ind ? (
                         <Slider
                           key={ind}
-                          style={{width: 200}}
+                          style={{width: 200, marginLeft: ind === 0 ? 0 : 5}}
                           value={this.state.currentTime / this.state.totalTime}
                           maximumValue={1}
                           trackStyle={{
                             height: 7,
-                            marginLeft: ind === 0 ? 0 : 10,
                             borderRadius: 10,
                           }}
                           thumbTouchSize={{height: 1, width: 1}}
