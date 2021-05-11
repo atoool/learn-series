@@ -4,6 +4,7 @@ import R from '../res/R';
 
 const key = 'appData';
 export const api = async lang => {
+  console.warn(lang);
   const result = await Axios.get(R.strings.api + lang).catch(e => {});
   const data = result?.data;
   const dt = data?.home?.plans ? data : [];

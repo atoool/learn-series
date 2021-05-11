@@ -71,8 +71,11 @@ export default class Language extends React.PureComponent {
     this.setState({loading: true});
     const {lang} = this.state;
     try {
-      await AsyncStorage.multiSet([['lang', lang], ['langSaw', 'yes']]);
-      await Promise.all([api('home', lang), api('explore', lang)]);
+      await AsyncStorage.multiSet([
+        ['lang', lang],
+        ['langSaw', 'yes'],
+      ]);
+      await Promise.all([api(lang)]);
       RNRestart.Restart();
     } catch (e) {
       ToastAndroid.show(R.strings.error, ToastAndroid.SHORT);
