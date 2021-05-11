@@ -91,6 +91,7 @@ let locale = new LocalizedStrings({
     journal: 'Journal',
     settings: 'Settings',
     error: 'Something went wrong! try again later',
+    lessons: 'LESSONS',
   },
 });
 // console.warn(jsonLang);
