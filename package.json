@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "upver": "node ./scripts/upver.js",
     "connect": "./scripts/connectHost.sh",
+    "clean":"cd android && ./gradlew clean && cd ..",
     "move:apk": "mv android/app/build/outputs/apk/release/app-release.apk ~/Desktop/$npm_package_name-$npm_package_version-$npm_package_buildNumber.apk",
     "move:aab": "mv android/app/build/outputs/apk/release/app-release.aab ~/Desktop/$npm_package_name-$npm_package_version-$npm_package_buildNumber.aab",
     "build:apk": "cd android && ./gradlew assembleRelease && cd .. && yarn move:apk",
