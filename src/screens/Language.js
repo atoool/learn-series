@@ -39,10 +39,11 @@ export default class Language extends React.PureComponent {
     this.setState({loading: true});
     try {
       let ar = await AsyncStorage.getItem('languages');
-      this.setState({radio_props: JSON.parse(ar), loading: false});
+      ar && this.setState({radio_props: JSON.parse(ar), loading: false});
 
       let {data} = await axios(R.strings.langApi);
       ar = data?.languages?.map(itm => ({label: itm?.name, value: itm?.code}));
+      !ar && this.setState({radio_props: JSON.parse(ar), loading: false});
       await AsyncStorage.setItem('languages', JSON.stringify(ar));
     } catch (e) {
       ToastAndroid.show(R.locale.network, ToastAndroid.SHORT);
