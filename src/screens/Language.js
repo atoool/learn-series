@@ -14,15 +14,7 @@ import {api} from '../func/ApiCalls';
 import {ToastAndroid} from 'react-native';
 import Loading from '../comp/Loading';
 import {StyleSheet} from 'react-native';
-
-const res = {
-  languages: [
-    {code: 'en', name: 'English'},
-    {code: 'fr', name: 'French'},
-    {code: 'it', name: 'Italian'},
-    {code: 'de', name: 'German'},
-  ],
-};
+import axios from 'axios';
 export default class Language extends React.PureComponent {
   state = {
     radio_props: [],
@@ -45,26 +37,16 @@ export default class Language extends React.PureComponent {
 
   fetchLanguage = async () => {
     this.setState({loading: true});
-    // await fetch(
-    //   `https://cookbookapp.in/RIA/grid.php?type=isLang&page=isLang&appname=${
-    //     R.strings.bundleId
-    //   }&versioncode=300&version=123&lang=en&simcountry=us`,
-    // )
-    //   .then(resJSON => resJSON.json())
-    //   .then(async res => {
-    let ar = [];
-    for (let i = 0; i < res.languages.length; i++) {
-      ar.push({label: res.languages[i].name, value: res.languages[i].code});
+    try {
+      let ar = await AsyncStorage.getItem('languages');
+      this.setState({radio_props: JSON.parse(ar), loading: false});
+
+      let {data} = await axios(R.strings.langApi);
+      ar = data?.languages?.map(itm => ({label: itm?.name, value: itm?.code}));
+      await AsyncStorage.setItem('languages', JSON.stringify(ar));
+    } catch (e) {
+      ToastAndroid.show(R.locale.network, ToastAndroid.SHORT);
     }
-    this.setState({radio_props: ar, loading: false});
-    await AsyncStorage.setItem('languages', JSON.stringify(ar));
-    // })
-    // .catch(async e => {
-    //   let ar = await AsyncStorage.getItem('languages');
-    //   ar != null
-    //     ? this.setState({radio_props: JSON.stringify(ar), loading: false})
-    //     : ToastAndroid.show(R.locale.network, ToastAndroid.SHORT);
-    // });
   };
 
   setLanguage = async () => {
