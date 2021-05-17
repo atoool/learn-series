@@ -5,15 +5,15 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  ToastAndroid,
+  StyleSheet,
 } from 'react-native';
 import R from '../res/R';
 import RadioForm from 'react-native-simple-radio-button';
 import AsyncStorage from '@react-native-community/async-storage';
 import RNRestart from 'react-native-restart';
 import {api} from '../func/ApiCalls';
-import {ToastAndroid} from 'react-native';
 import Loading from '../comp/Loading';
-import {StyleSheet} from 'react-native';
 import axios from 'axios';
 export default class Language extends React.PureComponent {
   state = {
@@ -23,16 +23,19 @@ export default class Language extends React.PureComponent {
     loading: false,
   };
   componentDidMount = async () => {
-    await this.fetchLanguage();
-    let lang = await AsyncStorage.getItem('lang').catch(e => {});
-    if (lang != null) {
-      for (let i = 0; i < this.state.radio_props.length; i++) {
-        if (this.state.radio_props[i].value === lang) {
-          this.radioForm.updateIsActiveIndex(i);
-        }
+    try {
+      this?.radioForm?.updateIsActiveIndex(-1);
+      await this.fetchLanguage();
+      let lang = await AsyncStorage.getItem('lang').catch(e => {});
+      if (lang != null) {
+        this.state.radio_props?.map((itm, i) => {
+          if (itm?.value === lang) {
+            this?.radioForm?.updateIsActiveIndex(i);
+          }
+        });
       }
       this.setState({lang});
-    }
+    } catch {}
   };
 
   fetchLanguage = async () => {
@@ -42,8 +45,12 @@ export default class Language extends React.PureComponent {
       ar && this.setState({radio_props: JSON.parse(ar), loading: false});
 
       let {data} = await axios(R.strings.langApi);
-      ar = data?.languages?.map(itm => ({label: itm?.name, value: itm?.code}));
-      !ar && this.setState({radio_props: JSON.parse(ar), loading: false});
+      ar = data?.languages?.map(itm => ({
+        label: itm?.name,
+        value: itm?.code,
+        loading: false,
+      }));
+      !ar && this.setState({radio_props: JSON.parse(ar)});
       await AsyncStorage.setItem('languages', JSON.stringify(ar));
     } catch (e) {
       ToastAndroid.show(R.locale.network, ToastAndroid.SHORT);
@@ -82,6 +89,7 @@ export default class Language extends React.PureComponent {
             labelColor={'grey'}
             labelStyle={styles.radioLabel}
             style={styles.radio}
+            value={this.state.lang}
             buttonColor={'grey'}
             selectedButtonColor={R.colors.primary}
             onPress={value => {
