@@ -55,12 +55,12 @@ export const ListData = props => {
                   style={[styles.img, props.small && {width: wp(41.7)}]}>
                   {!premiumPurchased && item?.premium && (
                     <>
-                      <Gradient
+                      {/* <Gradient
                         start={{x: 0, y: 1}}
                         end={{x: 0, y: 0}}
                         colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.3)']}
                         style={{flex: 1, borderRadius: hp(0.6)}}
-                      />
+                      /> */}
                       <PremiumTag />
                     </>
                   )}

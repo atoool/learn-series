@@ -6,6 +6,7 @@ import {
   TouchableNativeFeedback,
   ScrollView,
   ImageBackground,
+  StyleSheet,
 } from 'react-native';
 import {SearchBar, Button, Icon} from 'react-native-elements';
 import {SimpleList} from '../comp/SimpleList';
@@ -15,6 +16,7 @@ import Gradient from 'react-native-linear-gradient';
 import PremiumTag from '../comp/PremiumTag';
 import { checkPurchased } from '../comp/PremiumCheckFun';
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { LockedText } from '../comp/LockedText';
 
 export default class Explore extends React.PureComponent {
   static contextType = ContextStates;
@@ -153,56 +155,43 @@ const {premiumPurchased}=this.context.reduState
                   marginBottom: hp(2.6),
                   overflow: 'hidden',
                 }}>
-                <TouchableNativeFeedback
-                  onPress={() => {
-                    // if (this.state.selected) this.updateSearch(item);
-                    // else
-                    this.props.navigation.navigate('Plan', {
-                      data: item,type:'explore'
-                    });
-                  }}
-                  useForeground={true}>
-                  {/* {!selected ? ( */}
-                  <View style={{}}>
-                    <ImageBackground
-                      source={{uri:item.coverImage}}
-                      style={{
-                        width: '100%',
-                        backgroundColor: R.colors.img,
-                      }}>
-                      <View
-                        style={{
-                          padding: hp(3.9),paddingVertical:hp(5.1),
-                          width: '100%',
-                        }}>
-                        <Text
-                          style={{
-                            fontWeight: 'bold',
-                            fontSize: hp(2.1),
-                            color: '#000',
-                          }}>
-                          {item.name}
-                        </Text>
-                      </View>
-                      
-                 {!premiumPurchased&&item.premium&& 
+               <TouchableNativeFeedback
+              onPress={() => {
+                this.props.navigation.navigate('Plan', {
+                  data: item,type:'explore'
+                });
+              }}
+              style={styles.cardTouch}
+              useForeground>
+              <View style={styles.touchBox}>
+                <ImageBackground
+                  style={[styles.card]}
+                  source={{
+                    uri:item.coverImage
+                  }}>
+                  <View style={styles.cardTextView}>
+                    <LockedText
+                      type={''}
+                      locked={false}
+                      title={item.name}
+                      desc={''}
+                      lessons={`${item?.lessons?.length}`}
+                    />
+                  </View>
+                  
+                </ImageBackground>
+                {!premiumPurchased&&item.premium&& 
                   <>
-                  <Gradient
+                  {/* <Gradient
                   start={{x: 0, y: 1}}
                   end={{x: 0, y: 0}}
                   colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.3)']}
                   style={{width:'100%',height:'100%',position:'absolute'}}
-                />
+                /> */}
                 <PremiumTag /></>}
-                    </ImageBackground>
-                  </View>
-                  {/* ) : (
-                    <View style={{paddingBottom: 10, width: '100%'}}>
-                      <SimpleList title={'title'} image={''} />
-                    </View>
-                  )} */}
-                </TouchableNativeFeedback>
               </View>
+            </TouchableNativeFeedback>
+          </View>
             )}
           />
         
@@ -213,3 +202,25 @@ const {premiumPurchased}=this.context.reduState
     );
   }
 }
+
+
+const styles = StyleSheet.create({
+  card: {
+    borderRadius: hp(1.3),
+    width: '100%',
+    padding: hp(2.6),
+    height: hp(25.6),
+    backgroundColor: R.colors.img,
+    overflow: 'hidden',
+  },
+  cardTextView: {
+    position: 'absolute',
+    bottom: hp(1.3),
+    left: wp(2.8),
+    backgroundColor: R.colors.background,
+    borderRadius: hp(0.6),
+    padding: hp(1.3),
+  },
+  cardTouch: {width: '100%', height: '100%'},
+  touchBox: {borderRadius: hp(1.3), overflow: 'hidden'},
+});
