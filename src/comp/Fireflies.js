@@ -69,7 +69,7 @@ export default class Fireflies extends React.Component {
           height: 300,
           width: W,
         }}
-        source={require('../res/imgs/mpv.jpg')}>
+        source={require('../res/imgs/logo.jpg')}>
         {this.state.fly.map((itm, i) => (
           <Animated.View
             key={i}

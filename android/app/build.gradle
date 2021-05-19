@@ -135,8 +135,8 @@ android {
         applicationId "academy.learn.piano"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 27
-        versionName "1.3.52"
+        versionCode 29
+        versionName "1.3.53"
         multiDexEnabled true
     }
     splits {

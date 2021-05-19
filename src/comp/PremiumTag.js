@@ -3,14 +3,15 @@ import {View, Text, StyleSheet, Image} from 'react-native';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import R from '../res/R';
 
-export default (PremiumTag = () => {
+const PremiumTag = () => {
   return (
     <View style={styles.container}>
       <Image style={styles.img} source={require('../res/imgs/prem.png')} />
-      <Text style={styles.txt}>PREMIUM</Text>
+      <Text style={styles.txt}>{R.locale.premium}</Text>
     </View>
   );
-});
+};
+export default PremiumTag;
 
 const styles = StyleSheet.create({
   container: {

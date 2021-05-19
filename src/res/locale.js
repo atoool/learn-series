@@ -1,6 +1,6 @@
 import LocalizedStrings from 'react-native-localization';
 
-// const jsonLang = require('./fasting.json');
+const jsonLang = require('./locale.json');
 
 let locale = new LocalizedStrings({
   en: {
@@ -56,8 +56,7 @@ let locale = new LocalizedStrings({
     notific: 'Hey! Its time for you to continue your lessons',
   },
 });
-// console.warn(jsonLang);
 
-// locale.setContent(jsonLang);
+locale.setContent(jsonLang);
 
 export {locale};

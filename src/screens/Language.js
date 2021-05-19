@@ -24,7 +24,6 @@ export default class Language extends React.PureComponent {
   };
   componentDidMount = async () => {
     try {
-      this?.radioForm?.updateIsActiveIndex(-1);
       await this.fetchLanguage();
       let lang = await AsyncStorage.getItem('lang').catch(e => {});
       if (lang != null) {
@@ -33,24 +32,24 @@ export default class Language extends React.PureComponent {
             this?.radioForm?.updateIsActiveIndex(i);
           }
         });
+      } else {
+        this?.radioForm?.updateIsActiveIndex(0);
       }
-      this.setState({lang});
     } catch {}
   };
 
   fetchLanguage = async () => {
     this.setState({loading: true});
     try {
-      let ar = await AsyncStorage.getItem('languages');
-      ar && this.setState({radio_props: JSON.parse(ar), loading: false});
+      let arr = await AsyncStorage.getItem('languages');
+      arr && this.setState({radio_props: JSON.parse(arr), loading: false});
 
       let {data} = await axios(R.strings.langApi);
-      ar = data?.languages?.map(itm => ({
+      let ar = data?.languages?.map(itm => ({
         label: itm?.name,
         value: itm?.code,
-        loading: false,
       }));
-      !ar && this.setState({radio_props: JSON.parse(ar)});
+      !arr && this.setState({radio_props: ar, loading: false});
       await AsyncStorage.setItem('languages', JSON.stringify(ar));
     } catch (e) {
       ToastAndroid.show(R.locale.network, ToastAndroid.SHORT);
@@ -84,7 +83,7 @@ export default class Language extends React.PureComponent {
           <RadioForm
             ref={re => (this.radioForm = re)}
             radio_props={this.state.radio_props}
-            initial={0}
+            initial={-1}
             animation={true}
             labelColor={'grey'}
             labelStyle={styles.radioLabel}
@@ -93,7 +92,7 @@ export default class Language extends React.PureComponent {
             buttonColor={'grey'}
             selectedButtonColor={R.colors.primary}
             onPress={value => {
-              this.setState({lang: value});
+              typeof value === 'string' && this.setState({lang: value});
             }}
           />
         </ScrollView>

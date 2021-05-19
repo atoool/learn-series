@@ -3,6 +3,7 @@ import {fetchData} from './ApiCalls';
 import {Platform} from 'react-native';
 import {checkPurchased, showPrice} from '../comp/PremiumCheckFun';
 import {GoogleSignin} from '@react-native-community/google-signin';
+import {locale} from '../res/locale';
 
 export function getRandomArray(orgArray) {
   var arr = [];
@@ -34,7 +35,7 @@ export async function IAPCall() {
       lang = r ? r : 'en';
     })
     .catch(e => {});
-
+  locale.setLanguage(lang);
   return [htmlPath, premiumPurchased, prices, lang];
 }
 

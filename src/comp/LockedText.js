@@ -5,6 +5,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import R from '../res/R';
 
 export const LockedText = props => {
   return (
@@ -24,7 +25,7 @@ export const LockedText = props => {
           styles.cardSubTitle,
           props.type === 'sleep' && {color: '#6267a8'},
         ]}>
-        {props.lessons} LESSONS
+        {props.lessons} {R.locale.lessons}
       </Text>
       {props.desc?.length != 0 && (
         <Text
