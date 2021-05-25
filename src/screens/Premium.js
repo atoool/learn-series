@@ -49,9 +49,7 @@ export default class Premium extends Component {
         `javascript:setIAPValues('6month',"${this.state.sixMonthPrice}")`,
       );
       this.webview.injectJavaScript(
-        `javascript:setIAPValues('lifetime',"${this.state.price}"||"${
-          this.state.price
-        }000000")`,
+        `javascript:setIAPValues('lifetime',"${this.state.price}"||"${this.state.price}000000")`,
       );
       return false;
     } else if (url.indexOf('/terms') > -1) {
@@ -98,9 +96,7 @@ export default class Premium extends Component {
               this.state.htmlUrl === null &&
               this.setState({
                 htmlUrl: e.url.concat(
-                  `?lang=${lang}&simcountry=in&appname=${
-                    R.strings.bundleId
-                  }&iOS`,
+                  `?lang=${lang}&simcountry=in&appname=${R.strings.bundleId}&iOS`,
                 ),
               }),
           )
@@ -108,9 +104,7 @@ export default class Premium extends Component {
             // alert('Check your network connectivity');
           })
       : this.setState({
-          htmlUrl: `file:///android_asset/onboarding/premium.html?lang=${lang}&simcountry=in&appname=${
-            R.strings.bundleId
-          }`,
+          htmlUrl: `file:///android_asset/onboarding/premium.html?lang=${lang}&simcountry=in&appname=${R.strings.bundleId}`,
         });
     purchaseListener(this);
   };
@@ -119,9 +113,7 @@ export default class Premium extends Component {
   }
 
   render() {
-    if (this.state.htmlUrl == null) {
-      return <Loading load={this} />;
-    } else if (
+    if (
       this.state.purchasedPremium === 'yup' ||
       this.state.purchasedPremium === 'success'
     )

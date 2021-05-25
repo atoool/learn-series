@@ -14,6 +14,6 @@ let strings = {
   langApi:
     'https://forking.riafy.in/app-console/get-languages-api.php?appname=' +
     bundleId,
-  version: '1.3.53',
+  version: '1.3.54',
 };
 export default strings;

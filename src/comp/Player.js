@@ -55,6 +55,7 @@ export default class Player extends React.PureComponent {
       completed: false,
       lessons: 1,
       ip: '',
+      started: false,
     };
   }
   componentDidMount() {
@@ -70,11 +71,11 @@ export default class Player extends React.PureComponent {
       lesson,
     });
     setTimeout(() => {
-      this.props.route.params.lesson !== lesson &&
-        this.refSwipe.scrollToIndex({
-          index: this.props.route.params.chapter,
-          animated: true,
-        });
+      // this.props.route.params.lesson !== lesson &&
+      this.refSwipe.scrollToIndex({
+        index: this.props.route.params.chapter,
+        animated: true,
+      });
     }, 1000);
     AppState.addEventListener('change', state => {
       state === 'background' && this.setState({play: false});
@@ -86,34 +87,6 @@ export default class Player extends React.PureComponent {
         state === 'background' && this.setState({play: false});
       });
     });
-
-    // DeviceEventEmitter.addListener('new_device_found', (device) => {
-    //   this.setState({ip: device.ipAddress});
-    //   try {
-    //     this.socket = dgram.createSocket('udp4');
-    //     this.socket.bind(12345);
-    //     this.socket.once('listening', function () {});
-    //   } catch (e) {
-    //     console.warn(e);
-    //   }
-    //   console.warn('ss');
-    // });
-
-    // DeviceEventEmitter.addListener('connection_error', () => {
-    //   this.setState({ip: ''});
-    //   console.warn('dd');
-    // });
-
-    // DeviceEventEmitter.addListener('no_devices', () => {
-    //   this.setState({ip: ''});
-    //   console.warn('hh');
-    // });
-
-    // DeviceEventEmitter.addListener('no_ports', () => {
-    //   this.setState({ip: ''});
-    //   console.warn('ee');
-    // });
-    // this.getLocalDevices();
   }
 
   componentWillUnmount = () => {
@@ -125,34 +98,9 @@ export default class Player extends React.PureComponent {
         state === 'background' && this.setState({play: false});
       });
     });
-    // DeviceEventEmitter.removeListener('new_device_found', (device) => {
-    //   this.setState({ip: device.ipAddress});
-    //   try {
-    //     this.socket = dgram.createSocket('udp4');
-    //     this.socket.bind(12345);
-    //     this.socket.once('listening', function () {});
-    //   } catch {}
-    // });
-
-    // DeviceEventEmitter.removeListener('connection_error', () => {
-    //   this.setState({ip: ''});
-    // });
-
-    // DeviceEventEmitter.removeListener('no_devices', () => {
-    //   this.setState({ip: ''});
-    // });
-
-    // DeviceEventEmitter.removeListener('no_ports', () => {
-    //   this.setState({ip: ''});
-    // });
   };
 
-  getLocalDevices = () => {
-    // FindLocalDevices.getLocalDevices({
-    //   timeout: 10,
-    //   ports: [3000],
-    // });
-  };
+  getLocalDevices = () => {};
 
   triggerControls = hide => {
     clearTimeout(this.hideControl);
@@ -196,26 +144,19 @@ export default class Player extends React.PureComponent {
     const {type, videos, lessons} = this.props.route.params;
     const playLesson = this.props.route.params.lesson;
     if (lesson <= playLesson) {
-      if (
-        chapter - 1 <= swipeIndex &&
-        type !== 'random' &&
-        lessons !== lesson
-      ) {
-        chapter = swipeIndex + 1;
+      if (chapter - 1 <= swipeIndex && type !== 'random') {
+        chapter = swipeIndex + 2;
         lesson = this.state.lesson;
         if (swipeIndex === videos.length - 1 && lessons !== lesson) {
           lesson = this.state.lesson + 1;
           chapter = 1;
         }
         this.setState({chapter, lesson});
-        let session =
-          type === 'sleep'
-            ? this.context.reduState.sleepPr
-            : this.context.reduState.session;
-        session[type === 'sleep' ? session.length - 1 : 0].chapter = chapter;
-        session[type === 'sleep' ? session.length - 1 : 0].lesson = lesson;
+        let session = this.context.reduState.session;
+        session[0].chapter = chapter;
+        session[0].lesson = lesson;
         await this.context.dispatch({
-          type: type === 'sleep' ? 'sleepSess' : 'session',
+          type: 'session',
           payload: [...session],
         });
       }
@@ -283,15 +224,20 @@ export default class Player extends React.PureComponent {
                   contentScale={0.65}
                   webViewStyle={{marginTop: -10}}
                   onChangeState={e => {
-                    e === 'playing' && this.setState({buffering: false});
+                    if (e === 'playing') {
+                      if (!this.state.started) {
+                        let start = itm?.start_time ? itm?.start_time : 0;
+                        this.playerRef.seekTo(start);
+                      }
+                      this.setState({buffering: false, started: true});
+                    }
+                    e === 'buffering' && this.setState({buffering: true});
                   }}
-                  onReady={async e => {
+                  onReady={async () => {
                     if (this.state.swipeIndex === i) {
                       clearInterval(this.interval);
-                      let start = itm?.start_time;
                       let ends = itm?.end_time;
                       let totalTime = 60;
-                      this.playerRef.seekTo(start);
 
                       this.interval = setInterval(async () => {
                         let totalTim =
@@ -319,7 +265,7 @@ export default class Player extends React.PureComponent {
                           totalTime,
                         });
                       }, 1000);
-                      this.setState({totalTime}, () => {
+                      this.setState({totalTime, started: false}, () => {
                         this.triggerControls(true);
                       });
                     }
