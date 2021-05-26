@@ -63,17 +63,23 @@ export default class Player extends React.PureComponent {
     StatusBar.setTranslucent(true);
     Orientation.lockToLandscape();
     const session = this.context.reduState.session[0];
-    const chapter = session.chapter;
+    const chaptr = session.chapter;
     const lesson = session.lesson;
 
     this.setState({
-      chapter,
+      chapter: chaptr,
       lesson,
     });
     setTimeout(() => {
-      // this.props.route.params.lesson !== lesson &&
+      const {chapter, videos} = this.props.route.params;
+      const indx =
+        videos?.length - 1 < chapter
+          ? videos?.length - 1
+          : chapter < 0
+          ? 0
+          : chapter;
       this.refSwipe.scrollToIndex({
-        index: this.props.route.params.chapter,
+        index: indx,
         animated: true,
       });
     }, 1000);
