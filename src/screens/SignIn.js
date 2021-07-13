@@ -1,6 +1,9 @@
 import React from 'react';
 import {View, Text, StyleSheet, ToastAndroid} from 'react-native';
-import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 import R from '../res/R';
 import {Button} from 'react-native-elements';

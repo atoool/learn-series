@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Image, View, StatusBar, Platform} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loading from '../comp/Loading';
 import {
   widthPercentageToDP as wp,

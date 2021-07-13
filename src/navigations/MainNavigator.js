@@ -22,6 +22,7 @@ import R from '../res/R';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import SignIn from '../screens/SignIn';
 import {StyleSheet} from 'react-native';
+import {VideoBlog} from '../screens/VideoBlog';
 
 const Stack = createStackNavigator();
 
@@ -255,6 +256,16 @@ const MainNavigator = () => {
           tabBarColor: '#131953',
         }}
       /> */}
+      <Tab.Screen
+        name="Video"
+        component={VideoBlog}
+        options={{
+          tabBarLabel: R.locale.video,
+          tabBarIcon: ({color}) => (
+            <FontAwesome5Icon name="play-circle" color={color} size={hp(2.6)} />
+          ),
+        }}
+      />
       <Tab.Screen
         name="Journal"
         component={JournalStack}

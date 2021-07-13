@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import {Button} from 'react-native-elements';
 import {TouchableNativeFeedback} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {TimeType} from '../func/TimeFunc';
 import * as Animatable from 'react-native-animatable';
 import {ImageBackground} from 'react-native';
@@ -62,7 +62,9 @@ export default class Jounal extends React.PureComponent {
         contentContainerStyle={styles.contentContainer}>
         <Animatable.View style={styles.animatedBox}>
           <Text style={styles.greetText}>{TimeType()}</Text>
-          <Text style={styles.username}>{this.state.usr}</Text>
+          {this.state.usr?.length !== 0 && (
+            <Text style={styles.username}>{this.state.usr}</Text>
+          )}
         </Animatable.View>
         {arr.map((itm, indx) => (
           <TouchableNativeFeedback
@@ -105,7 +107,7 @@ export default class Jounal extends React.PureComponent {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, padding: hp(2.6), paddingTop: hp(12.8)},
+  container: {flex: 1, padding: hp(2.6), paddingTop: hp(3)},
   contentContainer: {paddingBottom: hp(12.8)},
   greetText: {
     fontSize: hp(2.8),

@@ -1,0 +1,82 @@
+.rewardItem {
+    width: 50%;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    padding: 16px 8px 0px 8px;
+    box-sizing: border-box;
+}
+.rewardItem .rewardImage {
+  width: 125px;
+  height: 125px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+
+.rewardImage {
+background-image: linear-gradient(0deg, #e2d1c3 0%, #fdfcfb 100%);
+border-radius: 8px;
+box-shadow: 0px 10px 20px -15px black;
+/* box-shadow: 0px 10px 20px -15px black, 0px 0px 30px -5px rgba(0,0,0,.5) inset; */
+}
+
+.streaksContainer .rewardImage{
+  border-radius: 50%;
+}
+.streaksContainer .rewardItem .rewardImage {
+  width: 125px;
+  height: 125px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.rewardImage img {
+    height: 80%;
+    width: auto;    filter: drop-shadow(0px 50px 5px rgba(0,0,0,.25));
+}
+.streaksContainer .rewardImage img {
+    height: 150%;
+    width: auto;
+}
+
+.rewardsContainer .centerPiece{
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 90%;
+  overflow: scroll;
+  overscroll-behavior: auto;
+}
+
+.rewardName {
+    font-weight: bold;
+    line-height: 24px;
+    font-size: 18px;
+}
+
+.rewardText {
+    font-size: 14px;
+}
+
+.rewardTextContainer {
+    color:rgba(255, 255, 255, 0.7);
+}
+.inactive .rewardImage img {
+    filter: none;
+    filter: drop-shadow(0px 5px 2px rgba(0,0,0,.25)); /* old lock */
+    /* filter: drop-shadow(0px 50px 5px rgba(0,0,0,.15)); */
+    /* filter: brightness(0.8) saturate(0.3) drop-shadow(0px 50px 5px rgba(0,0,0,.25)); */
+}
+
+.streaksContainer .inactive .rewardImage img {
+    height: 80%;
+    bottom: 10%;
+    position: relative;
+}

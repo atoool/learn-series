@@ -2,7 +2,7 @@ import React from 'react';
 import LottieView from 'lottie-react-native';
 import {View, ActivityIndicator} from 'react-native';
 import success from '../res/success.json';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,

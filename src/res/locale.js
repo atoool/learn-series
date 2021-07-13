@@ -4,6 +4,7 @@ const jsonLang = require('./locale.json');
 
 let locale = new LocalizedStrings({
   en: {
+    code: 'en',
     appName: 'Learn Piano Lessons',
     shareSub: 'Download Learn Piano Lessons app',
     shareMessage1: 'Best Learn Piano Lessons app for body fasting',
@@ -54,6 +55,7 @@ let locale = new LocalizedStrings({
     error: 'Something went wrong! try again later',
     lessons: 'LESSONS',
     notific: 'Hey! Its time for you to continue your lessons',
+    video: 'Video',
   },
 });
 

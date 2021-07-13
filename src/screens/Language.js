@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import R from '../res/R';
 import RadioForm from 'react-native-simple-radio-button';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNRestart from 'react-native-restart';
 import {api} from '../func/ApiCalls';
 import Loading from '../comp/Loading';
@@ -65,7 +65,9 @@ export default class Language extends React.PureComponent {
         ['langSaw', 'yes'],
       ]);
       await Promise.all([api(lang)]);
-      RNRestart.Restart();
+      this.props.route?.params?.nav === 'main'
+        ? this.props.navigation.replace('Onboarding')
+        : RNRestart.Restart();
     } catch (e) {
       ToastAndroid.show(R.strings.error, ToastAndroid.SHORT);
       this.setState({loading: false});

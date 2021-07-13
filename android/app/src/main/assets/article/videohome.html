@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <title>Videos Home</title>
+    <!-- <script src="plyr/plyr.js" charset="utf-8"></script> -->
+    <!--<script type="text/javascript" src="js/webp.min.js"></script>-->
+    <link rel="stylesheet" href="css/search.css">
+    <!-- <link rel="stylesheet" href="plyr/plyr.css"> -->
+    <script type="text/javascript">
+    function nightModeSwitch(check=0){
+      if (check==1) {
+        // to trigger night mode
+        document.querySelector('body').classList.add('night');
+        return;
+      }
+      else if (check==2){
+        //to trigger day mode
+        document.querySelector('body').classList.remove('night');
+        return;
+      }
+      if (urlParams.iOS!=undefined || urlParams.android!=undefined) {
+        if (urlParams.dark!=undefined) {
+          document.querySelector('body').classList.add('night');
+        }
+      }
+      else
+      {
+         var now = new Date();
+         var hrs = now.getHours();
+         var greet;
+         if (hrs >= 19 || hrs <= 6)
+         {
+           document.querySelector('body').classList.add('night');
+         }
+     }
+    }
+    var urlParams;
+    (window.onpopstate = function () {
+      var match,
+        pl = /\+/g, // Regex for replacing addition symbol with a space
+        search = /([^&=]+)=?([^&]*)/g,
+        decode = function (s) {
+          return decodeURIComponent(s.replace(pl, " "));
+        },
+        query = window.location.search.substring(1);
+
+      urlParams = {};
+      while (match = search.exec(query))
+        urlParams[decode(match[1])] = decode(match[2]);
+    })();
+    if (urlParams.lang==undefined) {
+      urlParams.lang='en';
+    }
+  </script>
+  </head>
+  <body class="noscroll">
+    <script type="text/javascript">nightModeSwitch();</script>
+    <div id="spinner" class="loaded"><div class="processing"><div class="ispinner"><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div></div></div></div>
+    <script type="text/javascript">
+    var retryTimer,spinnerHTML='<div class="ispinner"><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div><div class="ispinner-blade"></div></div>';
+    function removeSpinner(loadingText){
+      if (loadingText==undefined) {
+        loadingText=spinnerHTML;
+      }
+      document.getElementById('spinner').classList.remove('loaded');
+      document.querySelector('body').classList.remove('noscroll');
+      document.querySelector('#spinner .processing').innerHTML=loadingText;
+    }
+    function addSpinner(type="full",text,ctaFunction,ctaText='TAP TO RETRY'){
+      clearTimeout(retryTimer);
+      smoothscrollToTop();
+      if (type=='half') {
+        document.getElementById('spinner').classList.add('frozen');
+      }
+      else
+      {setTimeout(function(){
+        document.querySelector('body').classList.add('noscroll');
+      },400);}
+      if (ctaFunction!=undefined) {
+        console.log(ctaFunction);
+        text=text+'<br><a href="#" onclick="spinnerAction('+ctaFunction+')">'+ctaText+'</a>';
+      }
+      document.querySelector('#spinner .processing').innerHTML=text;
+      document.getElementById('spinner').classList.add('loaded');
+    }
+    function spinnerAction(ctaFunction){
+      retryTimer=setTimeout(function(){
+        document.querySelector('#spinner .processing a').innerHTML=spinnerHTML;
+      },150);
+      eval(ctaFunction);
+    }
+    </script>
+    <style media="screen">
+    * {
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+-webkit-tap-highlight-color: transparent;
+-moz-user-select: none;
+-ms-user-select: none;
+-khtml-user-select: none;
+-webkit-user-select: none;
+-webkit-touch-callout: none;
+}
+*::-webkit-scrollbar {
+display: none;
+}
+input { -webkit-user-select:text;}
+    .night #spinner{
+        background: #1c1c1f;
+        color: #eee;
+    }
+    .noscroll{overflow: hidden;height: 100%;}
+    #spinner .processing a:active{opacity: .4;}
+    #spinner .processing a{border-bottom: none;transition: 100ms ease opacity;
+    margin-top: 16px;
+    height: 32px;    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #06c;
+    font-size: 14px;}
+    #spinner.frozen .processing a {margin: 0;width: 30%;}
+    #spinner {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    background-color: white;
+    z-index: 10;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-direction: column;
+    }
+    .processing{
+    color: #777;max-width: 70%;text-align: center;
+    }
+    .loaded{display: flex!important;}
+    .ispinner {position: relative;width: 20px;height: 20px; }.ispinner .ispinner-blade {position: absolute;top: 37%;left: 44.5%;width: 10%;height: 25%;background-color: #8e8e93;border-radius: 50%/20%;animation: iSpinnerBlade 1s linear infinite;will-change: opacity; }.ispinner .ispinner-blade:nth-child(1) {transform: rotate(30deg) translate(0, -150%);animation-delay: -1.6666666667s; }.ispinner .ispinner-blade:nth-child(2) {transform: rotate(60deg) translate(0, -150%);animation-delay: -1.5833333333s; }.ispinner .ispinner-blade:nth-child(3) {transform: rotate(90deg) translate(0, -150%);animation-delay: -1.5s; }.ispinner .ispinner-blade:nth-child(4) {transform: rotate(120deg) translate(0, -150%);animation-delay: -1.4166666667s; }.ispinner .ispinner-blade:nth-child(5) {transform: rotate(150deg) translate(0, -150%);animation-delay: -1.3333333333s; }.ispinner .ispinner-blade:nth-child(6) {transform: rotate(180deg) translate(0, -150%);animation-delay: -1.25s; }.ispinner .ispinner-blade:nth-child(7) {transform: rotate(210deg) translate(0, -150%);animation-delay: -1.1666666667s; }.ispinner .ispinner-blade:nth-child(8) {transform: rotate(240deg) translate(0, -150%);animation-delay: -1.0833333333s; }.ispinner .ispinner-blade:nth-child(9) {transform: rotate(270deg) translate(0, -150%);animation-delay: -1s; }.ispinner .ispinner-blade:nth-child(10) {transform: rotate(300deg) translate(0, -150%);animation-delay: -0.9166666667s; }.ispinner .ispinner-blade:nth-child(11) {transform: rotate(330deg) translate(0, -150%);animation-delay: -0.8333333333s; }.ispinner .ispinner-blade:nth-child(12) {transform: rotate(360deg) translate(0, -150%);animation-delay: -0.75s; }.ispinner.ispinner-large {width: 35px;height: 35px; }.ispinner.ispinner-large .ispinner-blade {width: 8.5714285714%;height: 25.7142857143%;border-radius: 50%/16.67%; }@keyframes iSpinnerBlade {0% {opacity: 0.85; }50% {opacity: 0.25; }100% {opacity: 0.25; } }
+    #spinner.spinnerBottom {
+    height: 25%;
+    top: 75%;
+    }
+
+    #spinner.frozen {
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      background-color: rgba(255,255,255,0.7);
+        height: 90px;
+        bottom: 0;
+        position: fixed;
+        top: auto;
+    }
+
+    .frozen .processing {
+        display: flex;color: #1d1d1f;
+        justify-content: space-between;
+        max-width: 80%;
+        align-items: center;    text-align: left;
+    }
+    .night #spinner.frozen {background-color: rgba(29,29,31,0.72);}
+
+    .night .frozen .processing {
+        color: #eee;
+    }
+
+    .night a, .night #spinner.frozen .processing a{
+        color: #2997ff;
+    }
+
+    .heading{
+  color: #565656;font-size: 19px;
+    line-height: 1.26316;
+    font-weight: 600;
+    letter-spacing: .012em;    margin-bottom: 8px;
+}
+
+.night .heading{color: #eee;}
+.night .full, .night .w3 {
+    color: #1d1d1f;
+}
+
+.night .vHomeImage {
+    box-shadow: 0 5px 30px -8px rgb(0 0 0);
+}
+    </style>
+    <style media="screen">
+    /* Night mode */
+    .night,.night #spinner,.night .appContainer{
+        background: #1c1c1f;
+        color: #eee;
+    }
+    .night .heading{color: #eee;}
+    .night .dailyList,.night .videosContainer{
+      background: #28282f;
+    }
+    .night .ctaBtns{background: black}
+    .night .dailyList{box-shadow: 0px 20px 20px -20px #000;}
+    .night .ctaBtn,.night .largeBtn {
+    background: #bdbdbd;
+    color: #383840;
+    }
+    .night .lineIcon img{
+      filter: none;
+    }
+    .night .video {
+    box-shadow: 0 15px 13px -10px black;
+    }
+    .night img.smallIcon {
+    filter: contrast(0);
+    }
+    .night .video{
+      background: #454453;
+      color: whitesmoke;
+    }
+    #spinner {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      background-color: white;
+      z-index: 10;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-direction: column;
+    }
+    .processing{
+      color: #777;
+    }
+    .loaded{display: flex!important;}
+    .settingUp{
+    background: #fafafa!important;
+    color: #fafafa!important;
+    pointer-events: none;
+    }
+    .settingUp::before{
+      display: block;
+      content: "Setting up, please wait...";
+      color: gray;
+      font-weight: 100;
+      letter-spacing: normal;
+      text-transform: none;
+    }
+    .heading {
+    font-size: 32px;
+    line-height: 0.975;
+    font-weight: 600;
+    letter-spacing: .004em;
+    width: 80%;
+}
+
+*{box-sizing: border-box;}
+body{
+  background-color: #fafafa;
+  font-size: 17px;
+  line-height: 1.47059;
+  font-weight: 400;
+  letter-spacing: -.022em;
+  font-family: "SF Pro Text","SF Pro Icons","Helvetica Neue","Helvetica","Arial",sans-serif;
+  color: #1D1D2B;
+  margin: 0;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
+.filler {
+    width: 8px;
+    height: 150px;
+    display: flex;
+    flex: 0 0 auto;
+}
+
+.vHomeImage{
+
+  background: linear-gradient(270deg, #8983ba, #c29abe, #68a9bb, #5fc28a);
+      background-size: 800% 800%;
+}
+  </style>
+
+
+<div class="vHomeContainer">
+
+</div>
+<link rel="stylesheet" href="css/videoHome.css">
+<script src="js/langsHome.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    function getTranslation(string,spanCheck=true){
+      // missing lang fix
+      if(languages[urlParams.lang]!=undefined && languages[urlParams.lang][string]!=undefined)
+      {
+        if (languages[urlParams.lang][string].length<=25 || !spanCheck) {
+          return languages[urlParams.lang][string];
+        }
+        else
+        return "<span class='long'>"+languages[urlParams.lang][string]+"</span>";
+      }
+      else return string;
+    }
+
+    function smoothscrollToTop(){
+       var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+       if (currentScroll > 0) {
+            window.requestAnimationFrame(smoothscrollToTop);
+            window.scrollTo (0,currentScroll - (currentScroll/10));
+       }
+    }
+
+    function deeplink(link){
+      if (window.location.href.indexOf('localhost')==-1)
+      {
+        window.location.href=unescape(link);
+      }
+      else{
+        console.log(unescape(link));
+      }
+    }
+
+    var darkToggleCounter=0,darkToggleTimer,pipToggleTimer,pipToggleCounter=0,widgetToggleTimer,widgetToggleCounter=0;
+
+    function getAppleFeatures(){
+      if (urlParams.datanew!=undefined) {
+        return '';
+      }
+
+      var strings={};
+      strings['com.rstream.ketorecipes']=['keto','Keto'];
+      strings['com.rstream.crafts']=['craft','Crafts'];
+      strings['com.rstream.mindfulness']=['sleep','Mindfulness'];
+
+      if (strings[urlParams.appname]==undefined) {
+        strings[urlParams.appname]=['','it'];
+      }
+      if (urlParams.lang!=undefined && urlParams.lang!='en') {
+      var op='<div class="appleFeaturesContainer night"><div class="featuresTitle">'+getTranslation('Premium Experience')+'</div><div class="featuresExplainer">'+getTranslation('The best '+getTranslation(strings[urlParams.appname][0])+' ideas')+'.<br>'+getTranslation('Enjoy more for less.')+'</div>';
+      }
+      else
+      var op='<div class="appleFeaturesContainer night"><div class="featuresTitle">'+getTranslation('Premium Experience')+'</div><div class="featuresExplainer">'+getTranslation('The best '+getTranslation(strings[urlParams.appname][0])+' ideas')+'<br>with great features.<br>'+getTranslation('Enjoy more for less.')+'</div>';
+      op=op+'<div class="featureImagesContainer">'+
+      '    <div class="featureImageContent"><div class="featureImage"><div class="widgetContainer stock"><div class="wImages"><div class="wImage"></div><div class="wIcon"></div></div><div class="wText"><div class="wTitle">Riafy</div><div class="wSubtitle">They make apps</div></div></div></div>'+
+      '<div class="featureImageText">'+
+      '    <div class="featureImageHeading">'+getTranslation('Widgets')+'</div>'+
+      '    <div class="featureImageSubheading">'+getTranslation('Beautiful data rich widget provides great everyday utility.')+'</div>'+
+      '</div>'+
+      '</div>'+
+      '<div class="featureImageContent"><div class="featureImage"><div class="widgetContainer stock homeScreen"><div class="wImages"><div class="wIcon"></div><div class="wIcon"></div><div class="wIcon"></div><div class="wIcon"></div><div class="wIcon"></div><div class="wIcon"></div><div class="wIcon"></div><div class="wIcon"></div><div class="hidden wIcon"></div><div class="hidden wIcon"></div><div class="hidden wIcon"></div><div class="hidden wIcon"></div><div class="wIcon"></div><div class="wIcon"></div><div class="wIcon"></div><div class="wIcon"></div></div><div class="pip wPlayer"><i class="icon-play-circled"></i></div></div></div>'+
+      '<div class="featureImageText">'+
+      '    <div class="featureImageHeading">'+getTranslation('Picture in picture')+'</div>'+
+      '    <div class="featureImageSubheading">'+getTranslation('Watch our awesome videos while using other apps.')+'</div>'+
+      '</div>'+
+      '</div><div class="featureImageContent"><div class="featureImage"><div class="widgetContainer stock darkLight"><div class="wImages"><div class="wImage"></div><div class="wIcon"></div></div><div class="wText"><div class="wTitle">Riafy is awesome</div><div class="wSubtitle">They make apps that are awesome</div><div class="wSubtitle">They make apps that awesome</div><div class="wSubtitle">They make apps</div></div></div></div>'+
+      '<div class="featureImageText">'+
+      '    <div class="featureImageHeading">'+getTranslation('Dark mode')+'</div>'+
+      '    <div class="featureImageSubheading">'+getTranslation('Make videos stand out using darker backgrounds.')+'</div>'+
+      '</div></div><div class="filler"></div></div>';
+
+      var faq=[{'name':'Riafy On appStore','img':'http://photoapps.riafy.rocks/video_home_new/jpeg/flower%2Bcrafts.jpeg'}];
+      if (urlParams.android!=undefined) {
+        op=op+'<a onclick="deeplink(\'http://riafy.me/premium\')" class="featureBtn"><span>'+getTranslation('Try '+strings[urlParams.appname][1]+' free')+'</span></a></div>';
+      }
+      else
+      op=op+'<a onclick="deeplink(\'http://riafy.me/premium\')" class="featureBtn"><span>'+getTranslation('Try '+strings[urlParams.appname][1]+' free')+'</span></a><a onclick="deeplink(\'http://riafy.me/categoryFromSearch/'+encodeURIComponent(JSON.stringify(faq))+'\')" class="linkBtn"><span>'+getTranslation('Learn More')+'</span><i class="icon-angle-right"></i></a></div>';
+      return op;
+    }
+
+    var xhttp=new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+      var startIndex=1;
+     if (this.readyState == 4 && this.status == 200) {
+      document.querySelector('#spinner .processing').innerHTML='Setting up, please wait...'
+      var data=JSON.parse(this.responseText);
+
+      var videosHome="",newHTML='<div class="newBadge">'+getTranslation('NEW')+'</div>',specialHTML='<div class="newBadge special">'+getTranslation('Featured')+'</div>';
+
+      for (var i = 0; i < data.length; i++) {
+        switch (i) {
+          case 0:
+          videosHome=videosHome+'<div class="fullRow"><div style="padding-top:42px;" onclick="deeplink(\'http://riafy.me/videoCategory/'+escape(data[i].category)+'\')" class="vHomeItem full bg_orange"><div class="vHomeImage"><img  onerror="this.remove();"  src="'+data[i].imgurl+'"></div><div class="vHomeText">'+specialHTML+data[i].category+'</div></div></div>';
+          break;
+          case 14:
+          videosHome=videosHome+'<div class="fullRow"><div onclick="deeplink(\'http://riafy.me/videoCategory/'+escape(data[i].category)+'\')" class="vHomeItem full bg_peach"><div class="vHomeImage"><img  onerror="this.remove();"  src="'+data[i].imgurl+'"></div><div class="vHomeText">'+data[i].category+'</div></div></div>';
+          break;
+          case 15:case 16:case 17:
+          videosHome=videosHome+'<div onclick="deeplink(\'http://riafy.me/videoCategory/'+escape(data[i].category)+'\')" class="vHomeItem w3 index'+i+' bg_peach"><div class="vHomeImage"><img  onerror="this.remove();"  src="'+data[i].imgurl+'"></div><div class="vHomeText">'+data[i].category+'</div></div>';
+            break;
+
+          case 28:
+          videosHome=videosHome+'<div class="fullRow"><div onclick="deeplink(\'http://riafy.me/videoCategory/'+escape(data[i].category)+'\')" class="vHomeItem full bg_lavender"><div class="vHomeImage"><img  onerror="this.remove();"  src="'+data[i].imgurl+'"></div><div class="vHomeText">'+data[i].category+'</div></div></div>';
+          break;
+
+          case 54:
+          videosHome=videosHome+'<div class="fullRow"><div onclick="deeplink(\'http://riafy.me/videoCategory/'+escape(data[i].category)+'\')" class="vHomeItem full bg_lavender"><div class="vHomeImage"><img  onerror="this.remove();"  src="'+data[i].imgurl+'"></div><div class="vHomeText">'+data[i].category+'</div></div></div>';
+          break;
+          case 55:case 56:case 57:
+          videosHome=videosHome+'<div onclick="deeplink(\'http://riafy.me/videoCategory/'+escape(data[i].category)+'\')" class="vHomeItem w3 index'+i+' bg_teal"><div class="vHomeImage"><img  onerror="this.remove();"  src="'+data[i].imgurl+'"></div><div class="vHomeText">'+data[i].category+'</div></div>';
+            break;
+
+
+          case 36:
+          videosHome=videosHome+'<div class="fullRow"><div onclick="deeplink(\'http://riafy.me/videoCategory/'+escape(data[i].category)+'\')" class="vHomeItem full bg_teal"><div class="vHomeImage"><img  onerror="this.remove();"  src="'+data[i].imgurl+'"></div><div class="vHomeText">'+data[i].category+'</div></div></div>';
+          break;
+          case 37:case 38:case 39:
+          videosHome=videosHome+'<div onclick="deeplink(\'http://riafy.me/videoCategory/'+escape(data[i].category)+'\')" class="vHomeItem w3 index'+i+' bg_teal"><div class="vHomeImage"><img  onerror="this.remove();"  src="'+data[i].imgurl+'"></div><div class="vHomeText">'+data[i].category+'</div></div>';
+            break;
+
+          case 5:case 6:case 7:
+          videosHome=videosHome+'<div onclick="deeplink(\'http://riafy.me/videoCategory/'+escape(data[i].category)+'\')" class="vHomeItem w3 index'+i+' bg_green"><div class="vHomeImage"><img  onerror="this.remove();"  src="'+data[i].imgurl+'"></div><div class="vHomeText">'+data[i].category+'</div></div>';
+            break;
+
+          case 3:
+          videosHome=videosHome+getAppleFeatures();
+          default:
+          if(data[i].docked!=undefined && data[i].docked==1 && i<5)
+          videosHome=videosHome+'<div onclick="deeplink(\'http://riafy.me/videoCategory/'+escape(data[i].category)+'\')" class="vHomeItem w2"><div class="vHomeImage"><img  onerror="this.remove();"  src="'+data[i].imgurl+'"></div><div class="vHomeText">'+newHTML+data[i].category+'</div></div>';
+          else videosHome=videosHome+'<div onclick="deeplink(\'http://riafy.me/videoCategory/'+escape(data[i].category)+'\')" class="vHomeItem w2"><div class="vHomeImage"><img  onerror="this.remove();"  src="'+data[i].imgurl+'"></div><div class="vHomeText">'+data[i].category+'</div></div>';
+        }
+      }
+      document.querySelector('.vHomeContainer').innerHTML=videosHome;
+
+      darkToggleTimer=setInterval(function(){
+        if (urlParams.datanew!=undefined) {
+          return;
+        }
+        if (document.querySelector('.darkLight').classList.contains('dark')) {
+          document.querySelector('.darkLight').classList.remove('dark');
+        }
+        else document.querySelector('.darkLight').classList.add('dark');
+
+        if (darkToggleCounter++>10 && document.querySelector('.darkLight').classList.contains('dark')) {
+          clearInterval(darkToggleTimer);
+        }
+
+      },5000);
+      pipToggleTimer=setInterval(function(){
+        if (urlParams.datanew!=undefined) {
+          return;
+        }
+        var pipTimeline=['pip','pip','lpip','lpip','bpip','bpip'],animClass="";
+        if (pipTimeline[pipToggleCounter]!=undefined) {
+          animClass=pipTimeline[pipToggleCounter];
+        }
+        else animClass='pip';
+
+        if (document.querySelector('.wPlayer').classList.contains(animClass)) {
+          document.querySelector('.wPlayer').classList.remove(animClass);
+        }
+        else document.querySelector('.wPlayer').classList.add(animClass);
+
+        if (pipToggleCounter++>10 && document.querySelector('.wPlayer').classList.contains('pip')) {
+          clearInterval(pipToggleTimer);
+        }
+      },2000);
+      widgetToggleTimer=setInterval(function(){
+        if (urlParams.datanew!=undefined) {
+          return;
+        }
+        var pipTimeline=['step1','step1','step2','step2','step3','step3'],animClass="";
+        if (pipTimeline[widgetToggleCounter]!=undefined) {
+          animClass=pipTimeline[widgetToggleCounter];
+        }
+        else animClass='rounded';
+
+        if (document.querySelector('.wText').classList.contains(animClass)) {
+          document.querySelector('.wText').classList.remove(animClass);
+        }
+        else document.querySelector('.wText').classList.add(animClass);
+
+        if (widgetToggleCounter++>10 && document.querySelector('.wText').classList.contains('rounded')) {
+          clearInterval(widgetToggleTimer);
+        }
+      },4000);
+
+      removeSpinner("Loading...");
+
+    }
+    else if (this.readyState == 4 && this.status == 400){
+      if(urlParams.rstream==undefined)
+      addSpinner("full",'Something went wrong.<br>Please try another book.','init()','');
+      else addSpinner("full",'Something went wrong.<br>Please try another video.','init()','');
+    }
+    else if (this.readyState == 4 && this.status == 0){
+      setTimeout(function() {
+        addSpinner("full",'<span class="toTrans">You are offline.</span><br><span class="toTrans">Please check your internet connection.</span>','init()','<span class="toTrans tapToRetry" onclick="convertToSpinner(\'.tapToRetry\')">TAP TO RETRY</span>');
+      },500);
+    }
+  }
+  // if (urlParams.screenshot!=undefined) {
+  //   xhttp.open("GET", "https://cookbookapp.in/RIA/iOS/videoSeries.php?appname="+urlParams.appname+"&john&lang="+urlParams.lang);
+  // }
+  // else
+  xhttp.open("GET", "https://cookbookapp.in/RIA/iOS/videoSeries.php?appname="+urlParams.appname+"&lang="+urlParams.lang);
+  xhttp.send();
+  function smoothscrollTabPress(){}
+  </script>
+  </body>
+</html>

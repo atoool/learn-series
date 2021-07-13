@@ -1,8 +1,8 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {fetchData} from './ApiCalls';
 import {Platform} from 'react-native';
 import {checkPurchased, showPrice} from '../comp/PremiumCheckFun';
-import {GoogleSignin} from '@react-native-community/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {locale} from '../res/locale';
 
 export function getRandomArray(orgArray) {

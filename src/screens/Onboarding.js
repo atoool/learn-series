@@ -12,7 +12,7 @@ import {
 import WebView from 'react-native-webview';
 import Loading from '../comp/Loading';
 import R from '../res/R';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ContextStates} from '../func/ContextStates';
 import {PremSuccess} from '../comp/PremSuccess';
 import {
@@ -146,13 +146,7 @@ export default class Onboarding extends PureComponent {
   };
 
   render() {
-    const inject = `javascript:setIAPValues('monthly',"${
-      this.context?.reduState?.prices[2]
-    }");javascript:setIAPValues('6month',"${
-      this.context?.reduState?.prices[1]
-    }");javascript:setIAPValues('lifetime',"${
-      this.context?.reduState?.prices[0]
-    }"||"${this.context?.reduState?.prices[0]}000000")`;
+    const inject = `javascript:setIAPValues('monthly',"${this.context?.reduState?.prices[2]}");javascript:setIAPValues('6month',"${this.context?.reduState?.prices[1]}");javascript:setIAPValues('lifetime',"${this.context?.reduState?.prices[0]}"||"${this.context?.reduState?.prices[0]}000000")`;
 
     if (
       this.state.purchasedPremium === 'yup' ||
@@ -192,6 +186,7 @@ export default class Onboarding extends PureComponent {
           injectedJavaScript={inject}
           domStorageEnabled
           onShouldStartLoadWithRequest={a => {
+            console.warn(a.url);
             if (a.url.indexOf('/tech') > -1 || a.url.indexOf('/vibrate') > -1) {
               return false;
             }

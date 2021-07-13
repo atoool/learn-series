@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <title>Reading room</title>
+    <link rel="stylesheet" href="player_css/moonshot.css">
+    <script type="text/javascript">
+    if(window.speechSynthesis!=undefined)
+    {
+      // if (window.speechSynthesis.speaking)
+      {
+        window.speechSynthesis.cancel();
+      }
+    }
+    function nightModeSwitch(check=0){
+          if (check==1) {
+            // to trigger night mode
+            document.querySelector('body').classList.add('night');
+            return;
+          }
+          else if (check==2){
+            //to trigger day mode
+            document.querySelector('body').classList.remove('night');
+            return;
+          }
+          if (urlParams.iOS!=undefined) {
+            if (urlParams.dark!=undefined) {
+              document.querySelector('body').classList.add('night');
+            }
+          }
+          else
+          {
+             var now = new Date();
+             var hrs = now.getHours();
+             var greet;
+             if (hrs >= 19 || hrs <= 6)
+             {
+               document.querySelector('body').classList.add('night');
+             }
+         }
+        }
+    var urlParams;
+    (window.onpopstate = function () {
+      var match,
+        pl = /\+/g, // Regex for replacing addition symbol with a space
+        search = /([^&=]+)=?([^&]*)/g,
+        decode = function (s) {
+          return decodeURIComponent(s.replace(pl, " "));
+        },
+        query = window.location.search.substring(1);
+
+      urlParams = {};
+      while (match = search.exec(query))
+        urlParams[decode(match[1])] = decode(match[2]);
+    })();
+    if (urlParams.appname==undefined) {
+      urlParams.appname='com.riatech.cookbook';
+    }
+    </script>
+    <style media="screen">
+    body,div,span,a,li{-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none; -ms-user-select: none;user-select: none;-webkit-tap-highlight-color:transparent;}
+    .page
+    *::-webkit-scrollbar {
+    display: none;
+    }
+    html {scroll-behavior: smooth;}
+    body,html,div,figure{margin: 0;padding: 0;box-sizing: border-box;}
+    body{
+      font-size: 17px;
+      line-height: 1.47059;
+      font-weight: 400;
+      letter-spacing: -.022em;
+      font-family: "SF Pro Text","Roboto","Helvetica Neue","Helvetica","Arial",sans-serif;
+      color: #1d1d1f;
+    }
+      .closed .hero-headline {
+      font-size: 17px;
+      line-height: 1.47059;
+      font-weight: 600;
+      letter-spacing: -.022em;
+      margin-bottom: 0;
+      }
+      .closed .summary {
+        font-size: 12px;
+        line-height: 1.36364;
+        font-weight: 400;
+        letter-spacing: -.008em;
+        /* color: #666; */
+        margin-top: 4px;
+      }
+      .closed .component{
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      .closed .heading-component,.closed .summary.component{
+        border: none;
+      }
+
+      .hero-headline {
+    font-size: 32px;
+    line-height: 1.125;
+    font-weight: 600;
+    letter-spacing: .004em;
+    }
+
+    .summary,.read {
+    font-size: 19px;
+    line-height: 1.21053;
+    font-weight: 400;
+    letter-spacing: .012em;
+    color: #666;
+    /* transition: .3s ease-in all; */
+    }
+    .read{font-weight: 600;font-size: 21px;color: #1d1d1f}
+
+    .pagebody {
+    font-size: 17px;
+    line-height: 1.47059;
+    font-weight: 400;
+    letter-spacing: -.022em;
+    color: #666;
+  }
+
+  .component {
+    margin-left: auto;
+    margin-right: auto;
+    width: 87.5%;
+    margin-top: 28px;
+    margin-bottom: 28px;
+  }
+  .summary.component{
+    border-top: 1px solid #d2d2d7;
+  }
+
+  .heading-component{border-bottom: 1px solid #d2d2d7;}
+  .stock p,.stock h1{
+    display: inline;
+    /* background-image: linear-gradient(to bottom,transparent 0,#ccc 0); */
+    color: rgba(0, 0, 0, 0);
+    color: transparent;
+    background-repeat: no-repeat;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    background-size: 100% 1em;
+    background-position: 0 bottom;
+    background: linear-gradient(271deg, #ff9a9e, #fad0c4, #ffd1ff, #a6c1ee, #fbc2eb, #8fd3f4, #e0c3fc, #fed6e3, #a8edea);
+    background-size: 2200% 2200%;
+    /* line-height: 1.3; */
+    -webkit-animation: grains 15s ease infinite;
+    -moz-animation: grains 15s ease infinite;
+    animation: grains 15s ease infinite;
+}
+/* h1, p, li, .summary{
+  background-color: transparent;
+  transition: 1s linear background;
+} */
+.sentence-highlight h1, p.sentence-highlight, .sentence-highlight li, .sentence-highlight .summary,blockquote.sentence-highlight p{
+    display: inline;
+    background-repeat: no-repeat;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    background-size: 100% 1em;
+    background-position: 0 bottom;
+    background: linear-gradient(271deg,#fed6e3, #a8edea);
+    background-size: 2200% 2200%;
+    -webkit-animation: grains 15s ease infinite;
+    -moz-animation: grains 15s ease infinite;
+    animation: grains 15s ease infinite;
+    /* display: inline;
+    border-bottom:1px solid red; */
+}
+
+p.sentence-highlight::before,p.sentence-highlight::after{
+  content: " ";margin-top: .5em;margin-bottom: .5em;display: block;
+}
+
+.sentence-highlight .summary::before {margin-top: 1em;content: " ";display: block;}
+.sentence-highlight li::before {margin-top:8px;content: " ";display: block;}
+
+.stock h1{line-height: 1.36;}
+.stock p.summary{line-height: 1.5;}
+.stock .heading-component{border: none;}
+.stock .footer {
+    position: fixed;
+    bottom: 0;
+}
+.stock .component{
+  border: none;
+}
+
+iframe{
+  width: 100%;height: 200px;
+}
+
+@-webkit-keyframes grains {
+    0%{background-position:0% 52%}
+    50%{background-position:100% 49%}
+    100%{background-position:0% 52%}
+}
+@-moz-keyframes grains {
+    0%{background-position:0% 52%}
+    50%{background-position:100% 49%}
+    100%{background-position:0% 52%}
+}
+@keyframes grains {
+    0%{background-position:0% 52%}
+    50%{background-position:100% 49%}
+    100%{background-position:0% 52%}
+}
+
+.footer-logo {
+    width: 84px;
+    height: 24px;
+    background: url(Riafy.svg) no-repeat;
+    background-size: cover;
+}
+.visuallyhidden {
+    position: absolute;
+    clip: rect(1px, 1px, 1px, 1px);
+    -webkit-clip-path: inset(0px 0px 99.9% 99.9%);
+    clip-path: inset(0px 0px 99.9% 99.9%);
+    overflow: hidden;
+    height: 1px;
+    width: 1px;
+    padding: 0;
+    border: 0;
+}
+svg .rfy{fill:red;}
+.footertile-copy-headline {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.42859;
+    font-weight: 400;
+    letter-spacing: -.016em;
+    margin-top: 8px;
+  }
+.footer{background-color: #f5f5f7;    position: relative;
+  width: 100%;
+padding: 14px 0 28px 0;}
+/* .hide{display: none;} */
+.hidden{visibility: hidden;}
+.image-container {
+    width: 100%;
+}
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+a {
+    border-bottom: 2px solid #06c;
+    text-decoration: none;
+    color: #06c;
+}
+.story{
+  max-width: 692px;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+.component{max-width: 576px;}
+.related{max-width: 692px;}
+.related-story.closed {/* width: calc(50% - 28px); */margin-bottom: 14px;border-top: 1px solid #d2d2d7;
+  /* background-color: #fff; */
+}
+.stock .related-story.closed {border: none}
+
+.closed .image-container {
+    height: 100px;
+    width:90%;
+    overflow:hidden;
+    margin:0 auto;
+}
+
+.closed .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+}
+
+.related {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.related-story.closed .pagebody {
+    display: none;
+}
+.tag.red{color: #DA0F47;}
+.tag.sea{color: #0381A2;}
+.tag.violet{color: #4F69F8;}
+.tag.green{color: #688000;}
+.tag{font-size: 12px;
+    line-height: 1.33337;
+    font-weight: 600;
+    letter-spacing: -.01em;}
+.related-story{width: 100%;border-top: 1px solid #d2d2d7;position: relative;}
+.difference{
+  font-size: 19px;
+  line-height: 1.21053;
+  font-weight: 700;
+  letter-spacing: -.003em;
+}
+.typography{
+  font-size: 17px;
+  line-height: 1.23536;
+  font-weight: 700;
+  letter-spacing: -.003em;
+}
+.rewrite{
+  font-size: 40px;
+  line-height: 1.025;
+  font-weight: 700;
+  letter-spacing: 0em;
+}
+
+.button{
+  width: 100%;
+  max-width: 310px;
+  font-size: 14px;
+  line-height: 1.42859;
+  font-weight: 600;
+  letter-spacing: -.008em;
+  padding-left: 22px;
+  padding-right: 22px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-radius: 22px;
+  color: white;
+  text-align: center;
+  background-color: #ff0052;
+  cursor:pointer;
+}
+.phone-hardware{
+  position: absolute;
+  width: 162px;
+  height: 254px;
+  background-size: 162px 254px;
+  background-repeat: no-repeat;
+  background-image: url('https://www.apple.com/v/apple-news/d/images/overview/difference_iphone_hardware__ddo6yk9w9cia_small_2x.png');
+}
+.phone{
+  position: relative;height: 254px;
+}
+.phone-content{
+  width: 90px;
+  height: 192px;
+  position: absolute;
+  background-size: 90px 192px;
+  background-repeat: no-repeat;
+  background-image: url('https://www.apple.com/v/apple-news/d/images/overview/difference_iphone_screen2__bown0td6ta82_small_2x.jpg');
+}
+.phone-content {
+    top: 15px;
+    left: 15px;
+    z-index: 1;
+}
+
+.phone-hardware {
+    z-index: 2;
+}
+.ctaSection {
+    display: flex;align-items: center;
+}
+
+.leftSide {
+    width: 70%;
+    padding: 8px 8px 8px 0;
+}
+
+.rightSide {
+    width: 152px;
+}
+.stock .experience{display: none;}
+.experience{overflow: hidden;    margin-right: 0;
+    width: 93.75%;
+    padding-top: 28px;border-top: 1px solid #d2d2d7;
+}
+.read{
+  display: flex;justify-content: space-between;align-items: center;
+}
+.playStopBtn{padding: 8px;
+  background: #ff2f56;
+  border-color: #ff2f56;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.33337;
+  font-weight: 400;
+  letter-spacing: -.01em;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  min-width: 23px;
+  /* padding-left: 11px; */
+  padding-right: 11px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 12px;
+
+    }
+.hide{display: none!important;}
+
+/* Night mode */
+.night {
+    background: #1c1c1f;
+    color: #eee;
+}
+.night .read{color: #eee;}
+.night .pagebody {
+    color: #969697;
+}
+.night.stock p, .night.stock .closed .summary, .pagebody.text.component.stock p{
+    color: rgba(0, 0, 0, 0);
+    color: transparent;
+}
+
+.night .closed .summary,.night p {
+    color: #969697;
+}
+
+.night .sentence-highlight,.night .sentence-highlight p {
+    color: #1c1c20!important;
+}
+
+.night .related-story.closed, .night .related-story, .night .summary.component, .night .heading-component, .night .experience {
+    border-color: #3f3f43;
+}
+
+.night .footer {
+    background-color: #232327;
+}
+.night .footer-logo {filter: invert(81%) sepia(98%) saturate(6%) hue-rotate(159deg) brightness(111%) contrast(87%);}
+.night .footertile-copy-headline {
+    color: #969697;
+}
+.night a{
+  border-bottom: 2px solid #c30034;
+  color: #d6003e;
+}
+.night img {
+    filter: brightness(0.7);
+}
+.night .book img {
+    filter: none;
+}
+.playStopBtn{transition: 300ms ease-out transform;}
+.related-story::after {
+    content: " ";
+    height: 100%;
+    position: absolute;
+    right: 0;
+    width: 4px;
+    top: 0;
+    background: #ff2f56;
+    transform:scaleY(0);
+    transition:300ms linear transform;
+    -webkit-transform-origin-y: 10px;
+}
+.listening.related-story::after {
+    transform:scaleY(1);
+}
+.entry-content {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+div#p1{margin-bottom: 0;}
+
+.pagebody figure {
+    width: 100%!important;
+    max-height: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.pagebody figure img,.pagebody a img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.pagebody figure a {
+    border: none;
+}
+.deactivate{pointer-events: none;}
+.entry-content p:first-child:first-letter, .shareText:first-letter {
+    float: left;
+    font-size: 84px;
+    line-height: .85;
+    margin-right: 4px;
+    font-weight: bold;
+    font-family: 'Times New Roman', serif;
+}
+.shareText:first-letter {
+    font-size: 104px;    margin-top: -1px;
+}
+
+section.shareBtns i {font-style: normal;font-size: 14px;text-transform: uppercase;}
+
+section.shareBtns {
+    text-align : right;
+    margin-top: -1em;
+}
+section.shareBtns + figure, section.shareBtns + img {
+    margin-top: 14px;
+}
+
+@media (min-width:693px) {
+  .related .component{width: 100%;}
+  .experience{width: 87.5%;margin-right:auto;}
+}
+.progressBar{
+  height: 20px; position: fixed;top: 0;
+  width: 0%;transition: 1s linear width;
+  background: linear-gradient(271deg, #ff9a9e, #fad0c4, #ffd1ff, #a6c1ee, #fbc2eb, #8fd3f4, #e0c3fc, #fed6e3, #a8edea);
+  background-size: 2200% 2200%;
+  -webkit-animation: grains 15s ease infinite;
+  -moz-animation: grains 15s ease infinite;
+  animation: grains 15s ease infinite;
+}
+
+/* books */
+.book-container{
+    width: 100%;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: lightgray;
+    box-shadow: inset 1px 1px 100px -80px black;
+}
+
+.book {
+    width: 180px;
+    height: 270px;
+    box-shadow: 0 15px 13px -10px #7b7b7b;
+    position: relative;
+}
+
+.sleeve {
+    height: 100%;
+    width: 13px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(90deg, rgb(255 255 255), rgb(255 255 255 / 0%));
+    mix-blend-mode: soft-light;
+    z-index: 4;
+}
+
+.ridge {
+    height: 100%;
+    width: 4px;
+    position: absolute;
+    top: 0;
+    left: 4px;
+    box-shadow: inset 2px 0px 3px rgb(0 0 0 / 23%);
+    mix-blend-mode: multiply;
+    z-index: 5;
+}
+
+.bookName {
+    position: absolute;
+    top: 20%;
+    width: 100%;
+    height: 60%;
+    display: flex;
+    align-items: top;
+    justify-content: center;
+    word-break: break-word;
+    z-index: 2;
+}
+
+.allCaps {font-family: 'Avenir Next Condensed';font-weight: bold;text-transform: uppercase;padding: 10px;font-size: 38px;color: white;line-height: .82;text-align: center;    font-style: italic;
+    letter-spacing: -.1rem;}
+
+.book img {
+    width: 100%;height: 100%;object-fit: cover;
+    z-index: 3;position: absolute;
+}
+
+.longText {
+    font-size: 17px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 5px rgb(0 0 0 / 49%);
+    background: rgb(0 0 0 / 6%);
+    z-index:3;
+    height: 100%;
+top: 0;
+align-items: center;
+overflow: hidden;line-height: 1;
+}
+
+/* book gradients */
+.bookG-ro{
+  background-image: linear-gradient(-45deg, #eec899 0%,#b52b40 100%);
+  /* background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%); */
+}
+.bookG-wh{
+  background-image: linear-gradient(0deg, #93a5cf 0%, #e4efe9 100%);
+}
+.bookG-chemic{
+  background-color: #CDDCDC;
+ background-image: radial-gradient(at 50% 100%, rgba(255,255,255,0.50) 0%, rgba(0,0,0,0.50) 100%), -webkit-linear-gradient(rgba(255,255,255,0.25) 0%, rgba(0,0,0,0.25) 100%);
+ background-image: radial-gradient(at 50% 100%, rgba(255,255,255,0.50) 0%, rgba(0,0,0,0.50) 100%), -o-linear-gradient(rgba(255,255,255,0.25) 0%, rgba(0,0,0,0.25) 100%);
+ background-image: radial-gradient(at 50% 100%, rgba(255,255,255,0.50) 0%, rgba(0,0,0,0.50) 100%), linear-gradient(rgba(255,255,255,0.25) 0%, rgba(0,0,0,0.25) 100%);
+  background-blend-mode: screen, overlay;
+}
+.image-container {
+    height: 240px;
+    background-color: #ccc;
+}
+
+.imgPlaceholder {
+    display: none;
+}
+
+.stock .imgPlaceholder {
+    display: block;
+    background-position: 0 bottom;
+    background: linear-gradient(271deg, #ff9a9e, #fad0c4, #ffd1ff, #a6c1ee, #fbc2eb, #8fd3f4, #e0c3fc, #fed6e3, #a8edea);
+    background-size: 2200% 2200%;
+    -webkit-animation: grains 15s ease infinite;
+    -moz-animation: grains 15s ease infinite;
+    animation: grains 15s ease infinite;
+}
+  </style>
+  <style media="screen" id="styleChanger">.listening .playStopBtn {transform: translateX(100px);}</style>
+  </head>
+  <body class="stock">
+    <script type="text/javascript">
+      nightModeSwitch();
+    </script>
+    <div class="progressBar hide"></div>
+    <div class="story">
+      <div class="related-story">
+        <!-- <div class="book-container"><div class="book"><img src="/2020/books/start with why.jpg"></div></div> -->
+        <div class="imgPlaceholder" style="height:240px;"></div>
+        <div class="heading-component" onclick="readLoud(this,'p1')">
+          <div class="readtitle component">
+            <h3 class="read">Reading room<div class="playStopBtn hide"><i class="icon-play"></i>Listen</div></h3>
+          </div>
+          <div class="pagetitle component">
+            <h1 class="hero-headline">Riafy makes magic happen</h1>
+          </div>
+          <div class="summary text component"><p class="summary">Riafy is on moonshot protocol. Moonshot is an idea/throught process to become 10x better.</p></div>
+        </div>
+        <div class="pagebody text component" id="p1">
+          <p>Riafy revolutionized recipe discover with the introduction of the Cookbook in 2013. Today, Riafy leads the world with apps in food, fitness & photography. Riafy's team is dedicated to making the best products on earth, and to leaving the world better than we found it.</p>
+        </div>
+      </div>
+      <div class="related stock">
+        <div class="related-story closed">
+          <div class="heading-component">
+            <!-- <div class="readtitle component">
+              <h3 class="read">Reading room<div class="playStopBtn"><i class="icon-play"></i></div></h3>
+            </div> -->
+            <div class="pagetitle component">
+              <h1 class="hero-headline">Riafy makes magic happen</h1>
+            </div>
+            <div class="summary text component">
+              <p class="summary">Riafy is on moonshot protocol. Moonshot is an idea/throught process to become 10x better.</p>
+            </div>
+          </div>
+          <div class="pagebody text component">
+          </div>
+        </div>
+      </div>
+      <div class="experience text component">
+        <div class="difference">The Reading Room difference</div>
+        <div class="rewrite">Rewriting the reading experience.</div>
+        <div class="ctaSection">
+          <div class="leftSide">
+            <p class="typography">Reading Room delivers an incredibly diverse collection of the world’s best stories. Vivid photography and animation, rich videos, and immersive layouts bring articles to life in stunning new ways. You get every article in every title, all for one price — without ever hitting a paywall.</p>
+            <div class="button" onclick="deeplink('http://riafy.me/premium')">Try it free</div>
+          </div>
+          <div class="rightSide">
+            <div class="phone">
+              <div class="phone-hardware"></div>
+              <div class="phone-content"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Reading Room delivers an incredibly diverse collection of the world’s best tops. Vivid photography and animation, rich videos, and immersive layouts bring articles to life in stunning new ways. Swipe through issues from cover to cover or download them to read on the go. You get every article in every title, all for one price — without ever hitting a paywall. -->
+      </div>
+    </div>
+    <div class="footer">
+      <div class="footertile component">
+        <figure class="footer-logo"><span class="visuallyhidden" id="footertile-name">Riafy Technologies</span></figure>
+        <div class="footertile-copy-headline">The latest tips and tricks, direct from Riafy.</div>
+      </div>
+    </div>
+  <script type="text/javascript">
+  function imgCheck(e){
+    e.classList.add('hide');
+  }
+
+  var allStories={};
+  function deeplink(link){
+    if(urlParams.appClip!=undefined)
+    return;
+    if (window.location.href.indexOf('localhost')==-1 && window.location.href.indexOf('_id=')>-1)
+    {
+      window.location.href=link;
+    }
+    else{
+      console.log(link);
+    }
+  }
+  var playlist,playDom=[],utComplete=0,storyBeingRead,firstPass=0,currentParagraph=0;
+  function readLoud(e,id){
+    return;
+    document.querySelector('#styleChanger').innerHTML=".listening .playStopBtn {transform: translateX("+(document.querySelector(".story").offsetWidth-document.querySelector('.playStopBtn').offsetLeft-27)+"px);}";
+
+    if (e.parentNode.classList.contains('closed') && !document.querySelector('body').classList.contains('stock')) {
+      return;
+    }
+
+    if (e.parentNode.classList.contains('listening')) {
+      stop();
+      playlist=[];playDom=[];
+      e.parentNode.classList.remove('listening');
+      document.querySelector('.floatingSegmentContainer').classList.remove('active');
+      for (var i = 0; i < document.querySelectorAll('.sentence-highlight').length; i++) {
+        document.querySelectorAll('.sentence-highlight')[i].classList.remove('sentence-highlight');
+      }
+      return;
+    }
+    else if(document.querySelector('.listening')!=undefined)
+    stop();
+    e.parentNode.classList.add('listening');
+    document.querySelector('.floatingSegmentContainer').classList.add('active');
+    storyBeingRead=id;currentParagraph=0;
+
+    preparePlaylist(e);
+    play(currentParagraph);
+  }
+
+  function play(index){
+    document.querySelector('.fpPlayBtn').classList.remove('paused');
+    document.querySelector('.fpPlayBtn').classList.add('playing');
+    document.querySelector('.fpPlayBtn i').setAttribute('class','icon-pause');
+
+    var highlighted=document.querySelectorAll('.sentence-highlight');
+    for (var i = 0; i < highlighted.length; i++) {
+      highlighted[i].classList.remove('sentence-highlight');
+    }
+
+    playDom[index].classList.add('sentence-highlight');
+
+    deeplink("http://thecookbk.com/speakwithcallback/"+playlist[index]);
+    document.getElementById("bgm").play();
+    currentParagraph++;
+  }
+  function stop(){
+    document.querySelector('.listening').classList.remove('listening');
+    document.querySelector('.floatingSegmentContainer').classList.remove('active');
+
+    var highlighted=document.querySelectorAll('.sentence-highlight');
+    for (var i = 0; i < highlighted.length; i++) {
+      highlighted[i].classList.remove('sentence-highlight');
+    }
+
+    document.querySelector('.fpPlayBtn').classList.remove('paused');
+    document.querySelector('.fpPlayBtn i').setAttribute('class','icon-pause');
+    document.getElementById("bgm").pause();
+    deeplink("http://thecookbk.com/stopspeak");
+  }
+  function playPause(e){
+    if (e.classList.contains('playing')) {
+      //pause code
+      e.classList.remove('playing');
+      e.querySelector('i').setAttribute('class','icon-play');
+      e.classList.add('paused');
+      document.getElementById("bgm").pause();
+      deeplink("http://thecookbk.com/stopspeak");
+
+      currentParagraph--;
+    }
+    else{
+      //play code
+      e.classList.remove('paused');
+      e.querySelector('i').setAttribute('class','icon-pause');
+      e.classList.add('playing');
+      if(playlist[currentParagraph]!=undefined)
+      play(currentParagraph);
+    }
+  }
+
+  function next(){
+    if (currentParagraph>=playlist.length) {
+      currentParagraph=playlist.length-1;
+    }
+    if(playlist[currentParagraph]!=undefined)
+    {
+      if(playDom[currentParagraph-1]!=undefined)
+      {
+      playDom[currentParagraph-1].scrollIntoView();
+      }
+      play(currentParagraph);
+    }
+
+
+
+  }
+  function prev(){
+    currentParagraph=currentParagraph-2;
+    if (currentParagraph<=0) {
+      currentParagraph=0;
+    }
+    if(playlist[currentParagraph]!=undefined)
+    {
+      if(playDom[currentParagraph-1]!=undefined)
+      {
+      playDom[currentParagraph-1].scrollIntoView();}
+      play(currentParagraph);
+    }
+  }
+
+  function speechComplete(){
+    if (playlist[currentParagraph]!=undefined) {
+      play(currentParagraph);
+    }
+    else {
+      document.getElementById("bgm").pause();
+      document.querySelector('.listening').classList.remove('listening');
+      document.querySelector('.sentence-highlight').classList.remove('sentence-highlight');
+      document.querySelector('.floatingSegmentContainer').classList.remove('active');
+    };
+  }
+
+  function share(text){
+    document.querySelector('.floatingSegmentContainer .shareText').innerHTML=text;
+    document.querySelector('.floatingSegmentContainer').classList.add('shareEnable');
+    deeplink("http://thecookbk.com/generateshortlink/https://play.google.com/store/apps/details?id="+urlParams.appname+"&hl=en&gl=US")
+    setTimeout(function() {
+      document.querySelector('body').classList.add('noscroll');
+      document.querySelector('.story').classList.add('noscroll');
+    },300);
+  }
+
+  function dismissScreenshot(){
+    document.querySelector('body').classList.remove('noscroll');
+    document.querySelector('.story').classList.remove('noscroll');
+    document.querySelector('.floatingSegmentContainer').classList.remove('shareEnable');
+  }
+
+  function shortLinkCreated(link){
+    if (document.querySelector('.shareEnable')!=undefined && document.querySelector('.socksArea .button.waiting')!=undefined) {
+      document.querySelector('.socksArea .button.waiting').innerHTML='<i class="icon-send"></i>Share text';
+      document.querySelector('.socksArea .button.waiting').onclick=function(){
+        var shareData={};
+        shareData['link']=link;
+        shareData['text']=document.querySelector('.chestArea .shareText').innerText;
+        console.log(shareData);
+        deeplink("http://thecookbk.com/newshare/"+JSON.stringify(shareData));
+      };
+      document.querySelector('.socksArea .button.waiting').classList.remove('waiting');
+    }
+  }
+
+  function screenshotShare() {
+    document.querySelector('.socksArea').classList.add('noopacity');
+    document.querySelector('.closeBtn').classList.add('noopacity');
+    setTimeout(function(){
+      deeplink('http://thecookbk.com/screenshotshare');
+    },500)
+    setTimeout(function(){
+      document.querySelector('.socksArea').classList.remove('noopacity');
+      document.querySelector('.closeBtn').classList.remove('noopacity');
+    },1500);
+  }
+
+  function linkFixer(){
+
+    var firstP=document.querySelectorAll('.entry-content p:first-child');
+    for (var i = 0; i < firstP.length; i++) {
+      if(firstP[i].nextSibling!=undefined && firstP[i].nextSibling.classList!='shareBtns')
+      firstP[i].insertAdjacentHTML('afterend','<section class="shareBtns"><i onclick="share(\''+firstP[i].innerText.replace(/"'"/g,"\'")+'\')" class="icon-send">Share</i></section>');
+    }
+
+    var allLinks=document.querySelectorAll('.entry-content a'),link='';
+    for (i = 0; i < allLinks.length; i++) {
+      link=allLinks[i].getAttribute('href');
+      if (allLinks[i].querySelector('img')!=undefined) {
+        allLinks[i].classList.add('deactivate');
+        // allLinks[i].outerHTML=allLinks[i].querySelector('img').outerHTML;
+      }
+      else if (link.indexOf("http://thecookbk.com/openurlexternally/")==-1) {
+        allLinks[i].setAttribute('href',"http://thecookbk.com/openurlexternally/"+link);
+        allLinks[i].setAttribute('target',"_blank");
+      }
+    }
+  }
+
+  function preparePlaylist(e){
+    var c = e.childNodes;
+    playlist = [],playDom=[];
+    var i,textTemp;
+    //get title segment and summary
+    for (i = 0; i < c.length; i++) {
+      if (c[i].classList!=undefined && c[i].classList.contains('readtitle')) {
+        continue;
+      }
+      // c[i].innerText=c[i].innerText.replace(/\\n/g,'');
+      if(c[i].nodeName.toLowerCase()!='script' && c[i].nodeName.toLowerCase()!='section' && c[i].nodeName.toLowerCase()!='figure' && c[i].innerText!=undefined && c[i].innerText!=""){
+      playlist.push(c[i].innerText);playDom.push(c[i])}
+    }
+    if (e.parentNode.querySelector('.pagebody .entry-content')==undefined) {
+      return;
+    }
+    c = e.parentNode.querySelector('.pagebody .entry-content').childNodes;
+    for (i = 0; i < c.length; i++) {
+      if (c[i].classList!=undefined && c[i].classList.contains('readtitle')) {
+        continue;
+      }
+      if(c[i].nodeName.toLowerCase()!='script' && c[i].nodeName.toLowerCase()!='section' && c[i].nodeName.toLowerCase()!='figure' && c[i].nodeName.toLowerCase()!='img' && c[i].innerText!=undefined && c[i].innerText!=""){
+      playlist.push(c[i].innerText);playDom.push(c[i])}
+    }
+  }
+
+  setTimeout(function(){
+    var xhttp = new XMLHttpRequest(),imgHTML='';
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var data=JSON.parse(this.responseText);
+        if(data['content']!=undefined)
+        {
+        data['content']=data['content'].replace(/<img /g,"<img onerror='imgCheck(this)' ");
+        // data['content']=data['content'].replace(/<a href="/g,"<a target='_blank' href=\"http://thecookbk.com/openurlexternally/");
+        data['content']=data['content'].split('ALSO READ:');
+        data['content']=data['content'][0];
+        data['content']=data['content'].split('Also Read:');
+        data['content']=data['content'][0];
+        imgHTML='<div class="image-container"><img onerror="imgCheck(this);" src="'+data['img']+'"></div>';
+        // imgHTML='<div class="image-container"><div class="book bookG-chemic"><div class="ridge"></div><div class="sleeve"></div><img onerror="imgCheck(this);" src="'+data['img']+'"><div class="bookName longText">'+data['heading']+'</div></div></div>';
+        // imgHTML='<div class="image-container"><div class="book bookG-chemic"><div class="ridge"></div><div class="sleeve"></div><img onerror="imgCheck(this);" src="/2020/books/59-seconds-fg.png"><div class="bookName allCaps">'+data['heading'].replace(/ /g,"<br>")+'</div></div></div>';
+        // imgHTML='<div class="image-container"><div class="book bookG-ro"><div class="ridge"></div><div class="sleeve"></div><img onerror="imgCheck(this);" src="/2020/books/start-with-why-fg.png"><div class="bookName allCaps">'+data['heading'].replace(/ /g,"<br>")+'</div></div></div>';
+        // imgHTML='<div class="image-container"><div class="book"><div class="ridge"></div><div class="sleeve"></div><img onerror="imgCheck(this);" src="'+data['img']+'"><div class="bookName allCaps">'+data['heading'].replace(/ /g,"<br>")+'</div></div></div>';
+        // data['content']=data['content'].replace(/<img /g,"<img onerror='imgCheck(this);' ");
+        if (urlParams.datanew!=undefined) {
+          document.querySelector('.experience').classList.add('hide');
+        }
+        document.querySelector('body').classList.remove('stock');
+        document.querySelector('.playStopBtn').classList.remove('hide');
+        document.querySelector('.heading-component').insertAdjacentHTML('beforebegin',imgHTML);
+        document.querySelector('.pagebody').innerHTML=data['content'];
+        document.querySelector('.hero-headline').innerHTML=data['heading']+'<div onclick="toggleFav(this);" id="s'+data['url']+'" class="playStopBtn favBtn unfaved hide">Add to favourites</div>';
+                linkFixer();
+                if(urlParams.highlight!=undefined)
+                document.querySelector('p.summary').innerHTML=urlParams.highlight;
+                else {document.querySelector('p.summary').innerHTML='';document.querySelector('div.summary').classList.add('hide')}
+
+            var storyData={'heading':data['heading'],'url':encodeURI(data['url']),"img":data['img'],"sentences":"Read more"};
+                allStories['s'+data['url']]=storyData;
+//               deeplink('http://thecookbk.com/checkStoryFav/'+JSON.stringify(allStories));
+                getMagic(data['heading']);
+        }
+      }
+    }
+    xhttp.open("GET", "https://cookbookapp.in/RIA/play/readAPI.php?iOS&appname="+urlParams.appname+"&page=1&id="+encodeURI(urlParams.id), true);
+    xhttp.send();
+  },500);
+function loadStory(id){
+  var storyLocation=document.querySelector('div[data-id="'+id+'"]');
+  if (storyLocation.classList.contains('closed')) {
+    storyLocation.classList.remove('closed');
+    storyLocation.querySelector('.readtitle').classList.remove('hide');
+  }else return;
+
+  var xhttp = new XMLHttpRequest(),imgHTML='';
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var data=JSON.parse(this.responseText);
+      if(data['content']!=undefined)
+      {
+      data['content']=data['content'].replace(/<img /g,"<img onerror='imgCheck(this)' ");
+      // data['content']=data['content'].replace(/<a href="/g,"<a target='_blank' href=\"http://thecookbk.com/openurlexternally/");
+      data['content']=data['content'].split('ALSO READ:');
+      data['content']=data['content'][0];
+      data['content']=data['content'].split('Also Read:');
+      data['content']=data['content'][0];
+      // imgHTML='<div class="image-container"><div class="book"><img onerror="imgCheck(this);" src="'+data['img']+'"></div></div>';
+      // data['content']=data['content'].replace(/<img /g,"<img onerror='imgCheck(this);' ");
+      // document.querySelector('body').classList.remove('stock');
+      // storyLocation.querySelector('.pagebody').insertAdjacentHTML('beforebegin',imgHTML);
+      storyLocation.querySelector('.playStopBtn').classList.remove('hide');
+      storyLocation.querySelector('.pagebody').classList.remove('stock');
+      storyLocation.querySelector('.pagebody').innerHTML=data['content'];
+      storyLocation.querySelector('.hero-headline').innerHTML=data['heading'];
+      linkFixer();
+      // getMagic(data['heading']);
+      }
+    }
+  }
+  xhttp.open("GET", "https://cookbookapp.in/RIA/play/readAPI.php?appname="+urlParams.appname+"&page=1&id="+encodeURI(id), true);
+  xhttp.send();
+
+}
+
+function setFavStatus(code,status){
+  // if ((allVideos[currentVideo]!=undefined && allVideos[currentVideo]['id']==code) || (urlParams.ycode!=undefined && urlParams.ycode==code))
+  {
+    if (status) {
+      document.querySelector('#s'+code+'.favBtn').classList.remove('hide');
+      document.querySelector('#s'+code+'.favBtn').classList.remove('unfaved');
+      document.querySelector('#s'+code+'.favBtn').innerHTML="Remove from favourites";
+    }
+    else{
+      document.querySelector('#s'+code+'.favBtn').classList.remove('hide');
+      document.querySelector('#s'+code+'.favBtn').innerHTML="Add to favourites";
+      document.querySelector('#s'+code+'.favBtn').classList.add('unfaved');
+    }
+  }
+}
+
+function getMagic(title){
+  var xhttp = new XMLHttpRequest(),imgHTML='',fullHTML='',storyData={};
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var data=JSON.parse(this.responseText);
+      for (var i = 0; i < data.length; i++) {
+      if(data[i]['url']==urlParams.id) continue;
+      // imgHTML='<div class="image-container"><div class="book bookG-chemic"><div class="ridge"></div><div class="sleeve"></div><img onerror="imgCheck(this);" src="'+data['img']+'"><div class="bookName longText">'+data[i]['heading']+'</div></div></div>';
+      imgHTML='<div class="image-container"><img onerror="imgCheck(this);" src="'+data[i]['img']+'"></div>';
+      fullHTML=fullHTML+'<div data-id="'+data[i]['url']+'" onclick="loadStory('+data[i]['url']+');" class="related-story closed">'+imgHTML+'<div class="heading-component" onclick=readLoud(this,"p'+data[i]['url']+'")><div class="readtitle component hide"><h3 class="read">Reading room<div class="playStopBtn hide"><i class="icon-play"></i>Listen</div></h3></div><div class="pagetitle component"><h1 class="hero-headline">'+data[i]['heading']+'</h1><div onclick="toggleFav(this);" id="s'+data[i]['url']+'" class="playStopBtn favBtn unfaved hide">Add to favourites</div></div><div class="summary text component"><p class="summary">'+data[i]['sentences']+'</p></div></div><div id="p'+data[i]['url']+'" class="pagebody text component stock"><p>Please wait while we load your story.</p></div></div>';
+
+      storyData={'heading':data[i]['heading'],'url':data[i]['url'],"img":data[i]['img'],"sentences":data[i]['sentences']};
+      allStories['s'+data[i]['url']]=storyData;
+      }
+      var storyArray=[];
+            for (var story in allStories) {
+              if (allStories.hasOwnProperty(story)) {
+                storyArray.push(allStories[story]);
+              }
+            }
+      deeplink('http://thecookbk.com/checkStoryFav/'+JSON.stringify(storyArray));
+      document.querySelector(".related").innerHTML=fullHTML;
+      document.querySelector(".related").classList.remove('stock');
+    }
+  }
+  xhttp.open("GET", "https://cookbookapp.in/RIA/textMagic/neo/textMagic.php?s=loopy&dataAPI&q="+encodeURI(title), true);
+  xhttp.send();
+  }
+  </script>
+
+  <div class="floatingSegmentContainer">
+    <style media="screen">
+    .floatingSegmentContainer{
+    width: 100%;height: 100%;
+    position: fixed;top: 0;bottom: 0;left: 0;right: 0;
+    display: flex;justify-content: center;
+    pointer-events: none;
+    transition: .3s ease-in background;
+    opacity: 1;z-index: 10;
+    }
+    .floatingSegmentContainer.hide{display: none;}
+    .floatingSegmentContainer.shareEnable{background: rgba(0,0,0,.3);}
+    .floatingPlayerContainer{display: flex;width: 100%;margin:0 0 16px 0;justify-content: center;align-items: center;}
+    .floatGradient{background: linear-gradient(to bottom,transparent 0,#ccc 100%);}
+    .floatingPlayer{background: white;border-radius: 42px;width: 50%;align-items: center;width: 182px;pointer-events: all;
+    transition: opacity 250ms ease-out, transform 250ms ease-out, box-shadow 400ms ease; transform: translateY(60px);opacity: 0;box-shadow: none;}
+    .playerBtns{display: flex;justify-content: space-between;padding: 8px 11px;align-items: center;}
+    .playerBtns i[class^="icon-"]{font-size: 18px; color: black}
+    .floatBottom{bottom: 0;position: absolute;}
+    .floatShadow {
+      box-shadow: 0px 11px 19px -11px rgb(29 29 32 / 30%), 0px 0px 16px -5px rgb(29 29 32 / 25%);
+    }
+    .fpBtn.active{background: gray;border-radius: 14px;color: white;}
+    .fpBtn{width: 40px;text-align: center;opacity: 1;transition: 100ms ease opacity;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+    .fpBtn:active {opacity: .3}
+    .floatingSegmentContainer.active .floatingPlayer{transform: translateY(0px);opacity: 1;box-shadow: 0px 11px 19px -11px rgb(29 29 32 / 30%), 0px 0px 16px -5px rgb(29 29 32 / 25%);}
+
+
+    /* screenshot share */
+    .screenshotContainer {
+        padding: 28px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        max-width: 576px;
+        margin: 0 auto;
+    }
+
+    .chestArea {
+        height: 50%;
+    }
+
+    .socksArea {display: flex;flex-direction: column;justify-content: center;align-items: center;}
+
+    .socksArea .button {
+        margin-bottom: 14px; background: white;color: #1d1d1f;
+        box-shadow: 0px 10px 14px -6px rgb(0 0 0 / 15%);
+        font-size: 17px;
+        min-height: 48px;
+        transition: .3s ease-in opacity;
+    }
+    .button.waiting {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .button  i[class^="icon-"] {
+      margin-right: 8px;
+    }
+
+    .floatingSegmentContainer.shareEnable {
+        background: rgba(0,0,0,.3);
+        pointer-events: all!important;
+        overflow: hidden; color: white;
+    }
+
+    .shareText {
+        line-height: 1.4;
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: .007em;
+        font-size: 21px;
+        line-height: 1.4;
+        font-weight: 600;
+        letter-spacing: .011em;
+    }
+
+    .shareTitle {
+        font-size: 17px;
+        line-height: 1.47059;
+        font-weight: 400;
+        letter-spacing: -.022em;
+        margin-top: 14px;
+    }
+
+    .logoArea {
+        margin: 14px 0;
+    }
+
+    .logoArea .footer-logo {
+        width: 56px;
+        height: 16px;
+    }
+
+    .closeBtn {
+        background: rgb(51 51 51 / 51%);
+        border-radius: 50%;
+    }
+
+    .chestArea .footer-logo {
+        filter: invert(100%)brightness(135%) contrast(100%);
+    }
+    .floatinScreenshotContainer{    width: 100%;
+    background: white;z-index: 10;
+    height: 100%;}
+    .shareEnable .floatinScreenshotContainer{transform: translateY(0);}
+    .floatinScreenshotContainer{pointer-events: all; transition: transform 250ms ease-out; transform: translateY(100%);}
+    .shoulderArea{display: flex;justify-content: flex-end;}
+    /* screenshot gradients */
+    .seashore{background-image: linear-gradient(to top, #209cff 0%, #68e0cf 100%);}
+    .africanField{background-image: linear-gradient(-45deg, #FFC796 0%, #FF6B95 100%);}
+    .noscroll{overflow: hidden;}
+    .socksArea,.closeBtn{opacity: 1;transition: 300ms ease-out opacity;}
+    .noopacity{opacity: 0}
+    </style>
+    <div class="floatinScreenshotContainer floatBottom africanField">
+      <div class="screenshotContainer">
+        <div class="shoulderArea">
+          <div class="closeBtn" onclick="dismissScreenshot()"><i class="icon-cancel"></i></div>
+        </div>
+        <div class="chestArea">
+          <div class="logoArea"><figure class="footer-logo"><span class="visuallyhidden" id="footertile-name">Riafy Technologies</span></figure></div>
+          <div class="shareText">Paragraph to share goes here</div>
+          <div class="shareTitle">Riafy Editor</div>
+        </div>
+        <div class="socksArea">
+          <div class="button" onclick="screenshotShare()"><i class="icon-camera"></i>Share Image</div>
+          <div class="button waiting"></div>
+        </div>
+      </div>
+    </div>
+    <div class="floatingPlayerContainer floatBottom">
+      <div class="floatingPlayer">
+        <div class="playerBtns">
+          <div onclick="prev()" class="fpBtn fpPrevBtn"><i class="icon-to-start"></i></div>
+          <div onclick="playPause(this)"class="playing fpBtn fpPlayBtn"><i class="icon-pause"></i></div>
+          <div onclick="stop()" class="fpBtn fpStopBtn"><i class="icon-stop"></i></div>
+          <div onclick="next()" class="fpBtn fpNextBtn"><i class="icon-to-end"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <audio id="bgm" style="visibility:hidden;">
+    <source src="music/lights-music.mp3" type="audio/mpeg">
+  </audio>
+  <script type="text/javascript">
+    document.getElementById("bgm").volume=0.2;
+    document.getElementById("bgm").loop=true;
+
+function toggleFav(e){
+  e.style="pointer-events:none;";
+  var sid=e.getAttribute('id');
+  setTimeout(function(){
+        e.style="";
+      },500);
+  deeplink('http://thecookbk.com/toggleStoryFav/'+JSON.stringify(allStories[sid]));
+
+    if (document.querySelector('.favBtn#'+sid).classList.contains('unfaved')) {
+      document.querySelector('.favBtn#'+sid).classList.remove('unfaved');
+      document.querySelector('.favBtn#'+sid).innerHTML="Remove from favourites";
+    }
+    else{
+      document.querySelector('.favBtn#'+sid).classList.add('unfaved');
+      document.querySelector('.favBtn#'+sid).innerHTML="Add to favourites";
+    }
+}
+  </script>
+  <style>
+  .playStopBtn {
+        display: none;
+    }
+
+    section.shareBtns {
+        display: none;
+    }
+    .story>.related-story {
+    border-top: 0;
+}
+@media (min-width:1000px){
+.story {
+    max-width: 100%;
+}
+
+.related {
+    max-width: 100%;
+}
+
+.closed .image-container {
+    height: 220px;
+}
+
+.component {
+    max-width: 680px;
+}
+
+.image-container {height: 350px;overflow: hidden;}
+
+.image-container img {
+    object-fit: cover;
+    object-position: center;
+    height: 100%;
+    width: 100%;
+}
+body,.pagebody{
+  font-size: 21px;
+  line-height: 32px;
+}
+}
+
+.playStopBtn.favBtn {
+    display: block;
+    width: fit-content;
+    transition: 300ms ease all;
+    border: 1px solid #ff0050;
+    margin-top: 16px;
+}
+
+.playStopBtn.favBtn.faved {}
+
+.playStopBtn.favBtn.unfaved {
+    background: #f7f7f7;
+    color: #1d1d1f;
+    border: 1px solid #ececec;
+}
+
+.playStopBtn.hide.favBtn{
+  display: block!important;visibility: hidden!important;
+}
+  </style>
+  </body>
+</html>
+

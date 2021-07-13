@@ -1,5 +1,6 @@
 {
   "en": {
+    "code":"en",
     "appName": "Learn Piano Lessons",
     "shareSub": "Download Learn Piano Lessons app",
     "shareMessage1": "Best Learn Piano Lessons app for body fasting",
@@ -51,9 +52,11 @@
     "settings": "Settings",
     "error": "Something went wrong! try again later",
     "lessons": "Lessons",
-    "notific": "Hey! Its time for you to continue your lessons"
+    "notific": "Hey! Its time for you to continue your lessons",
+    "video":"Video"
   },
   "fr": {
+    "code":"fr",
     "appName": "Apprenez des leçons de piano",
     "shareSub": "Téléchargez l'application Learn Piano Lessons",
     "shareMessage1": "Meilleure application Learn Piano Lessons pour le jeûne corporel",
@@ -105,9 +108,11 @@
     "settings": "Paramètres",
     "error": "Un problème est survenu! Réessayez plus tard",
     "lessons": "Cours",
-    "notific": "Hey! Il est temps pour vous de continuer votre leçon"
+    "notific": "Hey! Il est temps pour vous de continuer votre leçon",
+    "video":"vidéo"
   },
   "it": {
+    "code":"it",
     "appName": "Impara lezioni di pianoforte",
     "shareSub": "Scarica l'app Learn Piano Lessons",
     "shareMessage1": "La migliore app Learn Piano Lessons per il digiuno corporeo",
@@ -159,9 +164,11 @@
     "settings": "impostazioni",
     "error": "Qualcosa è andato storto! riprovare più tardi",
     "lessons": "Lezioni",
-    "notific": "Hey! È ora che tu continui la lezione"
+    "notific": "Hey! È ora che tu continui la lezione",
+    "video":"Video"
   },
   "de": {
+    "code":"de",
     "appName": "Klavierunterricht lernen",
     "shareSub": "Laden Sie die App Learn Piano Lessons herunter",
     "shareMessage1": "Best Learn Piano Lessons App für Körperfasten",
@@ -213,6 +220,7 @@
     "settings": "die Einstellungen",
     "error": "Etwas ist schief gelaufen! Versuchen Sie es später noch einmal",
     "lessons": "Lektionen",
-    "notific": "Hallo! Es ist Zeit für Sie, Ihren Unterricht fortzusetzens"
+    "notific": "Hallo! Es ist Zeit für Sie, Ihren Unterricht fortzusetzens",
+    "video":"Video"
   }
 }

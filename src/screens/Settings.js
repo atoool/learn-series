@@ -19,7 +19,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import NotificationService from '../comp/NotificationService';
 import {AlertModal} from '../comp/AlertModal';
 import {ContextStates} from '../func/ContextStates';
@@ -298,7 +298,7 @@ const Style = StyleSheet.create({
   buttonImage: {width: hp(3.9), height: hp(3.9)},
 });
 
-export default function(props) {
+export default function (props) {
   const ref = React.useRef(null);
 
   useScrollToTop(ref);

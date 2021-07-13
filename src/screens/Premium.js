@@ -1,30 +1,21 @@
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  ActivityIndicator,
-  View,
-  StatusBar,
-  Dimensions,
-  Alert,
-  Platform,
-} from 'react-native';
+import {SafeAreaView, Dimensions, Alert, Platform} from 'react-native';
 import WebView from 'react-native-webview';
 import {
-  checkPurchased,
   purchaseSixMonthSubs,
   purchaseMonthlySubs,
   purchasePremium,
-  showPrice,
   purchaseListener,
   purchaseListenerRemove,
 } from '../comp/PremiumCheckFun';
 import Loading from '../comp/Loading';
 import R from '../res/R';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PremSuccess} from '../comp/PremSuccess';
 import {ContextStates} from '../func/ContextStates';
+import {StyleSheet} from 'react-native';
 
-const {width, height} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 export default class Premium extends Component {
   static contextType = ContextStates;
@@ -100,9 +91,7 @@ export default class Premium extends Component {
                 ),
               }),
           )
-          .catch(err => {
-            // alert('Check your network connectivity');
-          })
+          .catch(() => {})
       : this.setState({
           htmlUrl: `file:///android_asset/onboarding/premium.html?lang=${lang}&simcountry=in&appname=${R.strings.bundleId}`,
         });
@@ -116,19 +105,15 @@ export default class Premium extends Component {
     if (
       this.state.purchasedPremium === 'yup' ||
       this.state.purchasedPremium === 'success'
-    )
+    ) {
       return <PremSuccess that={this} />;
+    }
 
     return (
-      <SafeAreaView
-        style={{
-          flex: 1,
-          marginTop: Platform.OS === 'ios' ? (height > 736 ? -45 : 0) : 0,
-          backgroundColor: '#fff',
-        }}>
+      <SafeAreaView style={styles.container}>
         <WebView
           key={this.context.connected}
-          style={{flex: 1}}
+          style={styles.container}
           ref={webview => {
             this.webview = webview;
           }}
@@ -141,7 +126,9 @@ export default class Premium extends Component {
           allowsBackForwardNavigationGestures={true}
           originWhitelist={['*']}
           onShouldStartLoadWithRequest={a => {
-            if (a.url.indexOf('/tech') > -1) return false;
+            if (a.url.indexOf('/tech') > -1) {
+              return false;
+            }
             this._onNavigationStateChange(a);
             return true;
           }}
@@ -158,3 +145,6 @@ export default class Premium extends Component {
     );
   }
 }
+const styles = StyleSheet.create({
+  container: {flex: 1},
+});

@@ -13,7 +13,7 @@ import {
 import {Overlay, Tile, Button} from 'react-native-elements';
 import R from '../res/R';
 import Loading from '../comp/Loading';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,

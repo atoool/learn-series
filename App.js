@@ -1,23 +1,8 @@
 import React from 'react';
-import {
-  StyleSheet,
-  StatusBar,
-  View,
-  ActivityIndicator,
-  AppState,
-  BackHandler,
-  Alert,
-  SafeAreaView,
-} from 'react-native';
-import {
-  NavigationContainer,
-  CommonActions,
-  DefaultTheme,
-} from '@react-navigation/native';
-import {ContextStates, MyTheme} from './src/func/ContextStates';
-import Player from './src/comp/Player';
+import {StatusBar, StyleSheet, BackHandler, SafeAreaView} from 'react-native';
+import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
+import {ContextStates} from './src/func/ContextStates';
 import AppContainer from './src/navigations/AppContainer';
-import AsyncStorage from '@react-native-community/async-storage';
 import {reducer, init} from './src/func/Reducer';
 import NetInfo from '@react-native-community/netinfo';
 import ExitAlert from './src/comp/ExitAlert';
@@ -26,8 +11,6 @@ import R from './src/res/R';
 import analytics from '@react-native-firebase/analytics';
 import * as RNIap from 'react-native-iap';
 import NotificationService from './src/comp/NotificationService';
-
-// console.disableYellowBox = true;
 
 class App extends React.Component {
   constructor(props) {
@@ -58,7 +41,9 @@ class App extends React.Component {
     if (!this.navig?.canGoBack()) {
       this.exit && this.exit?.setState({show: true});
       return true;
-    } else return false;
+    } else {
+      return false;
+    }
   };
 
   componentDidMount = async () => {
@@ -117,7 +102,7 @@ class App extends React.Component {
           reduState: this.state,
           notific: this.notific,
         }}>
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={styles.container}>
           <StatusBar backgroundColor={R.colors.statusBar} />
           <NavigationContainer
             ref={re => (this.navig = re)}
@@ -147,6 +132,4 @@ class App extends React.Component {
 }
 export default App;
 
-// var styles = StyleSheet.create({
-
-// });
+const styles = StyleSheet.create({container: {flex: 1}});

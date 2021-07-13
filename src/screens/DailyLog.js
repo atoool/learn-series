@@ -1,7 +1,7 @@
 import React from 'react';
 import WebView from 'react-native-webview';
 import {Signup} from '../func/FirebaseAuth';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ContextStates} from '../func/ContextStates';
 import {StyleSheet} from 'react-native';
 

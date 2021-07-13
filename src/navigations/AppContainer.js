@@ -9,6 +9,7 @@ import Privacy from '../screens/Privacy';
 import Terms from '../screens/Terms';
 import Splash from '../screens/Splash';
 import Language from '../screens/Language';
+import {Player} from '../screens/Player';
 
 const Stack = createStackNavigator();
 
@@ -48,6 +49,13 @@ const AppContainer = props => {
       <Stack.Screen
         name="Terms"
         component={Terms}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="Player"
+        component={Player}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}

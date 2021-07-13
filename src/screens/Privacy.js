@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import WebView from 'react-native-webview';
 import Loading from '../comp/Loading';
 import R from '../res/R';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -16,7 +16,7 @@ export default class Privacy extends Component {
   state = {load: true, lang: 'en'};
 
   componentDidMount = async () => {
-    let lang = await AsyncStorage.getItem('lang').catch((e) => {});
+    let lang = await AsyncStorage.getItem('lang').catch(e => {});
     lang && this.setState({lang});
     // firebase.analytics().setCurrentScreen('Privacy screen', 'Privacy');
   };
