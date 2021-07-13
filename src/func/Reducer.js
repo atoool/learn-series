@@ -6,10 +6,15 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {locale} from '../res/locale';
 
 export function getRandomArray(orgArray) {
-  var arr = [];
+  let arr = [];
+  let rArr = [];
   while (arr.length < 4) {
-    var r = Math.floor(Math.random() * orgArray.length);
-    arr.push(orgArray[r]);
+    let r = Math.floor(Math.random() * orgArray.length);
+    let check = rArr.indexOf(r) > -1;
+    if (!check) {
+      rArr.push(r);
+      arr.push(orgArray[r]);
+    }
   }
   return arr;
 }
