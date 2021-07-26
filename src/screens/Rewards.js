@@ -1,8 +1,7 @@
 import React from 'react';
 import WebView from 'react-native-webview';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {ContextStates} from '../func/ContextStates';
-import {StyleSheet} from 'react-native';
 
 export default class Rewards extends React.PureComponent {
   static contextType = ContextStates;

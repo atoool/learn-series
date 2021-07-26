@@ -10,6 +10,7 @@ import Terms from '../screens/Terms';
 import Splash from '../screens/Splash';
 import Language from '../screens/Language';
 import {Player} from '../screens/Player';
+import ChangePref from '../screens/ChangePref';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,13 @@ const AppContainer = props => {
       <Stack.Screen
         name="Onboarding"
         component={Onboarding}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="ChangePrefs"
+        component={ChangePref}
         options={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}

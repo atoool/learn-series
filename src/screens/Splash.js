@@ -1,11 +1,8 @@
 import React from 'react';
-import {StyleSheet, Image, View, StatusBar, Platform} from 'react-native';
+import {StyleSheet, Image, View, Platform} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loading from '../comp/Loading';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {ContextStates} from '../func/ContextStates';
 import R from '../res/R';
 
@@ -29,9 +26,15 @@ export default class Splash extends React.PureComponent {
           }, 3000);
   };
   redirect = initApp => {
-    if (!initApp[2][1]) this.props.navigation.replace('Language');
-    else if (!initApp[0][1]) this.props.navigation.replace('Onboarding');
-    else this.props.navigation.replace('MainTab');
+    if (!initApp[2][1]) {
+      this.props.navigation.replace('Language');
+    } else if (!initApp[0][1]) {
+      this.context?.reduState?.premiumPurchased
+        ? this.props.navigation.replace('ChangePrefs')
+        : this.props.navigation.replace('Onboarding');
+    } else {
+      this.props.navigation.replace('MainTab');
+    }
 
     initApp[1][1] != null &&
       initApp[1][1] == '2nd' &&

@@ -47,43 +47,50 @@ export default class Onboarding extends PureComponent {
       let jsonURL = JSON.parse(
         decodeURI(url.split('http://riafy.me/onboarding/')[1]),
       );
-      // console.warn(url);
 
       if (jsonURL.iap === '6month') {
         let u = a.url.substring(a.url.indexOf('%'));
         let dec = decodeURI(u);
-        await AsyncStorage.multiSet([
-          ['urlVal', dec],
-          ['@ONBOARDING', 'HIDE'],
-          ['rateus', '2nd'],
-        ]).catch(e => {});
-        this.state.purchased
-          ? this.props.navigation.replace('MainTab')
-          : purchaseSixMonthSubs();
+
+        if (this.context?.reduState?.premiumPurchased) {
+          await AsyncStorage.multiSet([
+            ['urlVal', dec],
+            ['@ONBOARDING', 'HIDE'],
+            ['rateus', '2nd'],
+          ]).catch(e => {});
+          this.props.navigation.replace('MainTab');
+        } else {
+          purchaseSixMonthSubs();
+        }
         return false;
       } else if (jsonURL.iap === 'monthly') {
         let u = a.url.substring(a.url.indexOf('%'));
         let dec = decodeURI(u);
-        await AsyncStorage.multiSet([
-          ['urlVal', dec],
-          ['@ONBOARDING', 'HIDE'],
-          ['rateus', '2nd'],
-        ]).catch(e => {});
-        this.state.purchased
-          ? this.props.navigation.replace('MainTab')
-          : purchaseMonthlySubs();
+        if (this.context?.reduState?.premiumPurchased) {
+          await AsyncStorage.multiSet([
+            ['urlVal', dec],
+            ['@ONBOARDING', 'HIDE'],
+            ['rateus', '2nd'],
+          ]).catch(e => {});
+          this.props.navigation.replace('MainTab');
+        } else {
+          purchaseMonthlySubs();
+        }
         return false;
       } else if (jsonURL.iap === 'lifetime') {
         let u = a.url.substring(a.url.indexOf('%'));
         let dec = decodeURI(u);
-        await AsyncStorage.multiSet([
-          ['urlVal', dec],
-          ['@ONBOARDING', 'HIDE'],
-          ['rateus', '2nd'],
-        ]).catch(e => {});
-        this.context?.reduState?.premiumPurchased
-          ? this.props.navigation.replace('MainTab')
-          : purchasePremium();
+        if (this.context?.reduState?.premiumPurchased) {
+          await AsyncStorage.multiSet([
+            ['urlVal', dec],
+            ['@ONBOARDING', 'HIDE'],
+            ['rateus', '2nd'],
+          ]).catch(e => {});
+
+          this.props.navigation.replace('MainTab');
+        } else {
+          purchasePremium();
+        }
         return false;
       }
       return false;
@@ -134,7 +141,7 @@ export default class Onboarding extends PureComponent {
             // alert('Check your network connectivity');
           })
       : this.setState({
-          htmlUrl: `file:///android_asset/onboarding/onboarding.html?lang=${
+          htmlUrl: `file:///android_asset/onboarding/onboarding_2020.html?lang=${
             lang ? lang : 'en'
           }&simcountry=in&appname=${R?.strings?.bundleId}`,
         });
@@ -146,13 +153,31 @@ export default class Onboarding extends PureComponent {
   };
 
   render() {
-    const inject = `javascript:setIAPValues('monthly',"${this.context?.reduState?.prices[2]}");javascript:setIAPValues('6month',"${this.context?.reduState?.prices[1]}");javascript:setIAPValues('lifetime',"${this.context?.reduState?.prices[0]}"||"${this.context?.reduState?.prices[0]}000000")`;
+    console.warn(this?.context?.reduState?.prices[2]);
+    const inject = `javascript:setIAPValues('monthly',"${
+      this?.context?.reduState?.prices[2]
+        ? this?.context?.reduState?.prices[2]
+        : 0
+    }");javascript:setIAPValues('6month',"${
+      this?.context?.reduState?.prices[1]
+        ? this?.context?.reduState?.prices[1]
+        : 0
+    }");javascript:setIAPValues('lifetime',"${
+      this?.context?.reduState?.prices[0]
+        ? this?.context?.reduState?.prices[0]
+        : 0
+    }"||"${
+      this?.context?.reduState?.prices[0]
+        ? this?.context?.reduState?.prices[0]
+        : 0
+    }000000")`;
 
     if (
       this.state.purchasedPremium === 'yup' ||
       this.state.purchasedPremium === 'success'
-    )
+    ) {
       return <PremSuccess that={this} />;
+    }
     return (
       <SafeAreaView
         style={{
@@ -186,7 +211,6 @@ export default class Onboarding extends PureComponent {
           injectedJavaScript={inject}
           domStorageEnabled
           onShouldStartLoadWithRequest={a => {
-            console.warn(a.url);
             if (a.url.indexOf('/tech') > -1 || a.url.indexOf('/vibrate') > -1) {
               return false;
             }

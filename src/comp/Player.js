@@ -64,7 +64,7 @@ export default class Player extends React.PureComponent {
     Orientation.lockToLandscape();
     const session = this.context.reduState.session[0];
     const chaptr = session.chapter;
-    const lesson = session.lesson;
+    const {lesson = 1} = this.props.route.params;
 
     this.setState({
       chapter: chaptr,
@@ -149,18 +149,25 @@ export default class Player extends React.PureComponent {
     let {swipeIndex, chapter, lesson} = this.state;
     const {type, videos, lessons} = this.props.route.params;
     const playLesson = this.props.route.params.lesson;
+    console.warn(playLesson, lesson);
+    console.warn('0');
     if (lesson <= playLesson) {
-      if (chapter - 1 <= swipeIndex && type !== 'random') {
+      console.warn('1');
+      if (chapter - 1 <= swipeIndex) {
+        console.warn('2');
         chapter = swipeIndex + 2;
-        lesson = this.state.lesson;
-        if (swipeIndex === videos.length - 1 && lessons !== lesson) {
-          lesson = this.state.lesson + 1;
+        let {session} = this.context.reduState;
+        if (
+          (swipeIndex === videos.length - 1 && lessons !== lesson) ||
+          videos?.length === 1
+        ) {
+          console.warn('3');
+          lesson = lesson + 1;
           chapter = 1;
+          session[0].lesson = lesson;
         }
         this.setState({chapter, lesson});
-        let session = this.context.reduState.session;
         session[0].chapter = chapter;
-        session[0].lesson = lesson;
         await this.context.dispatch({
           type: 'session',
           payload: [...session],

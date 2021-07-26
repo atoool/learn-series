@@ -40,8 +40,11 @@ export default class ChangePref extends Component {
       await AsyncStorage.setItem('goalWeight', JSON.stringify(j.tweight)).catch(
         e => {},
       );
-      this.props.navigation.pop();
-      this.props.navigation.navigate('Home');
+      await AsyncStorage.multiSet([
+        ['@ONBOARDING', 'HIDE'],
+        ['rateus', '2nd'],
+      ]).catch(e => {});
+      this.props.navigation.replace('MainTab');
       return false;
     } else if (a.url.indexOf('stories')) {
       return false;

@@ -7,13 +7,9 @@ import {
   Image,
   Linking,
   Dimensions,
-  ActivityIndicator,
-  Platform,
 } from 'react-native';
-import {Overlay, Tile, Button} from 'react-native-elements';
+import {Overlay, Button} from 'react-native-elements';
 import R from '../res/R';
-import Loading from '../comp/Loading';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -41,15 +37,16 @@ export default class RateUs extends PureComponent {
   componentDidMount = async () => {
     try {
       let RDATA = 'rateData';
-      let lang = await getItem('lang', false);
+      let lang = R?.locale?.code;
       lang == null && 'en';
       const API = `${R.strings.splashApi}&lang=${lang}&inputlang=${lang}`;
-      const data = await getItem(RDATA);
-      data && (await this.setData(data));
+      // const data = await getItem(RDATA);
+      // data && (await this.setData(data));
       const res = await axios(API);
       const {splash = null} = res?.data;
-      !data && (await this.setData(splash));
-      await setItem(RDATA, splash);
+      // !data &&
+      await this.setData(splash);
+      // await setItem(RDATA, splash);
     } catch {}
   };
 
@@ -70,10 +67,12 @@ export default class RateUs extends PureComponent {
           padding: 0,
           marginHorizontal: hp(6),
           justifyContent: 'center',
+          borderRadius: 7,
+          overflow: 'hidden',
         }}
         animationType="fade"
         onBackdropPress={() => this.setState({isVisible: false})}>
-        <View>
+        <View style={{}}>
           <StatusBar backgroundColor="#000" />
           <View style={{backgroundColor: R.colors.background}}>
             <Image

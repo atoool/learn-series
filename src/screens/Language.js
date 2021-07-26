@@ -15,7 +15,9 @@ import RNRestart from 'react-native-restart';
 import {api} from '../func/ApiCalls';
 import Loading from '../comp/Loading';
 import axios from 'axios';
+import {ContextStates} from '../func/ContextStates';
 export default class Language extends React.PureComponent {
+  static contextType = ContextStates;
   state = {
     radio_props: [],
     lang: 'en',
@@ -64,9 +66,12 @@ export default class Language extends React.PureComponent {
         ['lang', lang],
         ['langSaw', 'yes'],
       ]);
-      await Promise.all([api(lang)]);
+      await api(lang);
+      await this.context?.dispatch({type: 'init'});
       this.props.route?.params?.nav === 'main'
-        ? this.props.navigation.replace('Onboarding')
+        ? this.context?.reduState?.premiumPurchased
+          ? RNRestart.Restart()
+          : this.props.navigation.replace('Onboarding')
         : RNRestart.Restart();
     } catch (e) {
       ToastAndroid.show(R.strings.error, ToastAndroid.SHORT);

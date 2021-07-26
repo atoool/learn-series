@@ -27,6 +27,7 @@ export const checkPurchased = async () => {
       } else {
         premiumPurchased = false;
       }
+      console.warn(purchased);
     })
     .catch(() => {});
 
@@ -36,20 +37,19 @@ export const checkPurchased = async () => {
 export const showPrice = async () => {
   let sixMonthPrice;
   let monthlyPremium;
-  await RNIap.getProducts(IAPid)
-    .then(products => {
+  try {
+    await RNIap.getProducts(IAPid).then(products => {
       if (products.length > 0) {
         price = products[products.length - 1].localizedPrice;
       }
-    })
-    .catch(() => {});
-  await RNIap.getSubscriptions(subscriptionsID)
-    .then(prices => {
+    });
+    await RNIap.getSubscriptions(subscriptionsID).then(prices => {
       monthlyPremium = prices[1].localizedPrice;
       sixMonthPrice = prices[0].localizedPrice;
-    })
-    .catch(() => {});
-
+    });
+  } catch (e) {
+    console.warn(e);
+  }
   return [price, sixMonthPrice, monthlyPremium];
 };
 

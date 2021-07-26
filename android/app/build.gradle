@@ -137,7 +137,7 @@ android {
         missingDimensionStrategy 'store', 'play' 
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 31
-        versionName "1.4.55"
+        versionName "1.4.58"
         multiDexEnabled true
     }
     splits {

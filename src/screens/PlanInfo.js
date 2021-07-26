@@ -135,6 +135,10 @@ export default class PlanInfo extends React.Component {
       outputRange: [20, -70],
       extrapolate: 'clamp',
     });
+    const isInSession =
+      this?.context?.reduState?.myCourse?.filter(
+        i => i?.name === params?.data?.name,
+      ).length !== 0;
 
     return (
       <View style={styles.mainContainer}>
@@ -241,6 +245,7 @@ export default class PlanInfo extends React.Component {
                             this.props.navigation.navigate('Premium');
                           } else {
                             this.savePlan();
+                            console.warn(key + 1, keyc);
                             this.props.navigation.navigate('Player', {
                               videos: lessn.chapters,
                               type: params.type,
@@ -365,7 +370,7 @@ export default class PlanInfo extends React.Component {
                 videos: params.data.lessons[lesson - 1].chapters,
                 type: params.type,
                 chapter: chapter - 1,
-                lesson: lesson,
+                lesson: isInSession ? lesson : 1,
                 lessons: params.data.lessons.length,
               });
             }

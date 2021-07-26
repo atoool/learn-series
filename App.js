@@ -47,6 +47,8 @@ class App extends React.Component {
   };
 
   componentDidMount = async () => {
+    const result = await RNIap.initConnection();
+    result == null && (await RNIap.initConnection());
     this.notif?.checkPermission(this.handlePerm);
     this.notif?.scheduleNotif();
     const data = await init(this.state);
@@ -54,8 +56,6 @@ class App extends React.Component {
 
     BackHandler.addEventListener('hardwareBackPress', this.onBackpress);
 
-    const result = await RNIap.initConnection();
-    result == null && (await RNIap.initConnection());
     this.unsubscribe == null &&
       (this.unsubscribe = NetInfo.addEventListener(state => {
         this.setState({connected: state?.isConnected});
