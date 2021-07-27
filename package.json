@@ -1,7 +1,7 @@
 {
   "name": "newApp",
-  "version": "1.4.58",
-  "buildNumber": 31,
+  "version": "1.4.59",
+  "buildNumber": 32,
   "private": true,
   "scripts": {
     "android": "react-native run-android",

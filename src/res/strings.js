@@ -14,7 +14,7 @@ let strings = {
   langApi:
     'https://forking.riafy.in/app-console/get-languages-api.php?appname=' +
     bundleId,
-  version: '1.4.58',
+  version: '1.4.59',
   splashApi: `http://riafy.me/splash.php?appname=${bundleId}&country=IN&simcountry=in&version=1.3.2&versioncode=24&network=wifi&loadcount=3&devtype=p&fbclid=IwAR0M6OClxu5DMoJl3efjkEwRSLlJx26JVP9yX8Ywfw70iHDPEWODl1YHUJs`,
 };
 export default strings;
