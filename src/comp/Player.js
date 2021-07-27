@@ -23,6 +23,7 @@ import LottieView from 'lottie-react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 // import FindLocalDevices from 'react-native-find-local-devices';
 import R from '../res/R';
+import YTPlayer from './YTPlayer';
 // import dgram from 'react-native-udp';
 
 const {height, width} = Dimensions.get('window');
@@ -149,19 +150,15 @@ export default class Player extends React.PureComponent {
     let {swipeIndex, chapter, lesson} = this.state;
     const {type, videos, lessons} = this.props.route.params;
     const playLesson = this.props.route.params.lesson;
-    console.warn(playLesson, lesson);
-    console.warn('0');
+
     if (lesson <= playLesson) {
-      console.warn('1');
       if (chapter - 1 <= swipeIndex) {
-        console.warn('2');
         chapter = swipeIndex + 2;
         let {session} = this.context.reduState;
         if (
           (swipeIndex === videos.length - 1 && lessons !== lesson) ||
           videos?.length === 1
         ) {
-          console.warn('3');
           lesson = lesson + 1;
           chapter = 1;
           session[0].lesson = lesson;
@@ -227,15 +224,11 @@ export default class Player extends React.PureComponent {
           {videos.map((itm, i) => (
             <View key={i} style={{width: height}}>
               {this.state.swipeIndex === i && (
-                <YoutubePlayer
+                <YTPlayer
                   key={this.state.swipeIndex}
                   ref={re => (this.playerRef = re)}
-                  width="100%"
-                  height="100%"
                   videoId={itm.video}
                   play={this.state.play}
-                  contentScale={0.65}
-                  webViewStyle={{marginTop: -10}}
                   onChangeState={e => {
                     if (e === 'playing') {
                       if (!this.state.started) {

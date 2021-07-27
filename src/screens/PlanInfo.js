@@ -245,7 +245,6 @@ export default class PlanInfo extends React.Component {
                             this.props.navigation.navigate('Premium');
                           } else {
                             this.savePlan();
-                            console.warn(key + 1, keyc);
                             this.props.navigation.navigate('Player', {
                               videos: lessn.chapters,
                               type: params.type,
