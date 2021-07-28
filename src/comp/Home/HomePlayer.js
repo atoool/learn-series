@@ -17,7 +17,6 @@ import {
   AppState,
 } from 'react-native';
 import {Button} from 'react-native-elements';
-import YoutubeIframe from 'react-native-youtube-iframe';
 import {useFocusEffect} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 import Gradient from 'react-native-linear-gradient';
@@ -28,6 +27,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import R from '../../res/R';
+import YTPlayer from '../YTPlayer';
 
 const {width, height} = Dimensions.get('window');
 
@@ -73,22 +73,11 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
   return (
     <View key={context.connected} style={styles.container}>
       <View style={styles.youtube}>
-        <YoutubeIframe
+        <YTPlayer
           key={index}
           videoId={videos[index]}
           play={playing}
-          height={'100%'}
-          forceAndroidAutoplay={true}
-          initialPlayerParams={{
-            rel: false,
-            preventFullScreen: true,
-            showClosedCaptions: false,
-            loop: true,
-          }}
-          webViewProps={{
-            containerStyle: {backgroundColor: '#000'},
-          }}
-          width={'auto'}
+          portrait={true}
           onChangeState={e => {
             if (e === 'ended') {
               if (videos.length - 1 === index) {
@@ -101,6 +90,9 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
               setBuff(true);
             }
             e === 'playing' && setBuff(false);
+          }}
+          onReady={() => {
+            console.warn('s');
           }}
         />
         {!playing && buff && vidData && (
@@ -160,7 +152,7 @@ export const HomePlayer = forwardRef(({that, vidData}, ref) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: hp(28.2),
+    height: hp(26.8),
     width: '100%',
     overflow: 'hidden',
     borderBottomStartRadius: height < 600 ? hp(15) : hp(23),
@@ -169,12 +161,12 @@ const styles = StyleSheet.create({
   },
   youtube: {
     position: 'absolute',
-    height: hp(28.2),
+    height: hp(26.8),
     width: '100%',
     transform: height < 600 ? [{scaleX: 1}] : [{scaleX: 0.5}],
   },
   contentContainer: {
-    height: hp(28.2),
+    height: hp(26.8),
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-end',

@@ -10,21 +10,18 @@ import {
   Easing,
   AppState,
   SafeAreaView,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import Slider from 'react-native-smooth-slider';
 import {Icon} from 'react-native-elements';
 import Orientation from 'react-native-orientation-locker';
 import LinearGradient from 'react-native-linear-gradient';
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
-import {TouchableWithoutFeedback} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {ContextStates} from '../func/ContextStates';
 import LottieView from 'lottie-react-native';
-import YoutubePlayer from 'react-native-youtube-iframe';
-// import FindLocalDevices from 'react-native-find-local-devices';
 import R from '../res/R';
 import YTPlayer from './YTPlayer';
-// import dgram from 'react-native-udp';
 
 const {height, width} = Dimensions.get('window');
 
@@ -148,7 +145,7 @@ export default class Player extends React.PureComponent {
 
   saveIndex = async () => {
     let {swipeIndex, chapter, lesson} = this.state;
-    const {type, videos, lessons} = this.props.route.params;
+    const {videos, lessons} = this.props.route.params;
     const playLesson = this.props.route.params.lesson;
 
     if (lesson <= playLesson) {
@@ -340,41 +337,6 @@ export default class Player extends React.PureComponent {
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}>
-                    {/* {this.state.ip != '' && (
-                      <TouchableNativeFeedback
-                        onPress={() => {
-                          const vidJson = JSON.stringify(videos);
-                          console.warn(this.state.ip, vidJson);
-
-                          try {
-                            this.socket.send(
-                              vidJson,
-                              undefined,
-                              undefined,
-                              12346,
-                              this.state.ip,
-                              function (err) {
-                                if (err) throw err;
-                              },
-                            );
-                            this.setState({play: false});
-                          } catch (e) {
-                            console.warn(e);
-                          }
-                        }}>
-                        <View
-                          style={{
-                            position: 'absolute',
-                            left: 30,
-                            top: 20,
-                            width: 40,
-                            height: 40,
-                            justifyContent: 'center',
-                          }}>
-                          <Icon name="cast" color="#ffffff" size={25} />
-                        </View>
-                      </TouchableNativeFeedback>
-                    )} */}
                     {videos.map((vid, ind) =>
                       swipeIndex === ind ? (
                         <Slider
@@ -452,7 +414,6 @@ export default class Player extends React.PureComponent {
                       onPress={() => {
                         this.setState({play: !this.state.play}, () => {
                           this.triggerControls(true);
-                          // this.getLocalDevices();
                         });
                       }}
                       style={{overflow: 'hidden'}}>
@@ -577,22 +538,4 @@ export default class Player extends React.PureComponent {
   }
 }
 
-var styles = StyleSheet.create({
-  backgroundVideo: {
-    position: 'absolute',
-    top: 120,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  },
-  container: {flex: 1, backgroundColor: 'white'},
-  child: {width, justifyContent: 'center'},
-  text: {fontSize: width * 0.5, textAlign: 'center'},
-});
-
-// position: absolute;
-//           transform:scaleY(0.95);
-//           top: -108%;
-//           left: 0;
-//           width: 100%;
-//           height: 300%;
+var styles = StyleSheet.create({});

@@ -44,7 +44,10 @@ const PLAYER_FUNCTIONS = {
   },
 };
 
-const YTPlayer = ({play, videoId, onChangeState, onReady}, ref) => {
+const YTPlayer = (
+  {play, videoId, onChangeState, onReady, portrait = false},
+  ref,
+) => {
   const eventEmitter = useRef(new EventEmitter());
   const webViewRef = useRef(null);
   const [playerReady, setPlayerReady] = useState(false);
@@ -140,12 +143,18 @@ const YTPlayer = ({play, videoId, onChangeState, onReady}, ref) => {
             top: -81%;
             height: 250%;
           }
+          .videos {
+            position: absolute;
+            top: -75%;
+            height: 250%;
+            width:100%
+          }
         </style>
       </head>
   <body>
   
         <div class="container">
-            <div class="video" id="player" />
+            <div class="${portrait ? 'videos' : 'video'}" id="player" />
           </div>
 
     <script>
@@ -164,7 +173,7 @@ const YTPlayer = ({play, videoId, onChangeState, onReady}, ref) => {
             playerVars: {
               rel: 0,
               playsinline: 1,
-              loop: 0,
+              loop: ${portrait ? 1 : 0},
               controls: 0,
               fs: 1,
               modestbranding: 1,
