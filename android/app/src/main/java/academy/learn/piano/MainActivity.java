@@ -30,6 +30,6 @@ protected void onCreate(Bundle state){
 
     SharedPreferences preferences =
         PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-preferences.edit().putString("debug_http_host", "192.168.151.2:8081").apply();
+preferences.edit().putString("debug_http_host", "192.168.54.2:8081").apply();
 }
 }

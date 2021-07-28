@@ -1,14 +1,5 @@
-import React, {Component, PureComponent} from 'react';
-import {
-  View,
-  ActivityIndicator,
-  SafeAreaView,
-  StatusBar,
-  KeyboardAvoidingView,
-  Dimensions,
-  Platform,
-  Alert,
-} from 'react-native';
+import React, {PureComponent} from 'react';
+import {SafeAreaView, Platform, Alert, Linking} from 'react-native';
 import WebView from 'react-native-webview';
 import Loading from '../comp/Loading';
 import R from '../res/R';
@@ -17,15 +8,11 @@ import {ContextStates} from '../func/ContextStates';
 import {PremSuccess} from '../comp/PremSuccess';
 import {
   purchaseSixMonthSubs,
-  checkPurchased,
-  showPrice,
   purchaseListener,
   purchaseListenerRemove,
   purchasePremium,
   purchaseMonthlySubs,
 } from '../comp/PremiumCheckFun';
-
-const {width, height} = Dimensions.get('window');
 
 export default class Onboarding extends PureComponent {
   static contextType = ContextStates;
@@ -212,6 +199,9 @@ export default class Onboarding extends PureComponent {
           domStorageEnabled
           onShouldStartLoadWithRequest={a => {
             if (a.url.indexOf('/tech') > -1 || a.url.indexOf('/vibrate') > -1) {
+              return false;
+            } else if (a.url.indexOf('-terms') > -1) {
+              Linking.openURL(a.url);
               return false;
             }
             this._onNavigationStateChange(a);

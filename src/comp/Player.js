@@ -146,20 +146,17 @@ export default class Player extends React.PureComponent {
   saveIndex = async () => {
     let {swipeIndex, chapter, lesson} = this.state;
     const {videos, lessons} = this.props.route.params;
-    const playLesson = this.props.route.params.lesson;
 
-    if (lesson <= playLesson) {
+    if (lessons !== lesson) {
       if (chapter - 1 <= swipeIndex) {
         chapter = swipeIndex + 2;
         let {session} = this.context.reduState;
-        if (
-          (swipeIndex === videos.length - 1 && lessons !== lesson) ||
-          videos?.length === 1
-        ) {
+        if (swipeIndex === videos.length - 1 || videos?.length === 1) {
           lesson = lesson + 1;
-          chapter = 1;
           session[0].lesson = lesson;
+          chapter = 1;
         }
+
         this.setState({chapter, lesson});
         session[0].chapter = chapter;
         await this.context.dispatch({
