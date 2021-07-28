@@ -93,7 +93,7 @@ export default class Premium extends Component {
           )
           .catch(() => {})
       : this.setState({
-          htmlUrl: `file:///android_asset/onboarding/premium.html?lang=${lang}&simcountry=in&appname=${R.strings.bundleId}`,
+          htmlUrl: `file:///android_asset/onboarding/premium2021.html?lang=${lang}&simcountry=in&appname=${R.strings.bundleId}`,
         });
     purchaseListener(this);
   };

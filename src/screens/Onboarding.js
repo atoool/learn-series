@@ -141,7 +141,7 @@ export default class Onboarding extends PureComponent {
             // alert('Check your network connectivity');
           })
       : this.setState({
-          htmlUrl: `file:///android_asset/onboarding/onboarding_2020.html?lang=${
+          htmlUrl: `file:///android_asset/onboarding/onboarding2021.html?lang=${
             lang ? lang : 'en'
           }&simcountry=in&appname=${R?.strings?.bundleId}`,
         });
