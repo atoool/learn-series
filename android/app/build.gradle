@@ -137,8 +137,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         missingDimensionStrategy 'store', 'play' 
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 34
-        versionName "1.5.62"
+        versionCode 35
+        versionName "1.5.63"
         multiDexEnabled true
     }
     splits {
