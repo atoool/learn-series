@@ -76,6 +76,28 @@ const updateAndroid = (currentVersion, newVersion, currentBuild, newBuild) => {
     .catch(() => console.log('🛑 Error Updating 🤖 Android => build.gradle'));
 };
 
+const updateUserVersion = (currentVersion, newVersion) => {
+  const files = './src/res/strings.js';
+
+  const fromString1 = `version: '${currentVersion}'`;
+  const from1 = new RegExp(fromString1, 'g');
+
+  const to1 = `version: '${newVersion}'`;
+
+  const from = [from1];
+  const to = [to1];
+
+  const options = {
+    files,
+    from,
+    to,
+  };
+
+  replace(options)
+    .then(() => console.log('🤖 User Version Updated ✅'))
+    .catch(() => console.log('🛑 Error Updating 🤖 Android => strings.js'));
+};
+
 if (argsValid()) {
   const currentVersion = packageObject.version;
   const currentBuild = packageObject.buildNumber;
@@ -89,4 +111,5 @@ if (argsValid()) {
   updatePackage(currentVersion, newVersion, currentBuild, newBuild);
   //Update Android
   updateAndroid(currentVersion, newVersion, currentBuild, newBuild);
+  updateUserVersion(currentVersion, newVersion);
 }

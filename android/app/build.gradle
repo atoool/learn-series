@@ -81,6 +81,7 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     enableHermes: true,  // clean and rebuild if changing
+    extraPackagerArgs: [ '--minify=false' ]
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -136,8 +137,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         missingDimensionStrategy 'store', 'play' 
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 32
-        versionName "1.5.60"
+        versionCode 34
+        versionName "1.5.62"
         multiDexEnabled true
     }
     splits {
